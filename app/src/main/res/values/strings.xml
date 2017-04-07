@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Komcity.ru - Городской Сервер</string>
+    <string name="action_settings">Settings</string>
+    <string-array name="screen_title">
+        <item>Новости</item>
+        <item>Объявления</item>
+        <item>Форум</item>
+    </string-array>
+
+    <string name="menu">Меню</string>
+    <string name="first_screen">Первый экран</string>
+    <string name="second_screen">Второй экран</string>
+    <string name="third_screen">Третий экран</string>
+    <string name="open_menu">Open</string>
+    <string name="close_menu">Close</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
