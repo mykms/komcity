@@ -1,0 +1,19 @@
+#Wed Jul 12 13:47:43 GMT+03:00 2017
+renamed.5=classes4.dex
+renamed.4=classes6.dex
+renamed.3=classes.dex
+renamed.2=classes3.dex
+renamed.1=classes2.dex
+renamed.0=classes5.dex
+base.5=D\:\\temps_project\\komcity\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\internal_impl-22.2.1_e1ec4938faa15be4924351b293f1249a92c4be57
+base.4=D\:\\temps_project\\komcity\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\support-annotations-22.2.1_4546a5745ae5b6aea506a41937cbe2e8ac7b938e
+base.3=D\:\\temps_project\\komcity\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_a157abbb21ce034b9c26385d264cebd862b3cf8d
+base.2=D\:\\temps_project\\komcity\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_b49421bece686057c92d6e12bf938d72e9b28bed
+base.1=D\:\\temps_project\\komcity\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_a6ef272b362cff4867adc00fc58a64dad7db4915
+base.0=D\:\\temps_project\\komcity\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\jsoup-1.10.3_6228e7a8ac04dd82212a8d3e9d68330b1b6bd8aa
+file.5=D\:\\temps_project\\komcity\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\internal_impl-22.2.1_e1ec4938faa15be4924351b293f1249a92c4be57\\classes.dex
+file.4=D\:\\temps_project\\komcity\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\support-annotations-22.2.1_4546a5745ae5b6aea506a41937cbe2e8ac7b938e\\classes.dex
+file.3=D\:\\temps_project\\komcity\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_a157abbb21ce034b9c26385d264cebd862b3cf8d\\classes.dex
+file.2=D\:\\temps_project\\komcity\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_b49421bece686057c92d6e12bf938d72e9b28bed\\classes.dex
+file.1=D\:\\temps_project\\komcity\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\classes_a6ef272b362cff4867adc00fc58a64dad7db4915\\classes.dex
+file.0=D\:\\temps_project\\komcity\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\jsoup-1.10.3_6228e7a8ac04dd82212a8d3e9d68330b1b6bd8aa\\classes.dex

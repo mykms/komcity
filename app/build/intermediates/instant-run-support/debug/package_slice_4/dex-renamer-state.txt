@@ -1,0 +1,4 @@
+#Wed Jul 12 13:47:44 GMT+03:00 2017
+base.0=D\:\\temps_project\\komcity\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\5\\slice_4
+renamed.0=classes.dex
+file.0=D\:\\temps_project\\komcity\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\5\\slice_4\\classes.dex
