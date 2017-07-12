@@ -32,11 +32,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-
-
-
-
-
     compile('com.hannesdorfmann.mosby3:mvp:3.0.4') {
         exclude group: 'com.android.support'
     }
