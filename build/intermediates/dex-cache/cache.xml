@@ -3,33 +3,6 @@
 
     <item
         is-multidex="true"
-        jar="C:\Users\zajcev\.gradle\caches\modules-2\files-2.1\org.jsoup\jsoup\1.10.3\b842f960942503cf1abbcc8c173a7f2c19d43726\jsoup-1.10.3.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="b842f960942503cf1abbcc8c173a7f2c19d43726">
-        <dex dex="D:\temps_project\komcity\app\build\intermediates\transforms\dex\debug\folders\1000\10\jsoup-1.10.3_6228e7a8ac04dd82212a8d3e9d68330b1b6bd8aa\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\zajcev\.android\build-cache\71e99219907d89d07126dfa4e35b32dc2e087696\output\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="f8efd0096475e0daf054267b61544e10dc776503">
-        <dex dex="D:\temps_project\komcity\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_a157abbb21ce034b9c26385d264cebd862b3cf8d\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\zajcev\.android\build-cache\68cd5a5d59bdf2f1eff19096ed3804a6e1c178d2\output\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="3abb4b88f5a8a0584a9b01d3170d7165f12f8588">
-        <dex dex="D:\temps_project\komcity\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_b49421bece686057c92d6e12bf938d72e9b28bed\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="D:\temps_project\komcity\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         optimize="true"
@@ -39,39 +12,12 @@
     </item>
     <item
         is-multidex="true"
-        jar="C:\Users\zajcev\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.2.1\support-annotations-22.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
-        <dex dex="D:\temps_project\komcity\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-22.2.1_4546a5745ae5b6aea506a41937cbe2e8ac7b938e\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\zajcev\.android\build-cache\71e99219907d89d07126dfa4e35b32dc2e087696\output\jars\libs\internal_impl-22.2.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
-        <dex dex="D:\temps_project\komcity\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-22.2.1_e1ec4938faa15be4924351b293f1249a92c4be57\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
         jar="D:\temps_project\komcity\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.0"
-        sha1="27833442fb2cdc27fe788e4deeaa8a5d202c476d">
+        sha1="23691ef78f59c0a5ae97a1f0372c02f8f32aa9e3">
         <dex dex="D:\temps_project\komcity\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_9179847ff7dfadd67e0faa6342734c396feaec1c\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\zajcev\.android\build-cache\7ab544dc5304efca7231c98ec6ea0015e91a647d\output\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="4486e953d1f35f8ccab098b1dd67146366d5f731">
-        <dex dex="D:\temps_project\komcity\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_a6ef272b362cff4867adc00fc58a64dad7db4915\classes.dex" />
     </item>
 
 </items>

@@ -11,13 +11,13 @@
                     "endOffset": 99
                 },
                 "from": {
-                    "file": "C:\\Users\\zajcev\\.android\\build-cache\\7ab544dc5304efca7231c98ec6ea0015e91a647d\\output\\res\\values-v18\\values-v18.xml",
+                    "file": "C:\\Users\\zajcev\\.android\\build-cache\\761b9e8c95768c2017a7508eab746808df91f024\\output\\res\\values-v18\\values-v18.xml",
                     "position": {
-                        "startLine": 4,
+                        "startLine": 2,
                         "startColumn": 4,
-                        "startOffset": 291,
+                        "startOffset": 55,
                         "endColumn": 48,
-                        "endOffset": 335
+                        "endOffset": 99
                     }
                 }
             }

@@ -126,7 +126,7 @@ public class fragment_announcement extends Fragment
                     fragment.setArguments(params);
 
                     FragmentManager fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+                    //fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
                 }
             });
         }

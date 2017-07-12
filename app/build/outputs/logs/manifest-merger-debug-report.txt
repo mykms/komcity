@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 manifest
-ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:2:1-23:12
+ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:2:1-26:12
 	package
 		ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:3:5-53
 		INJECTED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml
@@ -22,9 +22,22 @@ ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:6:5-79
 	android:name
 		ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:6:22-76
 application
-ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:8:5-21:19
-MERGED from [com.android.support:appcompat-v7:22.2.1] C:\Users\zajcev\.android\build-cache\7ab544dc5304efca7231c98ec6ea0015e91a647d\output\AndroidManifest.xml:22:5-20
-MERGED from [com.android.support:support-v4:22.2.1] C:\Users\zajcev\.android\build-cache\71e99219907d89d07126dfa4e35b32dc2e087696\output\AndroidManifest.xml:22:5-20
+ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:8:5-24:19
+MERGED from [com.hannesdorfmann.mosby3:mvp:3.0.4] C:\Users\zajcev\.android\build-cache\8786ac2aebe83905512db6944c6083a9591b6f2c\output\AndroidManifest.xml:11:5-20
+MERGED from [com.hannesdorfmann.mosby3:presentermanager:3.0.4] C:\Users\zajcev\.android\build-cache\f9182adfbcd3167b39e8d5f186b5940d3c4bb35f\output\AndroidManifest.xml:11:5-20
+MERGED from [com.hannesdorfmann.mosby3:utils-fragment:3.0.4] C:\Users\zajcev\.android\build-cache\0f5b38bf720d42aad33d14ce97033981705b16b6\output\AndroidManifest.xml:27:5-20
+MERGED from [com.android.support:design:25.3.1] C:\Users\zajcev\.android\build-cache\f32cc062abea4553090161bc0c61d9a5cc4aeb66\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:appcompat-v7:25.3.1] C:\Users\zajcev\.android\build-cache\761b9e8c95768c2017a7508eab746808df91f024\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:animated-vector-drawable:25.3.1] C:\Users\zajcev\.android\build-cache\d8f4bf708bd2bd9097c069a0fb70299e116d22af\output\AndroidManifest.xml:26:5-20
+MERGED from [com.android.support:support-vector-drawable:25.3.1] C:\Users\zajcev\.android\build-cache\ca2e98bb5289d6261699e2e4c7e07ae7e19fec65\output\AndroidManifest.xml:26:5-20
+MERGED from [com.android.support:transition:25.3.1] C:\Users\zajcev\.android\build-cache\b59f56975432fabc60760424c20676b9e1c430ca\output\AndroidManifest.xml:26:5-20
+MERGED from [com.android.support:support-v4:25.3.1] C:\Users\zajcev\.android\build-cache\69f2692711ab0dee10c263c4ce70ef20307896b4\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-fragment:25.3.1] C:\Users\zajcev\.android\build-cache\96fe429ce6a635e40a2ddd8717c0d0dff58f30f2\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-media-compat:25.3.1] C:\Users\zajcev\.android\build-cache\339a24e029b117e589a913f084fed96ad25e9b87\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-core-ui:25.3.1] C:\Users\zajcev\.android\build-cache\631cef293be5a4b143a8d9d73eee2d3133a5d476\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-core-utils:25.3.1] C:\Users\zajcev\.android\build-cache\489d7f00c51e33acef12a7f7a37d76a3b33a5f2b\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-compat:25.3.1] C:\Users\zajcev\.android\build-cache\3687da4b3308a5fd8ca73dba002fc53bc0e7718f\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support.constraint:constraint-layout:1.0.2] C:\Users\zajcev\.android\build-cache\6173bbc06abb3e785102972cab20043b4ef71761\output\AndroidManifest.xml:9:5-20
 	android:label
 		ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:11:9-41
 	android:supportsRtl
@@ -36,27 +49,64 @@ MERGED from [com.android.support:support-v4:22.2.1] C:\Users\zajcev\.android\bui
 	android:theme
 		ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:13:9-40
 activity#testapp.komcity.ru.myapplicationetalon.MainActivity
-ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:14:9-20:20
+ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:14:9-23:20
+	android:label
+		ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:16:13-56
+	android:theme
+		ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:17:13-56
 	android:name
-		ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:14:19-47
+		ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:15:13-41
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:15:13-19:29
+ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:18:13-22:29
 action#android.intent.action.MAIN
-ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:16:17-69
+ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:19:17-69
 	android:name
-		ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:16:25-66
+		ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:19:25-66
 category#android.intent.category.LAUNCHER
-ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:18:17-77
+ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:21:17-77
 	android:name
-		ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:18:27-74
+		ADDED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml:21:27-74
 uses-sdk
 INJECTED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
-MERGED from [com.android.support:appcompat-v7:22.2.1] C:\Users\zajcev\.android\build-cache\7ab544dc5304efca7231c98ec6ea0015e91a647d\output\AndroidManifest.xml:20:5-43
-MERGED from [com.android.support:recyclerview-v7:22.2.1] C:\Users\zajcev\.android\build-cache\68cd5a5d59bdf2f1eff19096ed3804a6e1c178d2\output\AndroidManifest.xml:20:5-43
-MERGED from [com.android.support:support-v4:22.2.1] C:\Users\zajcev\.android\build-cache\71e99219907d89d07126dfa4e35b32dc2e087696\output\AndroidManifest.xml:20:5-43
+MERGED from [com.hannesdorfmann.mosby3:mvp:3.0.4] C:\Users\zajcev\.android\build-cache\8786ac2aebe83905512db6944c6083a9591b6f2c\output\AndroidManifest.xml:7:5-9:41
+MERGED from [com.hannesdorfmann.mosby3:presentermanager:3.0.4] C:\Users\zajcev\.android\build-cache\f9182adfbcd3167b39e8d5f186b5940d3c4bb35f\output\AndroidManifest.xml:7:5-9:41
+MERGED from [com.hannesdorfmann.mosby3:utils-fragment:3.0.4] C:\Users\zajcev\.android\build-cache\0f5b38bf720d42aad33d14ce97033981705b16b6\output\AndroidManifest.xml:23:5-25:41
+MERGED from [com.jakewharton:butterknife:8.7.0] C:\Users\zajcev\.android\build-cache\75891a90d13256c924cc74f10890dda0129850f0\output\AndroidManifest.xml:5:5-43
+MERGED from [com.android.support:design:25.3.1] C:\Users\zajcev\.android\build-cache\f32cc062abea4553090161bc0c61d9a5cc4aeb66\output\AndroidManifest.xml:21:5-23:62
+MERGED from [com.android.support:appcompat-v7:25.3.1] C:\Users\zajcev\.android\build-cache\761b9e8c95768c2017a7508eab746808df91f024\output\AndroidManifest.xml:21:5-23:78
+MERGED from [com.android.support:animated-vector-drawable:25.3.1] C:\Users\zajcev\.android\build-cache\d8f4bf708bd2bd9097c069a0fb70299e116d22af\output\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:25.3.1] C:\Users\zajcev\.android\build-cache\ca2e98bb5289d6261699e2e4c7e07ae7e19fec65\output\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:recyclerview-v7:25.3.1] C:\Users\zajcev\.android\build-cache\0fd201de92507af536232967c23ef1f9c85d13ad\output\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:transition:25.3.1] C:\Users\zajcev\.android\build-cache\b59f56975432fabc60760424c20676b9e1c430ca\output\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-v4:25.3.1] C:\Users\zajcev\.android\build-cache\69f2692711ab0dee10c263c4ce70ef20307896b4\output\AndroidManifest.xml:21:5-23:54
+MERGED from [com.android.support:support-fragment:25.3.1] C:\Users\zajcev\.android\build-cache\96fe429ce6a635e40a2ddd8717c0d0dff58f30f2\output\AndroidManifest.xml:21:5-23:60
+MERGED from [com.android.support:support-media-compat:25.3.1] C:\Users\zajcev\.android\build-cache\339a24e029b117e589a913f084fed96ad25e9b87\output\AndroidManifest.xml:21:5-23:63
+MERGED from [com.android.support:support-core-ui:25.3.1] C:\Users\zajcev\.android\build-cache\631cef293be5a4b143a8d9d73eee2d3133a5d476\output\AndroidManifest.xml:21:5-23:58
+MERGED from [com.android.support:support-core-utils:25.3.1] C:\Users\zajcev\.android\build-cache\489d7f00c51e33acef12a7f7a37d76a3b33a5f2b\output\AndroidManifest.xml:21:5-23:61
+MERGED from [com.android.support:support-compat:25.3.1] C:\Users\zajcev\.android\build-cache\3687da4b3308a5fd8ca73dba002fc53bc0e7718f\output\AndroidManifest.xml:21:5-23:58
+MERGED from [com.android.support.constraint:constraint-layout:1.0.2] C:\Users\zajcev\.android\build-cache\6173bbc06abb3e785102972cab20043b4ef71761\output\AndroidManifest.xml:5:5-7:41
+	tools:overrideLibrary
+		ADDED from [com.android.support:design:25.3.1] C:\Users\zajcev\.android\build-cache\f32cc062abea4553090161bc0c61d9a5cc4aeb66\output\AndroidManifest.xml:23:9-59
 	android:targetSdkVersion
 		INJECTED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml
 		INJECTED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml
 	android:minSdkVersion
 		INJECTED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml
 		INJECTED from D:\temps_project\komcity\app\src\main\AndroidManifest.xml
+meta-data#android.support.VERSION
+ADDED from [com.android.support:design:25.3.1] C:\Users\zajcev\.android\build-cache\f32cc062abea4553090161bc0c61d9a5cc4aeb66\output\AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:appcompat-v7:25.3.1] C:\Users\zajcev\.android\build-cache\761b9e8c95768c2017a7508eab746808df91f024\output\AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:animated-vector-drawable:25.3.1] C:\Users\zajcev\.android\build-cache\d8f4bf708bd2bd9097c069a0fb70299e116d22af\output\AndroidManifest.xml:22:5-24:34
+MERGED from [com.android.support:support-vector-drawable:25.3.1] C:\Users\zajcev\.android\build-cache\ca2e98bb5289d6261699e2e4c7e07ae7e19fec65\output\AndroidManifest.xml:22:5-24:34
+MERGED from [com.android.support:recyclerview-v7:25.3.1] C:\Users\zajcev\.android\build-cache\0fd201de92507af536232967c23ef1f9c85d13ad\output\AndroidManifest.xml:22:5-24:34
+MERGED from [com.android.support:transition:25.3.1] C:\Users\zajcev\.android\build-cache\b59f56975432fabc60760424c20676b9e1c430ca\output\AndroidManifest.xml:22:5-24:34
+MERGED from [com.android.support:support-v4:25.3.1] C:\Users\zajcev\.android\build-cache\69f2692711ab0dee10c263c4ce70ef20307896b4\output\AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:support-fragment:25.3.1] C:\Users\zajcev\.android\build-cache\96fe429ce6a635e40a2ddd8717c0d0dff58f30f2\output\AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:support-media-compat:25.3.1] C:\Users\zajcev\.android\build-cache\339a24e029b117e589a913f084fed96ad25e9b87\output\AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:support-core-ui:25.3.1] C:\Users\zajcev\.android\build-cache\631cef293be5a4b143a8d9d73eee2d3133a5d476\output\AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:support-core-utils:25.3.1] C:\Users\zajcev\.android\build-cache\489d7f00c51e33acef12a7f7a37d76a3b33a5f2b\output\AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:support-compat:25.3.1] C:\Users\zajcev\.android\build-cache\3687da4b3308a5fd8ca73dba002fc53bc0e7718f\output\AndroidManifest.xml:25:5-27:34
+	android:value
+		ADDED from [com.android.support:design:25.3.1] C:\Users\zajcev\.android\build-cache\f32cc062abea4553090161bc0c61d9a5cc4aeb66\output\AndroidManifest.xml:27:9-31
+	android:name
+		ADDED from [com.android.support:design:25.3.1] C:\Users\zajcev\.android\build-cache\f32cc062abea4553090161bc0c61d9a5cc4aeb66\output\AndroidManifest.xml:26:9-47

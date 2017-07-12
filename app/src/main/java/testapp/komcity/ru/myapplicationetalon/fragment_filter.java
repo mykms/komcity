@@ -136,7 +136,7 @@ public class fragment_filter extends Fragment
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu, menu);
+        //inflater.inflate(R.menu.menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -145,10 +145,10 @@ public class fragment_filter extends Fragment
     {
         switch (item.getItemId())
         {
-            case R.id.action_filter:
-                LoadResult();
-                Toast.makeText(getActivity().getApplicationContext(), "Не удалось получить содержимое\nПроверьте интернет соединение", Toast.LENGTH_SHORT).show();
-                return true;
+            //case R.id.action_filter:
+                //LoadResult();
+                //Toast.makeText(getActivity().getApplicationContext(), "Не удалось получить содержимое\nПроверьте интернет соединение", Toast.LENGTH_SHORT).show();
+                //return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

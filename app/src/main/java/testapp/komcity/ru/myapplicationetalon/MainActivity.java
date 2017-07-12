@@ -1,174 +1,88 @@
 package testapp.komcity.ru.myapplicationetalon;
 
-import android.app.FragmentManager;
 import android.net.ConnectivityManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.content.res.Configuration;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.util.Log;
-import android.widget.Toast;
-import android.view.Gravity;
-
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity
-{
-    private DrawerLayout myDrawerLayout;
-    private ListView myDrawerList;
-    private ActionBarDrawerToggle myDrawerToggle;
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    // navigation drawer title
-    private CharSequence myDrawerTitle;
-    // used to store app title
-    private CharSequence myTitle;
-
-    private String[] viewsNames;
+    @BindView(R.id.toolbar) public Toolbar toolbar;
+    @BindView(R.id.drawer_layout) public DrawerLayout drawer;
+    @BindView(R.id.nav_view) public NavigationView navigationView;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        myTitle = getTitle();
-        myDrawerTitle = getResources().getString(R.string.menu);
+        setSupportActionBar(toolbar);
 
-        // load slide menu items
-        viewsNames = getResources().getStringArray(R.array.screen_title);
-        myDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        myDrawerList = (ListView) findViewById(R.id.leftPanel_fragment);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
 
-        myDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, viewsNames));
-
-        // enabling action bar app icon and behaving it as toggle button
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-        myDrawerToggle = new ActionBarDrawerToggle(this, myDrawerLayout, R.string.open_menu, R.string.close_menu) {
-            public void onDrawerClosed(View view) {
-                getSupportActionBar().setTitle(myTitle);
-                // calling onPrepareOptionsMenu() to show action bar icons
-                invalidateOptionsMenu();
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                getSupportActionBar().setTitle(myDrawerTitle);
-                // calling onPrepareOptionsMenu() to hide action bar icons
-                invalidateOptionsMenu();
-            }
-        };
-        myDrawerLayout.setDrawerListener(myDrawerToggle);
-
-        if (savedInstanceState == null) {
-            displayView(0); // on first time display view for first nav item
-        }
-
-        myDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private class DrawerItemClickListener implements ListView.OnItemClickListener
-    {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-        {
-            // display view for selected nav drawer item
-            displayView(position);
-        }
-    }
-
-    private void displayView(int position)
-    {
-        // update the main content by replacing fragments
-        Fragment fragment = null;
-        if(isNetworkActive()) {
-            switch (position) {
-                case 0:
-                    fragment = new fragment_news();
-                    break;
-                case 1:
-                    fragment = new fragment_announcement();
-                    break;
-                case 2:
-                    fragment = new fragment_forum();
-                    break;
-                default:
-                    break;
-            }
-        }
-        else
-            Toast.makeText(this, "Не удалось получить содержимое\nПроверьте интерент соединение", Toast.LENGTH_SHORT).show();
-
-        if (fragment != null)
-        {
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-            // update selected item and title, then close the drawer
-            myDrawerList.setItemChecked(position, true);
-            myDrawerList.setSelection(position);
-            setTitle(viewsNames[position]);
-            myDrawerLayout.closeDrawer(myDrawerList);
-
-        } else
-        {
-            Toast toast = Toast.makeText(getApplicationContext(), "Невозможно загрузить экран", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
-            // error in creating fragment
-            Log.e("MainActivity", "Error in creating fragment");
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        // toggle nav drawer on selecting action bar app icon/title
-        if (myDrawerToggle.onOptionsItemSelected(item)) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Called when invalidateOptionsMenu() is triggered
-     */
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // if navigation drawer is opened, hide the action items
-        boolean drawerOpen = myDrawerLayout.isDrawerOpen(myDrawerList);
-        //menu.findItem(R.id.action_filter).setVisible(true);
-        return super.onPrepareOptionsMenu(menu);
-    }
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
 
-    @Override
-    public void setTitle(CharSequence title) {
-        myTitle = title;
-        getSupportActionBar().setTitle(myTitle);
-    }
+        if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        myDrawerToggle.syncState();
-    }
+        } else if (id == R.id.nav_slideshow) {
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggls
-        myDrawerToggle.onConfigurationChanged(newConfig);
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }
+
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     private boolean isNetworkActive()

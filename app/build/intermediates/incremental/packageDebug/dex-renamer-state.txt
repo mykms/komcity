@@ -1,4 +1,4 @@
-#Wed Jul 12 13:47:44 GMT+03:00 2017
+#Wed Jul 12 19:06:00 GMT+03:00 2017
 base.0=D\:\\temps_project\\komcity\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_9179847ff7dfadd67e0faa6342734c396feaec1c
 renamed.1=classes.dex
 renamed.0=classes2.dex
