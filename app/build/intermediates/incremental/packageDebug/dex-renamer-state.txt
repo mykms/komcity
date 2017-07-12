@@ -1,7 +1,0 @@
-#Wed Jul 12 19:06:00 GMT+03:00 2017
-base.0=D\:\\temps_project\\komcity\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_9179847ff7dfadd67e0faa6342734c396feaec1c
-renamed.1=classes.dex
-renamed.0=classes2.dex
-file.1=D\:\\temps_project\\komcity\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_5ec463b1890461037ce7cf449400b9674cb56d86\\classes.dex
-base.1=D\:\\temps_project\\komcity\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_5ec463b1890461037ce7cf449400b9674cb56d86
-file.0=D\:\\temps_project\\komcity\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_9179847ff7dfadd67e0faa6342734c396feaec1c\\classes.dex
