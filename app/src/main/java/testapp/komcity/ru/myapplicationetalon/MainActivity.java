@@ -6,19 +6,22 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import com.arellomobile.mvp.MvpActivity;
+import com.arellomobile.mvp.presenter.InjectPresenter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends MvpActivity implements MainView, NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.toolbar) public Toolbar toolbar;
     @BindView(R.id.drawer_layout) public DrawerLayout drawer;
     @BindView(R.id.nav_view) public NavigationView navigationView;
+
+    @InjectPresenter
+    MainPresenter mainPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -91,5 +94,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         boolean isNetworkAvailable = connetInet.getActiveNetworkInfo() != null;
         boolean isNetworkConnected = isNetworkAvailable && connetInet.getActiveNetworkInfo().isConnected();
         return isNetworkConnected;
+    }
+
+    @Override
+    public void isProgressing(boolean isProgress) {
+        //
     }
 }
