@@ -1,8 +1,6 @@
-package testapp.komcity.ru.myapplicationetalon;
+package testapp.komcity.ru.android;
 
-import android.app.FragmentManager;
 import android.content.Context;
-import android.nfc.FormatException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -14,19 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import android.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

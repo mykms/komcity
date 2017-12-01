@@ -1,4 +1,4 @@
-package testapp.komcity.ru.myapplicationetalon;
+package testapp.komcity.ru.android;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -7,33 +7,27 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-
 import org.jsoup.Jsoup;
-import org.jsoup.parser.*;
-import org.jsoup.nodes.*;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class fragment_news extends Fragment
-{
-    private ArrayAdapter<String> dataList;
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class fragment_forum extends Fragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_news, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View rootView = inflater.inflate(R.layout.fragment_forum, container, false);
+
         return rootView;
     }
 
@@ -45,20 +39,20 @@ public class fragment_news extends Fragment
         if (rootView != null)
         {
             // Получаем наш список
-            ListView NewsList = (ListView)rootView.findViewById(R.id.newsList);
+            ListView forumList = (ListView)rootView.findViewById(R.id.forumList);
 
-            ProgressBar progressBar = (ProgressBar)rootView.findViewById(R.id.ProgressNews);
+            ProgressBar progressBar = (ProgressBar)rootView.findViewById(R.id.ProgressForum);
             progressBar.setVisibility(ProgressBar.VISIBLE);
 
-            NewsListTask _newsTask = new NewsListTask();
-            _newsTask.execute(NewsList, getActivity().getApplicationContext(), progressBar);
+            ForumListTask _forumTask = new ForumListTask();
+            _forumTask.execute(forumList, getActivity().getApplicationContext(), progressBar);
         }
     }
 
-    class NewsListTask extends AsyncTask<Object, Void, Void>
+    class ForumListTask extends AsyncTask<Object, Void, Void>
     {
         ListView _list;
-        ArrayList<Article> articles = new ArrayList<Article>();
+        ArrayList<Forum> forums = new ArrayList<Forum>();
         String date = "", theme = "", art = "";
         Context thisContext;
         ProgressBar progress;
@@ -73,7 +67,7 @@ public class fragment_news extends Fragment
             Document html = null;//Здесь хранится будет разобранный html документ
             try {
                 //Считываем заглавную страницу
-                html = Jsoup.connect("http://komcity.ru/news/").get();
+                html = Jsoup.connect("http://komcity.ru/forum/").get();
             } catch (IOException e) {
                 //Если не получилось считать
                 e.printStackTrace();
@@ -82,41 +76,50 @@ public class fragment_news extends Fragment
             //Если всё считалось, что вытаскиваем из считанного html документа table
             if (html != null)
             {
-                //int size = html.getElementsByTag("table").size();   // Total
-                Elements rootTR = html.getElementsByTag("tr");       // get all tags TD
-                for (int i = 0; i < rootTR.size(); i++)
+                Elements rootTABLE = html.getElementsByTag("table");       // get all tags Table
+                boolean StartFlag = false;
+
+                for (int i = 0; i < rootTABLE.size(); i++)
                 {
-                    Element row = rootTR.get(i);
-                    Elements cols = row.select("td");
-
-                    String text = cols.get(0).text().trim();
-                    if (text.length() < 6) continue;
-                    try
-                    {
-                        SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm");
-                        Date time = formatTime.parse(text.substring(0, 5));
-                        // поймали дату / время
-                        date = getShortDate(text.substring(6)) + " " + text.substring(0, 5);
-                        //dataNews[0][count] = date;
-                    } catch (ParseException e) {
-                        e.printStackTrace();   }
-                    // Нашли заголовок
-                    if(text.length() > 4) {
-                        if (text.substring(0, 4).equalsIgnoreCase("тема"))
+                    Element tr = rootTABLE.get(i);
+                    try {
+                        if (tr.attr("width").equalsIgnoreCase("100%") && tr.attr("height").equalsIgnoreCase("90%") && tr.attr("border").equalsIgnoreCase("0") && tr.attr("cellpadding").equalsIgnoreCase("0") && tr.attr("cellspacing").equalsIgnoreCase("0"))
                         {
-                            theme = text.substring(5, text.length());
-                            //dataNews[1][count] = theme;
-                            try
+                            Elements td = tr.select("td");
+                            for (int j = 0; j < td.size(); j++)
                             {
-                                Element body = rootTR.get(i+1).select("td").get(5);
-                                if (body.getElementsByTag("span") != null)
-                                    body.getElementsByTag("span").remove();
-                                art = body.text().trim();
-
-                                articles.add(new Article(date, theme, art));    // Заполняем адаптер
+                                Element thisElement = td.get(j);
+                                String thisTxt = thisElement.text().trim();
+                                if (!thisTxt.isEmpty()) {   // читаем только НЕ пустые строки
+                                    if (StartFlag) {    // Если нашли точку входа
+                                        //собираем
+                                        try {
+                                            String forumName = thisElement.select("a").get(0).text().trim();
+                                            String _descr = thisTxt.substring(forumName.length()).split("Модератор:")[0].trim();    // Здесь должно быть описание
+                                            String _count = td.get(j + 1).text().trim() + " / " + td.get(j + 2).text().trim();
+                                            forums.add(new Forum(forumName, _descr, _count));
+                                            j += 4;// Переместим курсор на начало тем
+                                        }
+                                        catch(Exception e)
+                                        {
+                                            break;
+                                            //e.printStackTrace();
+                                        }
+                                    } else {
+                                        if (thisTxt.equalsIgnoreCase("тем") && td.get(j + 1).text().equalsIgnoreCase("реплик")) {
+                                            // нашли вход
+                                            StartFlag = true;
+                                            j += 3;// Переместим курсор на начало тем
+                                        }
+                                    }
+                                }
                             }
-                            catch (Exception e) { e.printStackTrace(); }
+                            break;
                         }
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -130,7 +133,7 @@ public class fragment_news extends Fragment
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
 
-            NewsAdapter boxAdapter = new NewsAdapter(thisContext, articles);// Заполняем адаптер ListView
+            ForumAdapter boxAdapter = new ForumAdapter(thisContext, forums);// Заполняем адаптер ListView
             _list.setAdapter(boxAdapter);// настраиваем список
             progress.setVisibility(ProgressBar.INVISIBLE);
         }
@@ -162,42 +165,42 @@ public class fragment_news extends Fragment
             return "";
         }
 
-        public class Article
+        public class Forum
         {
-            private String date;
-            private String title;
-            private String text;
+            private String Theme;
+            private String Description;
+            private String CountThemeReplic;
 
-            public Article(String _date, String _title, String _text)
+            public Forum(String _theme, String _discr, String _count)
             {
-                date = _date;
-                title = _title;
-                text = _text;
+                Theme = _theme;
+                Description = _discr;
+                CountThemeReplic = _count;
             }
 
-            public String getDate()
+            public String getTheme()
             {
-                return date;
+                return Theme;
             }
 
-            public String getTitle()
+            public String getDescription()
             {
-                return title;
+                return Description;
             }
 
-            public String getText()
+            public String getCountThemeReplic()
             {
-                return text;
+                return CountThemeReplic;
             }
         }
 
-        public class NewsAdapter extends BaseAdapter
+        public class ForumAdapter extends BaseAdapter
         {
             Context context;
             LayoutInflater lInflater;
-            ArrayList<Article> objects;
+            ArrayList<Forum> objects;
 
-            NewsAdapter(Context _context, ArrayList<Article> products)
+            ForumAdapter(Context _context, ArrayList<Forum> products)
             {
                 context = _context;
                 objects = products;
@@ -233,12 +236,12 @@ public class fragment_news extends Fragment
                 if (view == null) {
                     view = lInflater.inflate(R.layout.listview_item, parent, false);
                 }
-                Article a = (Article)getItem(position);
+                Forum f = (Forum)getItem(position);
 
                 // заполняем View в пункте списка данными
-                ((TextView) view.findViewById(R.id.newsTitle)).setText(a.getTitle());
-                ((TextView) view.findViewById(R.id.newsDate)).setText(a.getDate());
-                ((TextView) view.findViewById(R.id.newsFullText)).setText(a.getText());
+                ((TextView) view.findViewById(R.id.newsTitle)).setText(f.getTheme());
+                ((TextView) view.findViewById(R.id.newsDate)).setText(f.getCountThemeReplic());
+                ((TextView) view.findViewById(R.id.newsFullText)).setText(f.getDescription());
 
                 return view;
             }

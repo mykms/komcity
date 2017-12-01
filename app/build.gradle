@@ -5,7 +5,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
     defaultConfig {
-        applicationId "testapp.komcity.ru.myapplicationetalon"
+        applicationId "ru.komcity.android"
         minSdkVersion 14    // Android 4.0
         targetSdkVersion 22
         versionCode 1

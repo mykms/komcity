@@ -1,4 +1,4 @@
-package testapp.komcity.ru.myapplicationetalon;
+package testapp.komcity.ru.android;
 
 import com.arellomobile.mvp.MvpView;
 
