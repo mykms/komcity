@@ -43,10 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        // добавляем в контейнер при помощи метода add()
-        fragmentTransaction.add(R.id.content_frame, new NewsFragment(), modules.getNameNews());
-        fragmentTransaction.commit();
+        showFragment(this, fragmentManager, modules.getNameNews()); // По умолчанию показываем новости
     }
 
     @Override
