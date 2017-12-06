@@ -1,7 +1,21 @@
 package ru.komcity.android.announcement;
 
 
-public class loadElements {
+import org.jsoup.nodes.Document;
+
+import java.util.List;
+
+import ru.komcity.android.base.AsyncLoader.HtmlLoader;
+import ru.komcity.android.base.AsyncLoader.IAsyncLoader;
+import ru.komcity.android.base.AsyncLoader.IHtmlLoader;
+import ru.komcity.android.base.Utils;
+
+public class AnnouncementData {
+    private Utils utils = new Utils();
+
+    public AnnouncementData() {
+        //
+    }
     /*
 
 public class fragment_filter extends Fragment
@@ -78,57 +92,6 @@ public class fragment_filter extends Fragment
         return view;
     }
 
-    private ArrayAdapter<String> LoadToSpinner(View view, int id)
-    {
-        ArrayAdapter<String> adapter = null;
-        ArrayList<String> sub = new ArrayList<String>();
-        int last = -1;
-        for (int i = 0; i < SubCategory.size(); i++)
-        {
-            String[] arr = SubCategory.get(i).split(", ", 4);
-            int val = 0;
-            try{
-                val = Integer.valueOf(arr[1]);
-                if (val == id)
-                {
-                    sub.add(arr[0]);
-                }
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-            last = val;
-        }
-        adapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_spinner_item, sub);
-
-        return adapter;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //inflater.inflate(R.menu.menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
-            //case R.id.action_filter:
-                //LoadResult();
-                //Toast.makeText(getActivity().getApplicationContext(), "Не удалось получить содержимое\nПроверьте интернет соединение", Toast.LENGTH_SHORT).show();
-                //return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    public void LoadResult()
-    {
-        return;
-    }
 
     class TypeCategory extends AsyncTask<Object, Void, Void>
     {
@@ -191,54 +154,5 @@ public class fragment_filter extends Fragment
             }
         }
     }
-}
-
-     */
-
-
-
-
-
-
-
-    /*
-    public class fragment_filter_result extends Fragment {
-
-    public fragment_filter_result()
-    {
-        //
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        View view = inflater.inflate(R.layout.fragment_filter_result, container, false);
-
-        return view;
-    }
-
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-        View rootView = getView();// берем корневой элемент всего фрагмента
-        if (rootView != null)
-        {
-            // Получаем наш список
-            final ListView announcemenList = (ListView)rootView.findViewById(R.id.FilterResult);
-
-            ProgressBar progressBar = (ProgressBar)rootView.findViewById(R.id.ProgressFilterResult);
-            progressBar.setVisibility(ProgressBar.VISIBLE);
-
-            String url = "http://www.komcity.ru/board/main/getPubAdverts/?id=236&s=3&thisrubric=230&h=3";
-        }
-    }
-}
     */
 }

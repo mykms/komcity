@@ -1,14 +1,18 @@
 package ru.komcity.android.announcement;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
 import org.jsoup.nodes.Document;
+
+import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,9 +23,11 @@ import ru.komcity.android.base.AsyncLoader.IHtmlLoader;
 import ru.komcity.android.base.ModulesGraph;
 import ru.komcity.android.base.Utils;
 
-public class AnnouncementFragment extends Fragment implements IAsyncLoader, IHtmlLoader {
-    @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
+public class AnnouncementFragment extends Fragment implements IAsyncLoader, IHtmlLoader, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefresh;
+    @BindView(R.id.category_list) Spinner category_list;
+    @BindView(R.id.announcement_type_list) Spinner announcement_type_list;
+    @BindView(R.id.subcategory_list) Spinner subcategory_list;
 
     private AnnouncementAdapter adapter;
     private Utils utils;
@@ -37,13 +43,13 @@ public class AnnouncementFragment extends Fragment implements IAsyncLoader, IHtm
         utils = new Utils();
         if (getActivity() != null)
             if (getActivity().getActionBar() != null)
-                getActivity().getActionBar().setTitle(modules.getTitleForum());
-
-        mRecyclerView.setHasFixedSize(true);    // Не будем динамически изменять размеры
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                getActivity().getActionBar().setTitle(modules.getTitleAnnouncement());
 
         swipeRefresh.setEnabled(true);
+        swipeRefresh.setOnRefreshListener(this);
         swipeRefresh.setRefreshing(true); // включаем
+
+        category_list.setPrompt("Выберите категорию");
 
         loadAnnouncement();
 
@@ -67,6 +73,36 @@ public class AnnouncementFragment extends Fragment implements IAsyncLoader, IHtm
 
     @Override
     public void onReadyToShow(List<Object> items) {
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
+            list.add(items.get(i).toString());
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item, list);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        category_list.setAdapter(adapter);
+        category_list.setSelection(-1);// выделяем элемент
+        category_list.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                announcement_type_list.setAdapter(null);
 
+                List<String> links = htmlLoader.getAnnouncementTypeByID(i);
+                ArrayAdapter<String> adapterTypes = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item, links);
+                adapterTypes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                announcement_type_list.setAdapter(adapterTypes);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                //
+            }
+        });
+
+        swipeRefresh.setRefreshing(false); // включаем
+    }
+
+    @Override
+    public void onRefresh() {
+        loadAnnouncement();
     }
 }

@@ -1,20 +1,22 @@
 package ru.komcity.android.forum;
 
 public class ForumItem {
-    private String Theme;
+    private String Title;
     private String Description;
-    private String CountThemeReplic;
+    private String CountReplic;
+    private String CountTheme;
 
-    public ForumItem(String _theme, String _discr, String _count)
+    public ForumItem(String _title, String _discr, String _countReplic, String _countTheme)
     {
-        Theme = _theme;
+        Title = _title;
         Description = _discr;
-        CountThemeReplic = _count;
+        CountReplic = _countReplic;
+        CountTheme = _countTheme;
     }
 
-    public String getTheme()
+    public String getTitle()
     {
-        return Theme;
+        return Title;
     }
 
     public String getDescription()
@@ -22,8 +24,12 @@ public class ForumItem {
         return Description;
     }
 
-    public String getCountThemeReplic()
+    public String getCountReplic()
     {
-        return CountThemeReplic;
+        return CountReplic;
+    }
+
+    public String getCountTheme() {
+        return CountTheme;
     }
 }

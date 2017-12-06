@@ -14,10 +14,11 @@ import android.view.MenuItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.komcity.android.base.FragmentCore;
+import ru.komcity.android.base.IMainActivityCommand;
 import ru.komcity.android.base.ModulesGraph;
 import ru.komcity.android.news.NewsFragment;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IMainActivityCommand {
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_gallery) {
             showFragment(this, fragmentManager, modules.getNameForum());
         } else if (id == R.id.nav_slideshow) {
-
+            showFragment(this, fragmentManager, modules.getNameAnnouncement());
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
@@ -80,7 +81,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void showFragment(Activity mActivity, FragmentManager mFrManager, String fragmentTAG) {
-        FragmentCore fragmentEngine = new FragmentCore(mActivity, mFrManager);
+        FragmentCore fragmentEngine = new FragmentCore(mFrManager);
         fragmentEngine.findFragment(fragmentTAG);
+    }
+
+    @Override
+    public void onSetTitle(String mTitle) {
+        if (mTitle != null)
+            if (!mTitle.isEmpty())
+                toolbar.setTitle(mTitle);
     }
 }

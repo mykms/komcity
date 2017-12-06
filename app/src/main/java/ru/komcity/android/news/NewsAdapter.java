@@ -36,10 +36,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         final NewsItem item = (NewsItem)feedItemList.get(i);
 
         //Download image using picasso library
-        if (!TextUtils.isEmpty(item.getThumbnail())) {
-            Picasso.with(mContext).load(item.getThumbnail())
-                    .error(R.drawable.placeholder)
-                    .placeholder(R.drawable.placeholder)
+        if (!TextUtils.isEmpty(item.getUrl())) {
+            Picasso.with(mContext).load(item.getUrl())
+                    .error(R.drawable.vector_ic_news)
+                    .placeholder(R.drawable.vector_ic_news)
                     .into(newsHolder.imageNews);
         }
 
@@ -56,13 +56,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         };
         newsHolder.imageNews.setOnClickListener(listener);
         newsHolder.lbl_title_news.setOnClickListener(listener);
+        newsHolder.lbl_text_news.setOnClickListener(listener);
     }
 
     @Override
     public int getItemCount() {
         return (null != feedItemList ? feedItemList.size() : 0);
     }
-
 
     class NewsViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.img_news) ImageView imageNews;
