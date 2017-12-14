@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onSetTitle(String mTitle) {
         if (mTitle != null)
             if (!mTitle.isEmpty())
-                toolbar.setTitle(mTitle);
+                if (toolbar != null)
+                    toolbar.setTitle(mTitle);
     }
 }

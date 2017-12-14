@@ -1,17 +1,16 @@
 package ru.komcity.android.news;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,14 +37,23 @@ public class NewsFragment extends Fragment implements IAsyncLoader, IHtmlLoader,
     private HtmlLoader htmlLoader = new HtmlLoader(this, this);
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        setIMainActivityCommand(activity);
+    }
+
+    private void setIMainActivityCommand(Object activity) {
+        if (activity instanceof AppCompatActivity){
+            AppCompatActivity mainActivity = (AppCompatActivity)activity;
+            commandToMainActivity = (IMainActivityCommand)mainActivity;
+            commandToMainActivity.onSetTitle(modules.getTitleNews());
+        }
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        AppCompatActivity mainActivity;
-
-        if (context instanceof AppCompatActivity){
-            mainActivity = (AppCompatActivity)context;
-            commandToMainActivity = (IMainActivityCommand)mainActivity;
-        }
+        setIMainActivityCommand(context);
     }
 
     @Override
@@ -69,8 +77,6 @@ public class NewsFragment extends Fragment implements IAsyncLoader, IHtmlLoader,
                                                             layoutManager.getOrientation());
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.recycler_divider_red));
         mRecyclerView.addItemDecoration(dividerItemDecoration);
-
-        commandToMainActivity.onSetTitle(modules.getTitleNews());
 
         swipeRefresh.setEnabled(true);
         swipeRefresh.setOnRefreshListener(this);

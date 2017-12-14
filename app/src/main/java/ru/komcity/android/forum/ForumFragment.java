@@ -1,5 +1,6 @@
 package ru.komcity.android.forum;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -35,14 +36,23 @@ public class ForumFragment extends Fragment implements IAsyncLoader, IHtmlLoader
     private HtmlLoader htmlLoader = new HtmlLoader(this, this);
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        setIMainActivityCommand(activity);
+    }
+
+    private void setIMainActivityCommand(Object activity) {
+        if (activity instanceof AppCompatActivity){
+            AppCompatActivity mainActivity = (AppCompatActivity)activity;
+            commandToMainActivity = (IMainActivityCommand)mainActivity;
+            commandToMainActivity.onSetTitle(modules.getTitleForum());
+        }
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        AppCompatActivity mainActivity;
-
-        if (context instanceof AppCompatActivity){
-            mainActivity = (AppCompatActivity)context;
-            commandToMainActivity = (IMainActivityCommand)mainActivity;
-        }
+        setIMainActivityCommand(context);
     }
 
     @Override
@@ -51,7 +61,6 @@ public class ForumFragment extends Fragment implements IAsyncLoader, IHtmlLoader
         ButterKnife.bind(this, view);
 
         utils = new Utils();
-        commandToMainActivity.onSetTitle(modules.getTitleForum());
 
         mRecyclerView.setHasFixedSize(true);    // Не будем динамически изменять размеры
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
