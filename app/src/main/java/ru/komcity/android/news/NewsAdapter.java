@@ -36,8 +36,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         final NewsItem item = (NewsItem)feedItemList.get(i);
 
         //Download image using picasso library
-        if (!TextUtils.isEmpty(item.getUrl())) {
-            Picasso.with(mContext).load(item.getUrl())
+        if (!TextUtils.isEmpty(item.getImage())) {
+            Picasso.with(mContext).load(item.getImage())
                     .error(R.drawable.vector_ic_news)
                     .placeholder(R.drawable.vector_ic_news)
                     .into(newsHolder.imageNews);

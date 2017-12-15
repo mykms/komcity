@@ -7,32 +7,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.komcity.android.R;
 
 public class ImageSliderAdapter extends PagerAdapter {
-    private List<Object> imageItemsList = new ArrayList<>();
+    private List<Object> imageItemsLinkList = new ArrayList<>();
     private LayoutInflater inflater;
     @BindView(R.id.slider_item_image) public ImageView item_image;
 
     public ImageSliderAdapter(Context mContext, List<Object> mItems) {
         if (mItems != null)
-            imageItemsList = mItems;
+            imageItemsLinkList = mItems;
 
         inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        imageItemsList.add(new Object());   // добавим один объект для отладки
     }
 
     @Override
     public int getCount() {
-        return imageItemsList.size();
+        return imageItemsLinkList.size();
     }
 
     @Override
@@ -45,13 +41,18 @@ public class ImageSliderAdapter extends PagerAdapter {
         View view = inflater.inflate(R.layout.slider_view_item, container, false);
         ButterKnife.bind(this, view);
 
-        Picasso.with(container.getContext()).load(imageItemsList.get(position).toString())
-                .error(R.drawable.vector_ic_news)
-                .placeholder(R.drawable.vector_ic_news)
+        Picasso.with(container.getContext()).load(imageItemsLinkList.get(position).toString())
+                .error(R.drawable.vector_ic_image_loading)
+                .placeholder(R.drawable.vector_ic_image_loading)
                 .into(item_image);
 
         container.addView(view);
 
         return view;
+    }
+
+    @Override
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        container.removeView((View)object);
     }
 }

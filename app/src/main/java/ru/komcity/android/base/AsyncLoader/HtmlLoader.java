@@ -15,7 +15,9 @@ import ru.komcity.android.forum.ForumItem;
 import ru.komcity.android.news.NewsItem;
 
 public class HtmlLoader {
-    private String rootAddress = "http://komcity.ru/";
+    private String domen = "komcity.ru";
+    private String rootAddress = "http://" + domen + "/";
+    private String rootNewsAddress = "news/";
     private String tr = "tr";
     private String td = "td";   // Тэг <td>
     private int textLen = 6;    // min-длина текста для распарсивания
@@ -84,6 +86,7 @@ public class HtmlLoader {
                                     // После заголовка идет статья
                                     try {
                                         Element body = rootTR.get(i + 1).select("td").get(5);
+                                        String link = body.attr("onclick"); // Ссылка на полную новость
                                         if (body.getElementsByTag("span") != null)
                                             body.getElementsByTag("span").remove();
                                         // Ищем рисунок
@@ -97,7 +100,7 @@ public class HtmlLoader {
                                                     Elements img_elems = div_elem.getElementsByTag("img");
                                                     if (    img_elems != null &&
                                                             img_elems.first().attr("src") != null) {
-                                                        item.setUrl(img_elems.first().attr("src"));  // Добавим ссылку на рисунок
+                                                        item.setImage(img_elems.first().attr("src"));  // Добавим ссылку на рисунок
                                                     }
                                                 }
                                             } catch (Exception ex) {
@@ -110,6 +113,7 @@ public class HtmlLoader {
                                             item.setDate(date);
                                             item.setTitle(theme);
                                             item.setText(art);
+                                            item.setUrl(rootNewsAddress + link.replace("\'", "").replace("window.location=", ""));
 
                                             newsList.add(item);
                                             item = null;
@@ -127,6 +131,31 @@ public class HtmlLoader {
         }
         if (iHtmlLoader != null)
             iHtmlLoader.onReadyToShow(newsList);
+    }
+
+    public void parseNewsImageLinks(Document mHtmlDoc) {
+        List<Object> imageLinkList = new ArrayList<>();
+        if (mHtmlDoc != null) {
+            Elements rootA = mHtmlDoc.getElementsByTag("a");
+            if (rootA != null) {
+                Elements elemA = rootA
+                                    .attr("class", "photoset-grid-lightbox")
+                                    .attr("rel", "group");
+                for (int i = 0; i < elemA.size(); i++) {
+                    Element element = elemA.get(i);
+                    if (    element.attr("href") != null &&
+                            element.attr("href").contains(domen) &&
+                            element.attr("href").contains(rootNewsAddress)) {
+                        Element elementIMG = element.getElementsByTag("img").first();
+                        if (elementIMG != null) {
+                            imageLinkList.add(elementIMG.attr("src"));
+                        }
+                    }
+                }
+            }
+        }
+        if (iHtmlLoader != null)
+            iHtmlLoader.onReadyToShow(imageLinkList);
     }
 
     public void parseForum(Document mHtmlDoc) {

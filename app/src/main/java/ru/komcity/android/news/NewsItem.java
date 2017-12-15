@@ -1,8 +1,5 @@
 package ru.komcity.android.news;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class NewsItem {
     private String title;   // Заголовок новости
     private String date;    // дата новости

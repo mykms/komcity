@@ -8,21 +8,29 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.jsoup.nodes.Document;
+
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.komcity.android.CustomView.ImageSliderView;
 import ru.komcity.android.R;
+import ru.komcity.android.base.AsyncLoader.HtmlLoader;
+import ru.komcity.android.base.AsyncLoader.IAsyncLoader;
+import ru.komcity.android.base.AsyncLoader.IHtmlLoader;
+import ru.komcity.android.base.Utils;
 
-public class NewsActivity extends AppCompatActivity {
+public class NewsActivity extends AppCompatActivity implements IAsyncLoader, IHtmlLoader {
 
     @BindView(R.id.toolbar_top)       Toolbar toolbar;
     @BindView(R.id.date_news)         TextView date_news;
     @BindView(R.id.title_news)        TextView title_news;
-    @BindView(R.id.img_news)          ImageView img_news;
     @BindView(R.id.text_news)         TextView text_news;
     @BindView(R.id.image_slider_news) ImageSliderView slider;
+    private HtmlLoader htmlLoader = new HtmlLoader(this, this);
+    private Utils utils = new Utils();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,15 +52,19 @@ public class NewsActivity extends AppCompatActivity {
         if (intent != null) {
             date_news.setText(intent.getStringExtra("DATE"));
             title_news.setText(intent.getStringExtra("TITLE"));
-            String test_url = intent.getStringExtra("URL");
             text_news.setText(intent.getStringExtra("TEXT"));
 
-            List<String> listImg = new ArrayList<String>();
-            listImg.add(test_url);
+            loadImages(intent.getStringExtra("URL"));
+        }
+    }
 
-            List<Object> items = new ArrayList<>();
-            items.add(test_url);
-            slider.setItems(items);
+    private void loadImages(String newsLink) {
+        if (htmlLoader != null) {
+            try {
+                htmlLoader.htmlAddressToParse(newsLink);
+            } catch (Exception ex) {
+                utils.getException(ex);
+            }
         }
     }
 
@@ -64,5 +76,15 @@ public class NewsActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCompletedLoading(Document html) {
+        htmlLoader.parseNewsImageLinks(html);
+    }
+
+    @Override
+    public void onReadyToShow(List<Object> items) {
+        slider.setItems(items);
     }
 }
