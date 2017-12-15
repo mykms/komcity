@@ -66,6 +66,13 @@
                 android:layout_gravity="center"
                 app:srcCompat="@mipmap/ic_launcher_round" />
 
+            <android.support.v4.view.ViewPager
+                android:id="@+id/image_slider_news"
+                android:layout_height="300dp"
+                android:layout_width="match_parent"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"  />
+
             <TextView
                 android:id="@+id/text_news"
                 android:layout_width="match_parent"
