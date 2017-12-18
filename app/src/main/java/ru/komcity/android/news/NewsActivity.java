@@ -6,12 +6,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.TextView;
-
 import org.jsoup.nodes.Document;
-
-import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,12 +44,16 @@ public class NewsActivity extends AppCompatActivity implements IAsyncLoader, IHt
             ab.setTitle("Просмотр новости");
         }
 
+        // Расположение панели с кнопками
+        if (slider != null) {
+            slider.setRadioPanelGravity(ImageSliderView.Gravity.Bottom);
+        }
+
         Intent intent = getIntent();
         if (intent != null) {
             date_news.setText(intent.getStringExtra("DATE"));
             title_news.setText(intent.getStringExtra("TITLE"));
             text_news.setText(intent.getStringExtra("TEXT"));
-
             loadImages(intent.getStringExtra("URL"));
         }
     }
