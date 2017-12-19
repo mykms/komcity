@@ -84,8 +84,12 @@ public class ForumActivity extends AppCompatActivity implements IForumActivityCo
     }
 
     @Override
-    public void replaceFragment(String fragmentName) {
+    public void replaceFragment(String fragmentName, ForumItem item) {
         if (fragmentName.equals(modules.getNameForumDetail())) {
+            data.clear();
+            data.put("NAME", item.getTitle());
+            data.put("URL", item.getLink());
+            fragmentEngine.setDataForFragment(data, new String[]{"String", "String"});
             fragmentEngine.findFragment(modules.getNameForumDetail(), R.id.forum_content_frame);
         }
     }

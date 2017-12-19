@@ -14,7 +14,7 @@ import ru.komcity.android.R;
 import ru.komcity.android.announcement.AnnouncementFragment;
 import ru.komcity.android.forum.ForumDetailFragment;
 import ru.komcity.android.forum.ForumFragment;
-import ru.komcity.android.forum.SubForum;
+import ru.komcity.android.forum.SubForumFragment;
 import ru.komcity.android.news.NewsFragment;
 
 public class FragmentCore {
@@ -78,7 +78,7 @@ public class FragmentCore {
             } else if (fragmentTAG.equals(modules.getNameAnnouncement())) {
                 fragment = new AnnouncementFragment();      // Объявления
             } else if (fragmentTAG.equals(modules.getNameSubForum())) {
-                fragment = new SubForum();                  // ПодФорумы
+                fragment = new SubForumFragment();                  // ПодФорумы
             } else if (fragmentTAG.equals(modules.getNameForumDetail())) {
                 fragment = new ForumDetailFragment();       // Форум детально (посты)
             } else {

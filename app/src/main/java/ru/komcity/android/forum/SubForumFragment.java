@@ -21,11 +21,10 @@ import ru.komcity.android.R;
 import ru.komcity.android.base.AsyncLoader.HtmlLoader;
 import ru.komcity.android.base.AsyncLoader.IAsyncLoader;
 import ru.komcity.android.base.AsyncLoader.IHtmlLoader;
-import ru.komcity.android.base.IMainActivityCommand;
 import ru.komcity.android.base.ModulesGraph;
 import ru.komcity.android.base.Utils;
 
-public class SubForum extends Fragment implements IAsyncLoader, IHtmlLoader, SwipeRefreshLayout.OnRefreshListener {
+public class SubForumFragment extends Fragment implements IAsyncLoader, IHtmlLoader, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
     @BindView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefresh;
     private HtmlLoader htmlLoader = new HtmlLoader(this, this);
@@ -34,14 +33,12 @@ public class SubForum extends Fragment implements IAsyncLoader, IHtmlLoader, Swi
     private AppCompatActivity ownerActivity = null;
     private SubForumAdapter adapter = null;
     private Utils utils = new Utils();
-    private Context context;
     private String url = "";
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         ownerActivity = setIMainActivityCommand(activity);
-        this.context = activity;
     }
 
     private AppCompatActivity setIMainActivityCommand(Object activity) {
@@ -56,7 +53,6 @@ public class SubForum extends Fragment implements IAsyncLoader, IHtmlLoader, Swi
     public void onAttach(Context context) {
         super.onAttach(context);
         ownerActivity = setIMainActivityCommand(context);
-        this.context = context;
     }
 
     @Override
@@ -122,7 +118,7 @@ public class SubForum extends Fragment implements IAsyncLoader, IHtmlLoader, Swi
         adapter.setOnItemClickListener(new ForumClickListener() {
             @Override
             public void onItemClick(ForumItem item) {
-                commandToMainActivity.replaceFragment(modules.getNameForumDetail());
+                commandToMainActivity.replaceFragment(modules.getNameForumDetail(), item);
             }
         });
     }

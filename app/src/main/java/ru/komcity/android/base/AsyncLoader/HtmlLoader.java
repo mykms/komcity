@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Locale;
 
 import ru.komcity.android.base.Utils;
+import ru.komcity.android.forum.ForumDetailItem;
 import ru.komcity.android.forum.ForumItem;
 import ru.komcity.android.news.NewsItem;
 
@@ -294,6 +295,48 @@ public class HtmlLoader {
 
         if (iHtmlLoader != null)
             iHtmlLoader.onReadyToShow(subForumList);
+    }
+
+    public void parseForumDetail(Document mHtmlDoc) {
+        List<Object> forumDetailList = new ArrayList<>();
+        if (mHtmlDoc != null) {
+            boolean endpointTD = false;
+            Elements rootTable = mHtmlDoc.getElementsByAttributeValue("height", "89%");
+            Elements allTR = rootTable.first().getElementsByTag(tr);
+            for (int i = 0; i < allTR.size(); i++) {
+                if (endpointTD) {
+                    String date = null;
+                    String name = null;
+                    String text = null;
+                    try {
+                        date = allTR.get(i).getElementsByTag(td).first().text().trim();
+                        name = allTR.get(i + 2).getElementsByTag(td).get(2).getElementsByTag("a").text().trim();
+                        text = allTR.get(i + 2).getElementsByTag(td).get(5).text().trim();
+                        i += allTR.get(i + 1).getElementsByTag(tr).size() +
+                                allTR.get(i + 2).getElementsByTag(tr).size();
+                    } catch (Exception ex) {
+                        utils.getException(ex);
+                    }
+                    if (date != null && name != null && text != null) {
+                        forumDetailList.add(new ForumDetailItem(date, name, text));
+                    }
+                } else {
+                    if (allTR.get(i).getElementsByTag(td).size() == 3) {
+                        try {
+                            if (allTR.get(i).getElementsByAttributeValue("width", "64%").first().text().contains("создать новую тему")) {
+                                // Нашли точку входа
+                                endpointTD = true;
+                            }
+                        } catch (Exception ex) {
+                            utils.getException(ex);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (iHtmlLoader != null)
+            iHtmlLoader.onReadyToShow(forumDetailList);
     }
 
     public void parseAnnouncement(Document mHtmlDoc) {
