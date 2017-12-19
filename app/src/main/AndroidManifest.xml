@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".news.NewsActivity" />
-        <activity android:name=".CustomView.ImageSlider"></activity>
+        <activity android:name=".forum.ForumActivity" />
     </application>
 
 </manifest>

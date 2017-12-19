@@ -1,8 +1,6 @@
 package ru.komcity.android;
 
-import android.app.Activity;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,7 +14,6 @@ import butterknife.ButterKnife;
 import ru.komcity.android.base.FragmentCore;
 import ru.komcity.android.base.IMainActivityCommand;
 import ru.komcity.android.base.ModulesGraph;
-import ru.komcity.android.news.NewsFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IMainActivityCommand {
 
@@ -43,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         fragmentManager = getFragmentManager();
-        showFragment(this, fragmentManager, modules.getNameNews()); // По умолчанию показываем новости
+        showFragment(fragmentManager, modules.getNameNews()); // По умолчанию показываем новости
     }
 
     @Override
@@ -61,11 +58,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            showFragment(this, fragmentManager, modules.getNameNews());
+            showFragment(fragmentManager, modules.getNameNews());
         } else if (id == R.id.nav_gallery) {
-            showFragment(this, fragmentManager, modules.getNameForum());
+            showFragment(fragmentManager, modules.getNameForum());
         } else if (id == R.id.nav_slideshow) {
-            showFragment(this, fragmentManager, modules.getNameAnnouncement());
+            showFragment(fragmentManager, modules.getNameAnnouncement());
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
@@ -77,9 +74,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    private void showFragment(Activity mActivity, FragmentManager mFrManager, String fragmentTAG) {
+    private void showFragment(FragmentManager mFrManager, String fragmentTAG) {
         FragmentCore fragmentEngine = new FragmentCore(mFrManager);
-        fragmentEngine.findFragment(fragmentTAG);
+        fragmentEngine.findFragment(fragmentTAG, 0);
     }
 
     @Override

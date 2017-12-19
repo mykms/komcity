@@ -46,6 +46,7 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ForumViewHol
             }
         };
         forumHolder.lbl_title_forum.setOnClickListener(listener);
+        forumHolder.lbl_description_forum_forum.setOnClickListener(listener);
     }
 
     @Override

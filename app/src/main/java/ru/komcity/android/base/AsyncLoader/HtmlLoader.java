@@ -42,8 +42,12 @@ public class HtmlLoader {
      * @return Возвращает html-документ типа Document
      */
     public void htmlAddressToParse(String mAddress) {
-        AsyncLoader asyncLoader = new AsyncLoader(iAsyncLoader, rootAddress + mAddress);
-        asyncLoader.execute();
+        if (mAddress != null) {
+            if (!mAddress.isEmpty()) {
+                AsyncLoader asyncLoader = new AsyncLoader(iAsyncLoader, rootAddress + mAddress);
+                asyncLoader.execute();
+            }
+        }
     }
 
     /**
@@ -186,8 +190,12 @@ public class HtmlLoader {
                                     //собираем
                                     try {
                                         String forumName = null;
-                                        if (thisElement.select("a").size() > 0)
-                                            forumName = thisElement.select("a").get(0).text().trim();
+                                        String linkForum = null;
+                                        if (thisElement.select("a").size() > 0) {
+                                            Element elem_a = thisElement.select("a").get(0);
+                                            linkForum = elem_a.attr("href").substring(1);   // Убираем первый символ (слэш)
+                                            forumName = elem_a.text().trim();
+                                        }
                                         String _descr = null;    // Здесь должно быть описание
                                         try {
                                             if (forumName != null)
@@ -198,14 +206,15 @@ public class HtmlLoader {
                                         String _countReplic = td.get(j + 2).text().trim();
                                         String _countTheme = td.get(j + 1).text().trim();
                                         if (forumName != null && _descr != null)
-                                            forumList.add(new ForumItem(forumName, _descr, _countReplic, _countTheme));
+                                            forumList.add(new ForumItem(forumName, _descr, _countReplic, _countTheme, linkForum));
                                         j += 4;// Переместим курсор на начало тем
                                     } catch (Exception e) {
                                         utils.getException(e);
                                         break;
                                     }
                                 } else {
-                                    if (thisTxt.equalsIgnoreCase("тем") && td.get(j + 1).text().equalsIgnoreCase("реплик")) {
+                                    if (    thisTxt.equalsIgnoreCase("тем") &&
+                                            td.get(j + 1).text().equalsIgnoreCase("реплик")) {
                                         // нашли вход
                                         StartFlag = true;
                                         j += 3;// Переместим курсор на начало тем
@@ -223,6 +232,68 @@ public class HtmlLoader {
 
         if (iHtmlLoader != null)
             iHtmlLoader.onReadyToShow(forumList);
+    }
+
+    public void parseSubForum(Document mHtmlDoc) {
+        List<Object> subForumList = new ArrayList<>();
+        if (mHtmlDoc != null) {
+            Elements rootTable = mHtmlDoc.getElementsByTag("table");
+            boolean endpointForum = false;
+            if (rootTable.size() > 7) {
+                Elements elem_td = rootTable.get(7).getElementsByTag(td);
+                for (int i = 0; i < elem_td.size(); i++) {
+                    String stylePadding = "padding-left: 8; padding-right: 8; padding-bottom: 3; padding-top: 3";
+                    Elements elem_x = elem_td.get(i).getElementsByAttributeValue("style", stylePadding);
+                    if (elem_x.size() > 0) {
+                        if (endpointForum) {
+                            String title = null;
+                            String link = null;
+                            String count = null;
+                            String lastDateMessage = null;
+                            try {
+                                title = elem_x.first().getElementsByTag("b").first().text();
+                                link = elem_x.first().getElementsByTag("a").first().attr("href");
+                                count = elem_td.get(i + 1).getElementsByAttributeValue("style", stylePadding).text();
+                                lastDateMessage = elem_td.get(i + 6)
+                                        .getElementsByAttributeValue("style", stylePadding)
+                                        .first()
+                                        .getElementsByTag("nobr")
+                                        .first().text();
+                            } catch (Exception ex) {
+                                utils.getException(ex);
+                            }
+                            if (title != null && link != null) {
+                                if (title.equalsIgnoreCase("создать новую тему"))
+                                    break;
+                                subForumList.add(new ForumItem(title, lastDateMessage,
+                                                                count.split("/")[0].trim(),
+                                                                count.split("/")[1].trim(),
+                                                                link));
+                            }
+                            i += 7;
+                        } else {
+                            // Будем искать точку входа
+                            Elements elem_t = elem_x.get(0).getElementsByTag("table");
+                            if (elem_t.size() > 0) {
+                                if (elem_t.first() != null) {
+                                    String tema = elem_t.first().text().substring(0, 4);
+                                    Elements elemtTD = elem_t.first().getElementsByTag(td);
+                                    if (elemtTD.size() == 2 && elemtTD.text() != null)
+                                        if (elemtTD.first().text().equals("тема")) {
+                                            // нашли точку входа
+                                            endpointForum = true;
+                                            i += 6;
+                                        }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (iHtmlLoader != null)
+            iHtmlLoader.onReadyToShow(subForumList);
     }
 
     public void parseAnnouncement(Document mHtmlDoc) {
