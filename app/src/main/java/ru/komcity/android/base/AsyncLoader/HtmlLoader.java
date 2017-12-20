@@ -255,11 +255,12 @@ public class HtmlLoader {
                                 title = elem_x.first().getElementsByTag("b").first().text();
                                 link = elem_x.first().getElementsByTag("a").first().attr("href");
                                 count = elem_td.get(i + 1).getElementsByAttributeValue("style", stylePadding).text();
-                                lastDateMessage = elem_td.get(i + 6)
-                                        .getElementsByAttributeValue("style", stylePadding)
-                                        .first()
-                                        .getElementsByTag("nobr")
-                                        .first().text();
+                                Elements elem_nobr = elem_td.get(i + 6).getElementsByAttributeValue("style", stylePadding);
+                                if (elem_nobr.size() > 0)
+                                    if (elem_nobr.first().getElementsByTag("nobr").size() > 0) {
+                                        lastDateMessage = elem_nobr.first().getElementsByTag("nobr")
+                                                                           .first().text();
+                                    }
                             } catch (Exception ex) {
                                 utils.getException(ex);
                             }
@@ -309,23 +310,45 @@ public class HtmlLoader {
                     String name = null;
                     String text = null;
                     try {
-                        date = allTR.get(i).getElementsByTag(td).first().text().trim();
-                        name = allTR.get(i + 2).getElementsByTag(td).get(2).getElementsByTag("a").text().trim();
-                        text = allTR.get(i + 2).getElementsByTag(td).get(5).text().trim();
+                        date = allTR.get(i).getElementsByTag(td).first().text().trim().replace("\u00A0","");
+                        if (date.isEmpty())
+                            continue;
+                        try {
+                            if (allTR.get(i + 2).getElementsByTag(td).size() >= 5) {
+                                name = allTR.get(i + 2).getElementsByTag(td).get(2).getElementsByTag("a").text().trim();
+                                text = allTR.get(i + 2).getElementsByTag(td).get(5).text().trim();
+                            }
+                        } catch (Exception ex) {
+                            try {
+                                if (allTR.get(i + 1).getElementsByTag(td).size() >= 5) {
+                                    name = allTR.get(i + 1).getElementsByTag(td).get(2).getElementsByTag("a").text().trim();
+                                    text = allTR.get(i + 1).getElementsByTag(td).get(5).text().trim();
+                                }
+                            } catch (Exception e) {
+                                utils.getException(e);
+                            }
+                        }
                         i += allTR.get(i + 1).getElementsByTag(tr).size() +
                                 allTR.get(i + 2).getElementsByTag(tr).size();
                     } catch (Exception ex) {
                         utils.getException(ex);
                     }
                     if (date != null && name != null && text != null) {
-                        forumDetailList.add(new ForumDetailItem(date, name, text));
+                        if (!date.isEmpty() && !name.isEmpty() && !text.isEmpty()) {
+                            forumDetailList.add(new ForumDetailItem(date, name, text));
+                        }
                     }
                 } else {
                     if (allTR.get(i).getElementsByTag(td).size() == 3) {
                         try {
-                            if (allTR.get(i).getElementsByAttributeValue("width", "64%").first().text().contains("создать новую тему")) {
-                                // Нашли точку входа
-                                endpointTD = true;
+                            Elements elem_ep = allTR.get(i).getElementsByAttributeValue("width", "64%");
+                            if (elem_ep.size() > 0) {
+                                if (elem_ep.first().text() != null) {
+                                    if (elem_ep.first().text().contains("создать новую тему") ||
+                                        elem_ep.first().text().contains("написать сообщение")) {
+                                        endpointTD = true;// Нашли точку входа
+                                    }
+                                }
                             }
                         } catch (Exception ex) {
                             utils.getException(ex);
