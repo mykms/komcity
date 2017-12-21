@@ -1,6 +1,7 @@
 package ru.komcity.android;
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_slideshow) {
             showFragment(fragmentManager, modules.getNameAnnouncement());
         } else if (id == R.id.nav_manage) {
-
+            showFragment(fragmentManager, modules.getNameMapPriceMain());
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

@@ -64,7 +64,7 @@ public class NewsFragment extends Fragment implements IAsyncLoader, IHtmlLoader,
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_news, container, false);
+        View view = inflater.inflate(R.layout.news_fragment, container, false);
         ButterKnife.bind(this, view);
 
         utils = new Utils();

@@ -5,17 +5,16 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import ru.komcity.android.R;
 import ru.komcity.android.announcement.AnnouncementFragment;
 import ru.komcity.android.forum.ForumDetailFragment;
 import ru.komcity.android.forum.ForumFragment;
 import ru.komcity.android.forum.SubForumFragment;
 import ru.komcity.android.news.NewsFragment;
+import ru.komcity.android.pricemap.MapPriceFragment;
 
 public class FragmentCore {
     private Bundle bundle = null;
@@ -46,9 +45,9 @@ public class FragmentCore {
             try {
                 Map.Entry entry = (Map.Entry) entryObj;
                 if (typeListForhashMap[i].equals("int"))
-                    bundle.putInt(entry.getKey().toString(), (int)entry.getValue());
+                    bundle.putInt(entry.getKey().toString(), (int) entry.getValue());
                 if (typeListForhashMap[i].equals("long"))
-                    bundle.putLong(entry.getKey().toString(), (long)entry.getValue());
+                    bundle.putLong(entry.getKey().toString(), (long) entry.getValue());
                 if (typeListForhashMap[i].equals("String"))
                     bundle.putString(entry.getKey().toString(), entry.getValue().toString());
                 if (typeListForhashMap[i].equals("ArrayList"))
@@ -62,8 +61,9 @@ public class FragmentCore {
 
     /**
      * Ищет фрагмент по тэгу, если находит, то загружает его в слой ResID
+     *
      * @param fragmentTAG название тэга
-     * @param ResID Ссылка на id FrameLayout
+     * @param ResID       Ссылка на id FrameLayout
      * @return Возвращает найденный фрагмент
      */
     public Fragment findFragment(String fragmentTAG, @IdRes int ResID) {
@@ -81,6 +81,8 @@ public class FragmentCore {
                 fragment = new SubForumFragment();                  // ПодФорумы
             } else if (fragmentTAG.equals(modules.getNameForumDetail())) {
                 fragment = new ForumDetailFragment();       // Форум детально (посты)
+            } else if (fragmentTAG.equals(modules.getNameMapPriceMain())) {
+                fragment = new MapPriceFragment();         // Карта цен
             } else {
                 fragment = new Fragment();
             }

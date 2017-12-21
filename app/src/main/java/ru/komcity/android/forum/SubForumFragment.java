@@ -57,7 +57,7 @@ public class SubForumFragment extends Fragment implements IAsyncLoader, IHtmlLoa
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_forum, container, false);
+        View view = inflater.inflate(R.layout.forum_fragment, container, false);
         ButterKnife.bind(this, view);
 
         setRecyclerViewSetting();

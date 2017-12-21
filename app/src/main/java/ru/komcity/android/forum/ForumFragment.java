@@ -60,7 +60,7 @@ public class ForumFragment extends Fragment implements IAsyncLoader, IHtmlLoader
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_forum, container, false);
+        View view = inflater.inflate(R.layout.forum_fragment, container, false);
         ButterKnife.bind(this, view);
 
         utils = new Utils();
