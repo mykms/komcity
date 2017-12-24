@@ -16,23 +16,18 @@
 
             <Spinner
                 android:id="@+id/category_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"/>
+                style="@style/spinner_announcement"/>
 
             <Spinner
                 android:id="@+id/announcement_type_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/spinner_announcement"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/category_list"
-                android:layout_marginBottom="20dp" />
+                android:layout_below="@+id/category_list" />
 
             <Spinner
                 android:id="@+id/subcategory_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/spinner_announcement"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/announcement_type_list" />

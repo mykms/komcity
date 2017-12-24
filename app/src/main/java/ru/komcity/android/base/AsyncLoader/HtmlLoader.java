@@ -10,6 +10,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import ru.komcity.android.announcement.AnnouncementData;
+import ru.komcity.android.announcement.AnnouncementSubCategoryItemModel;
+import ru.komcity.android.announcement.AnnouncementSubCategoryModel;
+import ru.komcity.android.announcement.IAnnoncementHtmlLoader;
 import ru.komcity.android.base.Utils;
 import ru.komcity.android.forum.ForumDetailItem;
 import ru.komcity.android.forum.ForumItem;
@@ -363,66 +367,87 @@ public class HtmlLoader {
     }
 
     public void parseAnnouncement(Document mHtmlDoc) {
-        List<Object> Title = new ArrayList<>();
-        List<String> Links = new ArrayList<>();
+        String[] titleArr;
+        String[] linksTitleArr;
+        String[] linksArr;
+        if (mHtmlDoc != null) {
 
-        Elements TextList = mHtmlDoc.getElementsByAttributeValue("class", "dsgTextcolor");
-        for (int i = 0; i < TextList.size(); i++) {
-            String title = null;
-            try {
-                title = TextList.get(i).text().trim();
-            } catch (Exception ex) {
-                utils.getException(ex);
-            }
-            if (title != null)
-                Title.add(title);
-        }
-        Elements LinksList = mHtmlDoc.getElementsByAttribute("onclick");
-        for (int i = 0; i < LinksList.size(); i++) {
-            String value = null;
-            try {
-                value = LinksList.get(i).attributes().get("onclick").substring(14);
-            } catch (Exception ex) {
-                utils.getException(ex);
-            }
-            if (value != null) {
+            Elements TextList = mHtmlDoc.getElementsByAttributeValue("class", "dsgTextcolor");
+            titleArr = new String[TextList.size()];
+            for (int i = 0; i < TextList.size(); i++) {
+                String title = null;
                 try {
-                    value = LinksList.get(i).text().trim() + ", " + value.substring(0, value.length() - 1);
-                    Links.add(value);
+                    title = TextList.get(i).text().trim();
                 } catch (Exception ex) {
                     utils.getException(ex);
                 }
+                if (title != null)
+                    titleArr[i] = title;
+            }
+            Elements LinksList = mHtmlDoc.getElementsByAttribute("onclick");
+            linksTitleArr = new String[LinksList.size()];
+            linksArr = new String[LinksList.size()];
+            for (int i = 0; i < LinksList.size(); i++) {
+                String value = null;
+                try {
+                    value = LinksList.get(i).attributes().get("onclick").substring(14);
+                } catch (Exception ex) {
+                    utils.getException(ex);
+                }
+                if (value != null) {
+                    try {
+                        linksTitleArr[i] = LinksList.get(i).text().trim();
+                        linksArr[i] = value.substring(0, value.length() - 1);
+                    } catch (Exception ex) {
+                        utils.getException(ex);
+                    }
+                }
+            }
+            AnnouncementData data = new AnnouncementData(titleArr, linksTitleArr, linksArr);
+            if (iHtmlLoader != null)
+                ((IAnnoncementHtmlLoader)iHtmlLoader).onReadyToShowCategoryAndTypes(data.getModelList());
+        }
+    }
+
+    public void parseAnnouncementSubCategory(Document mHtmlDoc) {
+        List<AnnouncementSubCategoryModel> subCategoryList = new ArrayList<>();
+        if (mHtmlDoc != null) {
+            //Если всё считалось, что вытаскиваем из считанного html документа table
+            boolean is_a = false;
+            Elements elem_span = mHtmlDoc.getElementsByTag("span");
+            List<AnnouncementSubCategoryItemModel> links_id = null;
+            for (int i = 0; i < elem_span.size(); i++) {
+                if (!is_a)
+                    links_id = new ArrayList<>();
+
+                Elements elem_a = elem_span.first().getElementsByTag("a");
+                if (elem_a.size() > 0) {
+                    AnnouncementSubCategoryItemModel itemModel = new AnnouncementSubCategoryItemModel(elem_a.attr("id"), elem_a.text());
+                    if (is_a && i > 0)
+                        links_id.add(itemModel);
+                    else {
+                        // Если в самый первый раз попался тэг a,
+                        if (i == 0) {
+                            links_id.add(itemModel);
+                            subCategoryList.add(new AnnouncementSubCategoryModel(null, links_id.));
+                        }
+                    }
+                    is_a = true;
+                }
+            }
+
+            Elements TextList = mHtmlDoc.getElementsByTag("a");
+            if (TextList.size() > 0) {
+                for (int i = 0; i < TextList.size(); i++) {
+                    subCategoryList.add(TextList.get(i).text().trim());
+                }
+            }
+            else {
+                // В данной рубрике объявления отсутствуют
             }
         }
 
         if (iHtmlLoader != null)
-            iHtmlLoader.onReadyToShow(Title);
-
-        announcementLinksList = Links;
-    }
-
-    public List<String> getAnnouncementItemsForLinks() {
-        return announcementLinksList;
-    }
-
-    public List<String> getAnnouncementTypeByID(int id) {
-        List<String> sub = new ArrayList<String>();
-        int last = -1;
-        if (announcementLinksList != null) {
-            for (int i = 0; i < announcementLinksList.size(); i++) {
-                String[] arr = announcementLinksList.get(i).split(", ", 4);
-                int val = 0;
-                try {
-                    val = Integer.valueOf(arr[1]);
-                    if (val == id) {
-                        sub.add(arr[0]);
-                    }
-                } catch (Exception e) {
-                    utils.getException(e);
-                }
-            }
-        }
-
-        return sub;
+            ((IAnnoncementHtmlLoader)iHtmlLoader).onReadyToShowSubCategory(subCategoryList);
     }
 }

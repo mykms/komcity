@@ -78,7 +78,7 @@ public class FragmentCore {
             } else if (fragmentTAG.equals(modules.getNameAnnouncement())) {
                 fragment = new AnnouncementFragment();      // Объявления
             } else if (fragmentTAG.equals(modules.getNameSubForum())) {
-                fragment = new SubForumFragment();                  // ПодФорумы
+                fragment = new SubForumFragment();          // ПодФорумы
             } else if (fragmentTAG.equals(modules.getNameForumDetail())) {
                 fragment = new ForumDetailFragment();       // Форум детально (посты)
             } else if (fragmentTAG.equals(modules.getNameMapPriceMain())) {
