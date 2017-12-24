@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
 import ru.komcity.android.announcement.AnnouncementData;
 import ru.komcity.android.announcement.AnnouncementSubCategoryItemModel;
 import ru.komcity.android.announcement.AnnouncementSubCategoryModel;
@@ -410,40 +409,40 @@ public class HtmlLoader {
     }
 
     public void parseAnnouncementSubCategory(Document mHtmlDoc) {
-        List<AnnouncementSubCategoryModel> subCategoryList = new ArrayList<>();
+        List<Object> subCategoryList = new ArrayList<>();
         if (mHtmlDoc != null) {
             //Если всё считалось, что вытаскиваем из считанного html документа table
             boolean is_a = false;
+            boolean is_all_a = false;
             Elements elem_span = mHtmlDoc.getElementsByTag("span");
             List<AnnouncementSubCategoryItemModel> links_id = null;
             for (int i = 0; i < elem_span.size(); i++) {
-                if (!is_a)
+                if (!is_a || is_all_a)
                     links_id = new ArrayList<>();
 
                 Elements elem_a = elem_span.first().getElementsByTag("a");
                 if (elem_a.size() > 0) {
-                    AnnouncementSubCategoryItemModel itemModel = new AnnouncementSubCategoryItemModel(elem_a.attr("id"), elem_a.text());
-                    if (is_a && i > 0)
+                    AnnouncementSubCategoryItemModel itemModel =
+                            new AnnouncementSubCategoryItemModel(
+                                    elem_a.attr("id"),
+                                    elem_a.text());
+                    if (i > 0 && !is_all_a)
                         links_id.add(itemModel);
                     else {
-                        // Если в самый первый раз попался тэг a,
-                        if (i == 0) {
+                        // Если в самый первый раз попался тэг <a>, то скорее всего все пункты будут с тэгом <a>
+                        if (i == 0 || is_all_a) {
                             links_id.add(itemModel);
-                            subCategoryList.add(new AnnouncementSubCategoryModel(null, links_id.));
+                            subCategoryList.add(new AnnouncementSubCategoryModel(null, links_id));
+                            is_all_a = true;
                         }
                     }
                     is_a = true;
+                } else {
+                    if (is_a) {
+                        subCategoryList.add(new AnnouncementSubCategoryModel(elem_span.get(i - 2).text(), links_id));
+                    }
+                    is_a = false;
                 }
-            }
-
-            Elements TextList = mHtmlDoc.getElementsByTag("a");
-            if (TextList.size() > 0) {
-                for (int i = 0; i < TextList.size(); i++) {
-                    subCategoryList.add(TextList.get(i).text().trim());
-                }
-            }
-            else {
-                // В данной рубрике объявления отсутствуют
             }
         }
 
