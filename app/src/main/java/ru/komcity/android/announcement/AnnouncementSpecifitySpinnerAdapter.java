@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 import ru.komcity.android.R;
 
-class AnnouncementSubCategoryAdapter extends ArrayAdapter<Object> {
+public class AnnouncementSpecifitySpinnerAdapter extends ArrayAdapter<AnnouncementSubCategoryItemModel> {
     private Context context;
     private LayoutInflater inflater = null;
-    private List<Object> spinnerObjectList = new ArrayList<>();
+    private List<AnnouncementSubCategoryItemModel> spinnerObjectList = new ArrayList<>();
 
-    public AnnouncementSubCategoryAdapter(@NonNull Context context, int resource, List<Object> objects) {
+    public AnnouncementSpecifitySpinnerAdapter(@NonNull Context context, int resource, List<AnnouncementSubCategoryItemModel> objects) {
         super(context, resource, objects);
         this.context = context;
 
@@ -28,10 +28,10 @@ class AnnouncementSubCategoryAdapter extends ArrayAdapter<Object> {
     @Override
     public View getDropDownView(int position, @Nullable final View convertView, @NonNull final ViewGroup parent) {
         View view = View.inflate(getContext(), R.layout.announcement_item_spinner_dropdown, null);
-        AnnouncementSubCategoryModel item = (AnnouncementSubCategoryModel)getItem(position);
+        AnnouncementSubCategoryItemModel item = (AnnouncementSubCategoryItemModel)getItem(position);
 
         TextView label = (TextView) view.findViewById(R.id.lbl_spinner_item_text);
-        label.setText(getCorrectName(item));
+        label.setText(item.Name);
 
         return view;
     }
@@ -40,18 +40,11 @@ class AnnouncementSubCategoryAdapter extends ArrayAdapter<Object> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view = inflater.inflate(R.layout.announcement_item_spinner, parent, false);
-        AnnouncementSubCategoryModel item = (AnnouncementSubCategoryModel)spinnerObjectList.get(position);
+        AnnouncementSubCategoryItemModel item = (AnnouncementSubCategoryItemModel)spinnerObjectList.get(position);
 
         TextView label = (TextView) view.findViewById(R.id.lbl_spinner_item_text);
-        label.setText(getCorrectName(item));
+        label.setText(item.Name);
 
         return view;
-    }
-
-    private String getCorrectName(AnnouncementSubCategoryModel item) {
-        String itemName = item.getCatName() == null ? item.getCatNameItemsList().get(0).Name : item.getCatName();
-        if (itemName == null)
-            itemName = "Значение не определено";
-        return itemName;
     }
 }

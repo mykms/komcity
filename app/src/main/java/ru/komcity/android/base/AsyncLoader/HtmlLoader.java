@@ -416,16 +416,17 @@ public class HtmlLoader {
             boolean is_all_a = false;
             Elements elem_span = mHtmlDoc.getElementsByTag("span");
             List<AnnouncementSubCategoryItemModel> links_id = null;
+            String spanText = null;
             for (int i = 0; i < elem_span.size(); i++) {
                 if (!is_a || is_all_a)
                     links_id = new ArrayList<>();
 
-                Elements elem_a = elem_span.first().getElementsByTag("a");
+                Elements elem_a = elem_span.get(i).getElementsByTag("a");
                 if (elem_a.size() > 0) {
                     AnnouncementSubCategoryItemModel itemModel =
                             new AnnouncementSubCategoryItemModel(
                                     elem_a.attr("id"),
-                                    elem_a.text());
+                                    elem_a.text().replace("\u2022", "").trim());
                     if (i > 0 && !is_all_a)
                         links_id.add(itemModel);
                     else {
@@ -437,10 +438,13 @@ public class HtmlLoader {
                         }
                     }
                     is_a = true;
+                    if (i == (elem_span.size() - 1) && !is_all_a)
+                        subCategoryList.add(new AnnouncementSubCategoryModel(spanText, links_id));
                 } else {
                     if (is_a) {
-                        subCategoryList.add(new AnnouncementSubCategoryModel(elem_span.get(i - 2).text(), links_id));
+                        subCategoryList.add(new AnnouncementSubCategoryModel(spanText, links_id));
                     }
+                    spanText = elem_span.get(i).text().replace("\u2022", "").trim();
                     is_a = false;
                 }
             }

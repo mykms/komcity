@@ -15,4 +15,11 @@ public class AnnouncementSubCategoryModel {
         this.catNameItemsList = catNameItemsList;
     }
 
+    public String getCatName() {
+        return catName;
+    }
+
+    public List<AnnouncementSubCategoryItemModel> getCatNameItemsList() {
+        return catNameItemsList;
+    }
 }

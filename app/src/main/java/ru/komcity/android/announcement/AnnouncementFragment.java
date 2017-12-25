@@ -2,6 +2,7 @@ package ru.komcity.android.announcement;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,6 +18,7 @@ import org.jsoup.nodes.Document;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import ru.komcity.android.R;
 import ru.komcity.android.base.AsyncLoader.HtmlLoader;
 import ru.komcity.android.base.AsyncLoader.IAsyncLoader;
@@ -29,9 +31,12 @@ public class AnnouncementFragment extends Fragment implements IAsyncLoader, IAnn
     @BindView(R.id.category_list) Spinner category_list;
     @BindView(R.id.announcement_type_list) Spinner announcement_type_list;
     @BindView(R.id.subcategory_list) Spinner subcategory_list;
+    @BindView(R.id.last_spinner) Spinner last_spinner;
 
     private IMainActivityCommand commandToMainActivity;
     private Utils utils;
+    private Context context;
+    private List<AnnouncementSubCategoryItemModel> itemForLink;
     private ModulesGraph modules = new ModulesGraph();
     private HtmlLoader htmlLoader = new HtmlLoader(this, this);
     private HtmlLoader htmlLoaderSubCategory;
@@ -50,6 +55,7 @@ public class AnnouncementFragment extends Fragment implements IAsyncLoader, IAnn
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         setIMainActivityCommand(activity);
+        this.context = (Context)activity;
     }
 
     private void setIMainActivityCommand(Object activity) {
@@ -64,6 +70,7 @@ public class AnnouncementFragment extends Fragment implements IAsyncLoader, IAnn
     public void onAttach(Context context) {
         super.onAttach(context);
         setIMainActivityCommand(context);
+        this.context = context;
     }
 
     @Override
@@ -94,6 +101,40 @@ public class AnnouncementFragment extends Fragment implements IAsyncLoader, IAnn
             } catch (Exception ex) {
                 utils.getException(ex);
             }
+        }
+    }
+
+    @OnClick(R.id.show_announcement_button)
+    public void OnShowAllAnouncement(View view) {
+        // Обязательный выбор 2-х первых списков
+        if (    category_list.getSelectedItemPosition() >= 0 &&
+                announcement_type_list.getSelectedItemPosition() >= 0) {
+            // Выбраны ли остальные списки
+            if (subcategory_list.getSelectedItemPosition() >= 0) {
+                String linkID = null;
+                String toolBarTitle = null;
+                // Проверим, есть ли значения в последнем списке. Если есть, то выбраны ли они?
+                if (last_spinner.getCount() > 0) {
+                    if (last_spinner.getSelectedItemPosition() < 0) {
+                        utils.showMessageSnackbar("Выберите значение в последнем списке", view);
+                        return;
+                    }
+                    linkID = itemForLink.get(last_spinner.getSelectedItemPosition()).id;
+                    toolBarTitle = itemForLink.get(last_spinner.getSelectedItemPosition()).Name;
+                }
+                // Покажем список объявлений в новом окне
+                if (linkID != null && linkID.length() > 1) {
+                    Intent intent = new Intent(context, AnnouncementShowAllActivity.class);
+                    intent.putExtra("EXTRA_LINK_ID", linkID.substring(1));
+                    intent.putExtra("EXTRA_TOOLBAR_TITLE", toolBarTitle);
+                    startActivity(intent);
+                }
+            } else {
+                // В данной рубрике объявлений нет
+                utils.showMessageSnackbar("В данной рубрике объявлений нет", view);
+            }
+        } else {
+            utils.showMessageSnackbar("Выберите все необходимые значения из списков", view);
         }
     }
 
@@ -157,12 +198,53 @@ public class AnnouncementFragment extends Fragment implements IAsyncLoader, IAnn
     }
 
     @Override
-    public void onReadyToShowSubCategory(List<Object> items) {
+    public void onReadyToShowSubCategory(final List<Object> items) {
+        if (items.size() <= 0) {
+            last_spinner.setVisibility(View.INVISIBLE);
+        }
+
+        boolean IsNeedShowLastSpinner = false;
+        for (int i = 0; i < items.size(); i++) {
+            AnnouncementSubCategoryModel itemSubCat = (AnnouncementSubCategoryModel)items.get(i);
+            if (itemSubCat.getCatName() != null) {
+                IsNeedShowLastSpinner = true;
+                last_spinner.setVisibility(View.VISIBLE);
+                break;
+            }
+        }
+        final boolean finalIsNeedShowLastSpinner = IsNeedShowLastSpinner;
+
         AnnouncementSubCategoryAdapter adapter = new AnnouncementSubCategoryAdapter(getActivity().getApplicationContext(), R.layout.announcement_item_spinner, items);
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         subcategory_list.setAdapter(adapter);
         subcategory_list.setSelection(-1);// выделяем элемент
         subcategory_list.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                AnnouncementSubCategoryModel specItem = (AnnouncementSubCategoryModel) items.get(i);
+                itemForLink = specItem.getCatNameItemsList();
+                if (finalIsNeedShowLastSpinner) {
+                    setSpecifitySpinner(specItem.getCatNameItemsList());
+                } else {
+                    last_spinner.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                //
+            }
+        });
+
+        swipeRefresh.setRefreshing(false); // включаем только здесь
+    }
+
+    private void setSpecifitySpinner(List<AnnouncementSubCategoryItemModel> items) {
+        AnnouncementSpecifitySpinnerAdapter adapter = new AnnouncementSpecifitySpinnerAdapter(getActivity().getApplicationContext(), R.layout.announcement_item_spinner, items);
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        last_spinner.setAdapter(adapter);
+        last_spinner.setSelection(-1);// выделяем элемент
+        last_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 // Отображаем все объявления
@@ -173,7 +255,5 @@ public class AnnouncementFragment extends Fragment implements IAsyncLoader, IAnn
                 //
             }
         });
-
-        swipeRefresh.setRefreshing(false); // включаем только здесь
     }
 }
