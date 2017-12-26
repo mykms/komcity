@@ -1,13 +1,20 @@
 package ru.komcity.android.announcement;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +32,7 @@ public class AnnouncementShowAllActivity extends AppCompatActivity implements IA
     private static String EXTRA_TOOLBAR_TITLE = "EXTRA_TOOLBAR_TITLE";
     private HtmlLoader htmlLoader = new HtmlLoader(this, this);
     private Utils utils = new Utils();
+    private String newsLinkID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +44,8 @@ public class AnnouncementShowAllActivity extends AppCompatActivity implements IA
         String title = "Просмотр объявлений";
         Intent intent = getIntent();
         if (intent != null) {
-            loadAnnouncement(intent.getStringExtra(EXTRA_LINK_ID));
+            newsLinkID = intent.getStringExtra(EXTRA_LINK_ID);
+            loadAnnouncement(newsLinkID);
             String dopTitle = intent.getStringExtra(EXTRA_TOOLBAR_TITLE);
             if (dopTitle != null && dopTitle.isEmpty())
                 title += " " + dopTitle;
@@ -75,7 +84,26 @@ public class AnnouncementShowAllActivity extends AppCompatActivity implements IA
 
     @Override
     public void onCompletedLoading(Document html) {
-        //
+        Element elem_head = html.head();
+        elem_head.append("<script type=\"text/javascript\" src=\"http://www.komcity.ru/boardjs/km.js\"></script>");
+        elem_head.append("<script type=\"text/javascript\" src=\"http://www.komcity.ru/boardplugs/fancybox/jquery.fancybox.pack.js\"></script>");
+        elem_head.append("<script type=\"text/javascript\" src=\"http://www.komcity.ru/boardjs/jquery-1.10.2.min.js\"></script>");
+        web_content.setWebChromeClient(new WebChromeClient());
+        web_content.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+            }
+        });
+        web_content.getSettings().setJavaScriptEnabled(true);
+        web_content.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        web_content.loadDataWithBaseURL(null, html.toString(),"text/html", "UTF-8", null);
+        //web_content.loadData(html.toString(), "text/html", "utf-8");
     }
 
     @Override

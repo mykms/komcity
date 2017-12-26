@@ -54,6 +54,10 @@ public class HtmlLoader {
         }
     }
 
+    public String getRootAddress() {
+        return rootAddress;
+    }
+
     /**
      * @param mHtmlDoc Загруженный html-документ
      */
