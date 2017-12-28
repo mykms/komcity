@@ -84,6 +84,8 @@ public class AnnouncementShowAllActivity extends AppCompatActivity implements IA
 
     @Override
     public void onCompletedLoading(Document html) {
+        // Отображение капчи http://komcity.ru/board/main/GetContact/?id=2546749&h=3
+        // id=2546749 - это идентификатор объявления
         Element elem_head = html.head();
         elem_head.append("<script type=\"text/javascript\" src=\"http://www.komcity.ru/boardjs/km.js\"></script>");
         elem_head.append("<script type=\"text/javascript\" src=\"http://www.komcity.ru/boardplugs/fancybox/jquery.fancybox.pack.js\"></script>");
@@ -103,7 +105,6 @@ public class AnnouncementShowAllActivity extends AppCompatActivity implements IA
         web_content.getSettings().setJavaScriptEnabled(true);
         web_content.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         web_content.loadDataWithBaseURL(null, html.toString(),"text/html", "UTF-8", null);
-        //web_content.loadData(html.toString(), "text/html", "utf-8");
     }
 
     @Override
