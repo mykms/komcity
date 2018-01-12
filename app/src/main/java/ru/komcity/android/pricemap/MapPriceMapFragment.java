@@ -23,8 +23,7 @@ public class MapPriceMapFragment extends Fragment implements OnMapReadyCallback 
         View view = inflater.inflate(R.layout.mapprice_map_fragment, container, false);
         ButterKnife.bind(this, view);
 
-        Bundle bundle = new Bundle();
-        googleMapView.onCreate(bundle);
+        googleMapView.onCreate(savedInstanceState);
         googleMapView.getMapAsync(this);
 
         return view;
