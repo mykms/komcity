@@ -39,6 +39,8 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterKnifeLib"
     implementation "com.google.android.gms:play-services-maps:$googleFireBaseLib"
     implementation "com.google.firebase:firebase-database:$googleFireBaseLib"
+    implementation "com.google.firebase:firebase-auth:$googleFireBaseLib"
+    implementation 'com.firebaseui:firebase-ui-database:3.0.0'
     implementation 'org.jsoup:jsoup:1.10.3'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     testImplementation 'junit:junit:4.12'
