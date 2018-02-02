@@ -2,41 +2,69 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/parentView"
     android:layout_width="match_parent"
-    android:layout_height="90dp">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/group_top"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="vertical">
+        android:layout_height="60dp">
+
+        <ImageView
+            android:id="@+id/prod_logo"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:gravity="center" />
 
         <TextView
-            android:id="@+id/title_price"
-            android:layout_width="wrap_content"
+            android:id="@+id/prod_name"
+            android:layout_width="160dp"
             android:layout_height="match_parent"
-            android:text="TextView"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/prod_logo"
+            android:layout_toRightOf="@+id/prod_logo"
+            android:gravity="center"
+            android:text="Orange" />
 
         <TextView
-            android:id="@+id/date_price"
+            android:id="@+id/market_name"
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="20dp"
-            android:layout_toLeftOf="@+id/replic_forum"
-            android:layout_toStartOf="@+id/replic_forum"
-            android:text="Тем 4" />
+            android:layout_toEndOf="@+id/prod_name"
+            android:layout_toLeftOf="@+id/group_prod_price"
+            android:layout_toRightOf="@+id/prod_name"
+            android:layout_toStartOf="@+id/group_prod_price"
+            android:gravity="center"
+            android:text="Ашан-1088" />
 
-        <TextView
-            android:id="@+id/geo_price"
-            android:layout_width="50dp"
+        <RelativeLayout
+            android:id="@+id/group_prod_price"
+            android:layout_width="90dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:text="Реплик" />
+            android:layout_alignParentTop="true">
+
+            <TextView
+                android:id="@+id/prod_price"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/prod_price_date"
+                android:gravity="center"
+                android:text="707.80 Р" />
+
+            <TextView
+                android:id="@+id/prod_price_date"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:gravity="center"
+                android:text="12.01.2018" />
+        </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>

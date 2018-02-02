@@ -5,4 +5,8 @@
 
     <string name="google_maps_key">AIzaSyB62LPGJNT6T9JP48InH3MtnDj-WrHzhIs</string>
     <string name="title_activity_map_price">Map</string>
+
+    <string name="Product">Продукт</string>
+    <string name="Address">Адрес</string>
+    <string name="Price">Цена</string>
 </resources>

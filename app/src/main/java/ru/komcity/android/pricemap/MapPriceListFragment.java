@@ -3,6 +3,8 @@ package ru.komcity.android.pricemap;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,20 +23,33 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.komcity.android.R;
+import ru.komcity.android.base.Utils;
 
 public class MapPriceListFragment extends Fragment {
     private FirebaseDatabase db = FirebaseDatabase.getInstance();
     private FirebaseAuth dbAuth = FirebaseAuth.getInstance();
     private FirebaseUser dbUser = null;
     private DatabaseReference dbRef = null;
-    private FirebaseRecyclerAdapter<Message, PriceViewHolder> mAdapter;
+    private Utils utils = new Utils();
+
+    @BindView(R.id.prod_list) public RecyclerView productList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.mapprice_list_fragment, container, false);
         ButterKnife.bind(this, view);
+
+        productList.setHasFixedSize(true);    // Не будем динамически изменять размеры
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        productList.setLayoutManager(layoutManager);
 
         signInAnonymous(dbAuth);
         dbRef = db.getReference();
@@ -86,33 +101,21 @@ public class MapPriceListFragment extends Fragment {
     }
 
     private void getPriceList(DatabaseReference mDBRef) {
-
-        FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<Message>()
-                .setQuery(mDBRef.child("messages"), Message.class)
-                .build();
-
-        mAdapter = new FirebaseRecyclerAdapter<Message, PriceViewHolder>(options) {
-            @Override
-            public PriceViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-                return new PriceViewHolder(inflater.inflate(R.layout.price_list_item, parent, false));
-            }
-
-            @Override
-            protected void onBindViewHolder(PriceViewHolder holder, int position, Message model) {
-                final DatabaseReference postRef = getRef(position);
-
-                // Set click listener for the whole post view
-                final String postKey = postRef.getKey();
-            }
-        };
-
-        mDBRef.addValueEventListener(new ValueEventListener() {
+        mDBRef.child("productList").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Message msg = dataSnapshot.getValue(Message.class);
-                int x = 0;
-                x++;
+                List<Object> items = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    PriceListModel item = null;
+                    try {
+                        item = snapshot.getValue(PriceListModel.class);
+                    } catch (Exception ex) {
+                        utils.getException(ex);
+                    }
+                    if (item != null)
+                        items.add(item);
+                }
+                showPriceList(items);
             }
 
             @Override
@@ -123,5 +126,10 @@ public class MapPriceListFragment extends Fragment {
                 x++;
             }
         });
+    }
+
+    private void showPriceList(List<Object> items) {
+        PriceListAdapter adapter = new PriceListAdapter(getActivity(), items);
+        productList.setAdapter(adapter);
     }
 }

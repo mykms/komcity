@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Komcity.ru</string>
+    <string name="Product">Товар</string>
+    <string name="Address">Адрес</string>
+    <string name="Price">Цена</string>
+</resources>
