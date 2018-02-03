@@ -8,28 +8,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import ru.komcity.android.R;
 import ru.komcity.android.base.Utils;
 
@@ -41,6 +36,23 @@ public class MapPriceListFragment extends Fragment {
     private Utils utils = new Utils();
 
     @BindView(R.id.prod_list) public RecyclerView productList;
+    @OnClick(R.id.btnAddFloat)
+    public void OnAddProduct(View view) {
+        ArrayList<Object> geo = new ArrayList<Object>();
+
+        PriceListModel prod = new PriceListModel(geo,
+                "Москва, ул.Вавилова, д.3",
+                "Ашан-14",
+                23.5,
+                "Ананас",
+                "Продовольственные",
+                "Фрукты",
+                "user2");
+        dbRef.child("productList").setValue(new PriceListItem(prod));
+        dbRef.child("productList").push();
+
+        utils.showMessageSnackbar("Добавлено", view);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,13 +76,15 @@ public class MapPriceListFragment extends Fragment {
         User user = new User(name, email);
         mDatabase.child("users").child(userId).setValue(user);
          */
-        mDBAuth.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) {
-                    dbUser = mDBAuth.getCurrentUser();
-                } else {
-                    AuthCredential credential = null;//GoogleAuthProvider.getCredential(null, null);
+        if (mDBAuth != null) {
+            try {
+                mDBAuth.signInAnonymously().addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            dbUser = mDBAuth.getCurrentUser();
+                        } else {
+                            AuthCredential credential = null;//GoogleAuthProvider.getCredential(null, null);
                     /*
                                     mAuth.getCurrentUser().linkWithCredential(credential)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -92,12 +106,16 @@ public class MapPriceListFragment extends Fragment {
                         });
                         AnonymousAuthActivity.java
                     */
-                    //Странно, но мы не смогли определить текущего пользователя
-                    int x = 0;
-                    x++;
-                }
+                            //Странно, но мы не смогли определить текущего пользователя
+                            int x = 0;
+                            x++;
+                        }
+                    }
+                });
+            } catch (Exception ex) {
+                utils.getException(ex);
             }
-        });
+        }
     }
 
     private void getPriceList(DatabaseReference mDBRef) {
@@ -130,6 +148,12 @@ public class MapPriceListFragment extends Fragment {
 
     private void showPriceList(List<Object> items) {
         PriceListAdapter adapter = new PriceListAdapter(getActivity(), items);
+        adapter.setOnItemClickListener(new IPriceListClickListener() {
+            @Override
+            public void onItemClick(PriceListModel item) {
+                //
+            }
+        });
         productList.setAdapter(adapter);
     }
 }

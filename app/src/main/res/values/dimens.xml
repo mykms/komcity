@@ -6,4 +6,9 @@
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+
+    <!-- Список продуктов -->
+    <dimen name="txt_width_price">90dp</dimen>
+    <dimen name="img_logo_size_wh">40dp</dimen>
+    <dimen name="txt_product_width">110dp</dimen>
 </resources>

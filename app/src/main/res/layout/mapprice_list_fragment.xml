@@ -10,37 +10,42 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/title_list"
             android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/lbl_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="" />
+            android:layout_height="35dp">
 
             <TextView
                 android:id="@+id/lbl_product_name"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/txt_product_width"
                 android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/img_logo_size_wh"
+                android:layout_marginStart="@dimen/img_logo_size_wh"
                 android:text="@string/Product" />
 
             <TextView
                 android:id="@+id/lbl_product_address"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/Address"/>
+                android:gravity="center"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/lbl_product_name"
+                android:layout_toLeftOf="@+id/lbl_product_price"
+                android:layout_toRightOf="@+id/lbl_product_name"
+                android:layout_toStartOf="@+id/lbl_product_price"
+                android:text="@string/Address" />
 
             <TextView
                 android:id="@+id/lbl_product_price"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/txt_width_price"
                 android:layout_height="match_parent"
-                android:text="@string/Price"/>
-        </LinearLayout>
+                android:gravity="center"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:text="@string/Price" />
+        </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/prod_list"

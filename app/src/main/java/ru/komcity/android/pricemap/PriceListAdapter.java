@@ -22,7 +22,6 @@ public class PriceListAdapter extends RecyclerView.Adapter<PriceListAdapter.Pric
         this.mContext = context;
     }
 
-
     @Override
     public PriceListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.price_list_item, null);
@@ -42,7 +41,8 @@ public class PriceListAdapter extends RecyclerView.Adapter<PriceListAdapter.Pric
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClickListener.onItemClick(item);
+                if (onItemClickListener != null)
+                    onItemClickListener.onItemClick(item);
             }
         };
         // Открываем карту и показываем все магазины где есть этот продукт

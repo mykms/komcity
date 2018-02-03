@@ -7,30 +7,60 @@
     <RelativeLayout
         android:id="@+id/group_top"
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="60dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="5dp">
 
         <ImageView
             android:id="@+id/prod_logo"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="@dimen/img_logo_size_wh"
+            android:layout_height="@dimen/img_logo_size_wh"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:gravity="center" />
+            android:gravity="center"
+            android:src="@drawable/vector_ic_gingerbread"/>
 
-        <TextView
-            android:id="@+id/prod_name"
-            android:layout_width="160dp"
+        <LinearLayout
+            android:id="@+id/d1"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/prod_logo"
             android:layout_toRightOf="@+id/prod_logo"
+            android:orientation="horizontal">
+
+            <include layout="@layout/delimiter_vertical" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/prod_name"
+            android:layout_width="@dimen/txt_product_width"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/d1"
+            android:layout_toRightOf="@+id/d1"
             android:gravity="center"
             android:text="Orange" />
 
+        <LinearLayout
+            android:id="@+id/d2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/prod_name"
+            android:layout_toRightOf="@+id/prod_name"
+            android:orientation="horizontal">
+
+            <include layout="@layout/delimiter_vertical" />
+        </LinearLayout>
+
         <TextView
             android:id="@+id/market_name"
-            android:layout_width="40dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/prod_name"
@@ -40,9 +70,21 @@
             android:gravity="center"
             android:text="Ашан-1088" />
 
+        <LinearLayout
+            android:id="@+id/d3"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/market_name"
+            android:layout_toRightOf="@+id/market_name"
+            android:orientation="horizontal">
+
+            <include layout="@layout/delimiter_vertical" />
+        </LinearLayout>
+
         <RelativeLayout
             android:id="@+id/group_prod_price"
-            android:layout_width="90dp"
+            android:layout_width="@dimen/txt_width_price"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
@@ -53,6 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@+id/prod_price_date"
+                android:textStyle="bold"
                 android:gravity="center"
                 android:text="707.80 Р" />
 
