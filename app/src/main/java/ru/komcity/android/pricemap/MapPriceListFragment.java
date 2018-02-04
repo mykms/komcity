@@ -18,7 +18,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,16 +42,65 @@ public class MapPriceListFragment extends Fragment {
     public void OnAddProduct(View view) {
         ArrayList<Object> geo = new ArrayList<Object>();
 
-        PriceListModel prod = new PriceListModel(geo,
+        PriceListModel prod1 = new PriceListModel(geo,
                 "Москва, ул.Вавилова, д.3",
-                "Ашан-14",
-                23.5,
+                "Ашан-24",
+                89.99,
                 "Ананас",
                 "Продовольственные",
                 "Фрукты",
                 "user2");
-        dbRef.child("productList").setValue(new PriceListItem(prod));
+
+        final PriceListModel prod2 = new PriceListModel(geo,
+                "Москва, ул.Вавилова, д.3",
+                "Ашан-14",
+                102.5,
+                "Яблоко",
+                "Продовольственные",
+                "Фрукты",
+                "user2");
+
+        dbRef.child("productList/1").setValue(prod1);
+        dbRef.child("productList/2").setValue(prod1);
+        dbRef.child("productList/3").setValue(prod1);
+        dbRef.child("productList/4").setValue(prod1);
+        dbRef.child("productList/5").setValue(prod1);
+        dbRef.child("productList/6").setValue(prod1);
+        dbRef.child("productList/7").setValue(prod1);
+        dbRef.child("productList/8").setValue(prod1);
+        dbRef.child("productList/9").setValue(prod1);
+        dbRef.child("productList/10").setValue(prod1);
         dbRef.child("productList").push();
+
+        dbRef.child("productList/11").runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                PriceListModel priceListModel = mutableData.getValue(PriceListModel.class);
+                mutableData.setValue(prod2);
+
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+
+            }
+        });
+
+        dbRef.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                PriceListModel priceListModel = mutableData.getValue(PriceListModel.class);
+                mutableData.setValue(priceListModel);
+
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                //
+            }
+        });
 
         utils.showMessageSnackbar("Добавлено", view);
     }
