@@ -7,12 +7,7 @@
     <RelativeLayout
         android:id="@+id/group_top"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="5dp">
+        android:layout_height="60dp">
 
         <ImageView
             android:id="@+id/prod_logo"
@@ -109,5 +104,14 @@
                 android:gravity="center"
                 android:text="12.01.2018" />
         </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/group_bottom_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/group_top">
+
+        <include layout="@layout/delimiter_horizontal" />
     </RelativeLayout>
 </RelativeLayout>

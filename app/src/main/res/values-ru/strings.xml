@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="title_default">Заголовок окна</string>
+
+    <string name="input_prod_name_default">Введите наименование товара</string>
+    <string name="input_prod_price_default">Введите Цену товара</string>
+    <string name="input_market_name_default">Введите название магазина</string>
+
+    <string name="btn_add_product_default">Добавить товар</string>
+
     <string name="app_name">Komcity.ru</string>
     <string name="Product">Товар</string>
     <string name="Address">Адрес</string>

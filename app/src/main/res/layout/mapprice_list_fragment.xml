@@ -62,7 +62,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:src="@drawable/vector_ic_plus_black"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/red_light"
         app:borderWidth="1dp"
         app:fabSize="normal" />
 </FrameLayout>

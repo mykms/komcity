@@ -23,6 +23,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,21 +36,16 @@ public class MapPriceListFragment extends Fragment {
     private FirebaseAuth dbAuth = FirebaseAuth.getInstance();
     private FirebaseUser dbUser = null;
     private DatabaseReference dbRef = null;
+    private DatabaseReference productListRef = null;
     private Utils utils = new Utils();
 
     @BindView(R.id.prod_list) public RecyclerView productList;
     @OnClick(R.id.btnAddFloat)
-    public void OnAddProduct(View view) {
-        ArrayList<Object> geo = new ArrayList<Object>();
+    public void OnAddProduct(final View view) {
+        PriceAddDialog addDialog = new PriceAddDialog(getActivity());
+        addDialog.show();
 
-        PriceListModel prod1 = new PriceListModel(geo,
-                "Москва, ул.Вавилова, д.3",
-                "Ашан-24",
-                89.99,
-                "Ананас",
-                "Продовольственные",
-                "Фрукты",
-                "user2");
+        ArrayList<Object> geo = new ArrayList<Object>();
 
         final PriceListModel prod2 = new PriceListModel(geo,
                 "Москва, ул.Вавилова, д.3",
@@ -60,49 +56,40 @@ public class MapPriceListFragment extends Fragment {
                 "Фрукты",
                 "user2");
 
-        dbRef.child("productList/1").setValue(prod1);
-        dbRef.child("productList/2").setValue(prod1);
-        dbRef.child("productList/3").setValue(prod1);
-        dbRef.child("productList/4").setValue(prod1);
-        dbRef.child("productList/5").setValue(prod1);
-        dbRef.child("productList/6").setValue(prod1);
-        dbRef.child("productList/7").setValue(prod1);
-        dbRef.child("productList/8").setValue(prod1);
-        dbRef.child("productList/9").setValue(prod1);
-        dbRef.child("productList/10").setValue(prod1);
-        dbRef.child("productList").push();
-
-        dbRef.child("productList/11").runTransaction(new Transaction.Handler() {
+        dbRef.child("productList").runTransaction(new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
-                PriceListModel priceListModel = mutableData.getValue(PriceListModel.class);
-                mutableData.setValue(prod2);
+                long nextNumber = mutableData.getChildrenCount();
+                try {
+                    long maxVal = 0;
+                    for (MutableData childrenItem : mutableData.getChildren()) {
+                        try {
+                            long item = Long.parseLong(childrenItem.getKey());
+                            maxVal = maxVal >= item ? maxVal : item;
+                        } catch (Exception ex) {
+                            utils.getException(ex);
+                        }
+                    }
+                    nextNumber = nextNumber >= maxVal ? nextNumber : maxVal;
+                    nextNumber++;
+                } catch (Exception ex) {
+                    utils.getException(ex);
+                }
+                dbRef.child("productList/" + nextNumber).setValue(prod2);
+                dbRef.child("productList/" + nextNumber).push();
 
                 return Transaction.success(mutableData);
             }
 
             @Override
             public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-
+                if (databaseError != null) {
+                    utils.showMessage(databaseError.getMessage(), true);
+                } else {
+                    utils.showMessageSnackbar("Добавлено", view);
+                }
             }
         });
-
-        dbRef.runTransaction(new Transaction.Handler() {
-            @Override
-            public Transaction.Result doTransaction(MutableData mutableData) {
-                PriceListModel priceListModel = mutableData.getValue(PriceListModel.class);
-                mutableData.setValue(priceListModel);
-
-                return Transaction.success(mutableData);
-            }
-
-            @Override
-            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-                //
-            }
-        });
-
-        utils.showMessageSnackbar("Добавлено", view);
     }
 
     @Override
@@ -110,13 +97,14 @@ public class MapPriceListFragment extends Fragment {
         View view =  inflater.inflate(R.layout.mapprice_list_fragment, container, false);
         ButterKnife.bind(this, view);
 
-        productList.setHasFixedSize(true);    // Не будем динамически изменять размеры
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        productList.setLayoutManager(layoutManager);
+        productList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         signInAnonymous(dbAuth);
         dbRef = db.getReference();
-        getPriceList(dbRef);
+        if (dbRef != null) {
+            productListRef = dbRef.child("productList");
+        }
+        getPriceList();
 
         return view;
     }
@@ -169,32 +157,40 @@ public class MapPriceListFragment extends Fragment {
         }
     }
 
-    private void getPriceList(DatabaseReference mDBRef) {
-        mDBRef.child("productList").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Object> items = new ArrayList<>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    PriceListModel item = null;
-                    try {
-                        item = snapshot.getValue(PriceListModel.class);
-                    } catch (Exception ex) {
-                        utils.getException(ex);
-                    }
-                    if (item != null)
-                        items.add(item);
-                }
-                showPriceList(items);
-            }
+    private void getPriceListCurrentMonth(DatabaseReference mDBRef) {
+        if (mDBRef != null) {
+            final Query query = productListRef
+                    .startAt("2134")
+                    .endAt("2134");
+            //mDBRef.child("productList")
+        }
+    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                String err = databaseError.getDetails() + "\n";
-                err += databaseError.getMessage();
-                int x = 0;
-                x++;
-            }
-        });
+    private void getPriceList() {
+        if (productListRef != null) {
+            productListRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    List<Object> items = new ArrayList<>();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        PriceListModel item = null;
+                        try {
+                            item = snapshot.getValue(PriceListModel.class);
+                        } catch (Exception ex) {
+                            utils.getException(ex);
+                        }
+                        if (item != null)
+                            items.add(item);
+                    }
+                    showPriceList(items);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    //
+                }
+            });
+        }
     }
 
     private void showPriceList(List<Object> items) {
