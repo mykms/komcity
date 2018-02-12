@@ -18,7 +18,15 @@ public class PriceListModel {
         //
     }
 
-    public PriceListModel(ArrayList<Object> geo, String marketAddress, String marketName, double price, String prodName, String prodType, String prodSubType, String user) {
+    public PriceListModel(ArrayList<Object> geo,
+                          String marketAddress,
+                          String marketName,
+                          double price,
+                          String prodName,
+                          String prodType,
+                          String prodSubType,
+                          String user) {
+
         this.dateadd = Calendar.getInstance().getTime().toString();
         this.geo = geo;
         this.marketAddress = marketAddress;

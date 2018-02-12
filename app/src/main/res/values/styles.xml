@@ -50,4 +50,13 @@
         <item name="android:background">@drawable/spinner_background</item>
         <item name="android:spinnerMode">dialog</item>
     </style>
+
+    <style name="spinner_price_dialog">
+        <item name="android:layout_marginLeft">50dp</item>
+        <item name="android:layout_marginRight">0dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="android:background">@drawable/spinner_background</item>
+    </style>
 </resources>

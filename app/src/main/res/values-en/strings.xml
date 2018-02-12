@@ -4,7 +4,15 @@
 
     <string name="input_prod_name_default">Input product name</string>
     <string name="input_prod_price_default">Input product price</string>
-    <string name="input_market_name_default">Введите название магазина</string>
+    <string name="input_market_name_default">Enter store name</string>
+    <string name="input_select_default">Select a value</string>
+    <string name="spinner_select_default">&lt;Select from List&gt;</string>
+
+    <string name="msg_empty_prod_name">The name of the goods can not be empty!</string>
+    <string name="msg_empty_prod_price">The price of the goods can not be empty!</string>
+    <string name="msg_empty_prod_less_zero">The price of the goods can not be less than 0!</string>
+    <string name="msg_empty_market_name">Store name can not be empty!</string>
+    <string name="msg_not_contains_number">The value must contain digits</string>
 
     <string name="btn_add_product_default">Add product</string>
 

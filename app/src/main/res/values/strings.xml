@@ -10,6 +10,14 @@
     <string name="input_prod_name_default">Введите наименование товара</string>
     <string name="input_prod_price_default">Введите Цену товара</string>
     <string name="input_market_name_default">Введите название магазина</string>
+    <string name="input_select_default">Выберите значение</string>
+    <string name="spinner_select_default">&lt;Выберите из списка&gt;</string>
+
+    <string name="msg_empty_prod_name">Наименование товара не может быть пустым!</string>
+    <string name="msg_empty_prod_price">Цена товара не может быть пустым!</string>
+    <string name="msg_empty_prod_less_zero">Цена товара не может меньше 0!</string>
+    <string name="msg_empty_market_name">Название магазина не может быть пустым!</string>
+    <string name="msg_not_contains_number">Значение должно содержать цифры!</string>
 
     <string name="btn_add_product_default">Добавить товар</string>
 

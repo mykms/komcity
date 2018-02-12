@@ -37,25 +37,26 @@ public class MapPriceListFragment extends Fragment {
     private FirebaseUser dbUser = null;
     private DatabaseReference dbRef = null;
     private DatabaseReference productListRef = null;
+    private DatabaseReference productTypeListRef = null;
+    private HashMap<String, ArrayList<String>> productTypesListItems = new HashMap<>();
     private Utils utils = new Utils();
+    private IPriceSaveComleteListener saveComleteListener = new IPriceSaveComleteListener() {
+        @Override
+        public void onAddToDB(final PriceListModel item) {
+            addPriceToDB(item);
+        }
+    };
 
     @BindView(R.id.prod_list) public RecyclerView productList;
     @OnClick(R.id.btnAddFloat)
-    public void OnAddProduct(final View view) {
+    public void OnAddProduct(View view) {
         PriceAddDialog addDialog = new PriceAddDialog(getActivity());
+        addDialog.setProductTypes(productTypesListItems);
+        addDialog.setPriceSaveComleteListener(saveComleteListener);
         addDialog.show();
+    }
 
-        ArrayList<Object> geo = new ArrayList<Object>();
-
-        final PriceListModel prod2 = new PriceListModel(geo,
-                "Москва, ул.Вавилова, д.3",
-                "Ашан-14",
-                102.5,
-                "Яблоко",
-                "Продовольственные",
-                "Фрукты",
-                "user2");
-
+    private void addPriceToDB(final PriceListModel productItem) {
         dbRef.child("productList").runTransaction(new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
@@ -75,7 +76,7 @@ public class MapPriceListFragment extends Fragment {
                 } catch (Exception ex) {
                     utils.getException(ex);
                 }
-                dbRef.child("productList/" + nextNumber).setValue(prod2);
+                dbRef.child("productList/" + nextNumber).setValue(productItem);
                 dbRef.child("productList/" + nextNumber).push();
 
                 return Transaction.success(mutableData);
@@ -84,9 +85,10 @@ public class MapPriceListFragment extends Fragment {
             @Override
             public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
                 if (databaseError != null) {
-                    utils.showMessage(databaseError.getMessage(), true);
+                    (new Utils(getActivity().getApplicationContext())).showMessage(databaseError.getMessage(), true);
                 } else {
-                    utils.showMessageSnackbar("Добавлено", view);
+                    (new Utils(getActivity().getApplicationContext())).showMessage("Добавлен 1 товар", false);
+                    //utils.showMessage("Добавлен 1 товар", false);
                 }
             }
         });
@@ -103,8 +105,10 @@ public class MapPriceListFragment extends Fragment {
         dbRef = db.getReference();
         if (dbRef != null) {
             productListRef = dbRef.child("productList");
+            productTypeListRef = dbRef.child("productTypes");
         }
         getPriceList();
+        getProductTypesList();
 
         return view;
     }
@@ -202,5 +206,28 @@ public class MapPriceListFragment extends Fragment {
             }
         });
         productList.setAdapter(adapter);
+    }
+
+
+    private void getProductTypesList() {
+        if (productTypeListRef != null) {
+            productTypeListRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    try {
+                        productTypesListItems = (HashMap<String, ArrayList<String>>)dataSnapshot.getValue();
+                    } catch (Exception ex) {
+                        utils.getException(ex);
+                    }
+                    if (productTypesListItems == null)
+                        productTypesListItems = new HashMap<>();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    //
+                }
+            });
+        }
     }
 }
