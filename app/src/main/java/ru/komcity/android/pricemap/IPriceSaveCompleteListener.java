@@ -1,6 +1,6 @@
 package ru.komcity.android.pricemap;
 
 
-public interface IPriceSaveComleteListener {
+public interface IPriceSaveCompleteListener {
     void onAddToDB(final PriceListModel item);
 }

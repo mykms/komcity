@@ -35,7 +35,8 @@ public class PriceAddDialog extends Dialog {
     @BindView(R.id.lst_prod_subtype) public Spinner lst_prod_subtype;
 
     private HashMap<String, ArrayList<String>> productTypesListItems = null;
-    private IPriceSaveComleteListener saveComleteListener = null;
+    private IPriceSaveCompleteListener saveCompleteListener = null;
+    private String currentUser = "Anonymous";
     private Utils utils = new Utils();
 
     @OnItemSelected(R.id.lst_prod_type)
@@ -67,7 +68,6 @@ public class PriceAddDialog extends Dialog {
         String marketName = "";
         String marketAddress = "ул. Дикопольцева, д.29/3";
         ArrayList<Object> marketGeo = new ArrayList<>();
-        String user = "testUserX Ivanov";
 
         // наименование товара
         if (lbl_prod_name_text != null) {
@@ -102,6 +102,7 @@ public class PriceAddDialog extends Dialog {
                 }
             }
         }
+        // Название магазина
         if (lbl_market_name_text != null) {
             marketName = lbl_market_name_text.getText().toString().trim();
             if (marketName.isEmpty()) {
@@ -113,9 +114,9 @@ public class PriceAddDialog extends Dialog {
         // Добавляем товар
         PriceListModel price = new PriceListModel(  marketGeo, marketAddress, marketName,
                                                     prodPriceValue, prodName, prodType,
-                                                    prodSybType, user);
-        if (this.saveComleteListener != null) {
-            this.saveComleteListener.onAddToDB(price);
+                                                    prodSybType, currentUser);
+        if (this.saveCompleteListener != null) {
+            this.saveCompleteListener.onAddToDB(price);
         }
         this.dismiss();
     }
@@ -131,8 +132,8 @@ public class PriceAddDialog extends Dialog {
 
     }
 
-    public void setPriceSaveComleteListener(IPriceSaveComleteListener saveComleteListener) {
-        this.saveComleteListener = saveComleteListener;
+    public void setPriceSaveComleteListener(IPriceSaveCompleteListener saveComleteListener) {
+        this.saveCompleteListener = saveComleteListener;
     }
 
     /**
@@ -153,6 +154,12 @@ public class PriceAddDialog extends Dialog {
         this.productTypesListItems = productTypesListItems;
 
         loadProductTypesItemsToSpinner();
+    }
+
+    public void setUserInfo(String uInfo) {
+        if (uInfo != null) {
+            currentUser = uInfo;
+        }
     }
 
     private void loadProductTypesItemsToSpinner() {
