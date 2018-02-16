@@ -37,7 +37,7 @@ public class PriceAddDialog extends Dialog {
     private HashMap<String, ArrayList<String>> productTypesListItems = null;
     private IPriceSaveCompleteListener saveCompleteListener = null;
     private String currentUser = "Anonymous";
-    private Utils utils = new Utils();
+    private Utils utils = null;
 
     @OnItemSelected(R.id.lst_prod_type)
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -127,6 +127,8 @@ public class PriceAddDialog extends Dialog {
         View dialogView = inflater.inflate(R.layout.dialog_add_price, null);
         requestWindowFeature(Window.FEATURE_NO_TITLE);  // Без заголовка окна
         setContentView(dialogView);
+
+        utils = new Utils(context);
 
         ButterKnife.bind(this);
 

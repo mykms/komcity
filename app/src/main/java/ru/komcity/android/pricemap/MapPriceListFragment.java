@@ -3,6 +3,7 @@ package ru.komcity.android.pricemap;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,11 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,10 +32,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ru.komcity.android.R;
+import ru.komcity.android.base.IUserAuth;
 import ru.komcity.android.base.UserAuth;
 import ru.komcity.android.base.Utils;
 
-public class MapPriceListFragment extends Fragment {
+public class MapPriceListFragment extends Fragment implements IUserAuth {
     private FirebaseDatabase db = FirebaseDatabase.getInstance();
     private DatabaseReference dbRef = null;
     private DatabaseReference productListRef = null;
@@ -48,20 +55,11 @@ public class MapPriceListFragment extends Fragment {
     @BindView(R.id.prod_list) public RecyclerView productList;
     @OnClick(R.id.btnAddFloat)
     public void onAddProduct_Click(View view) {
-        String userInfo = getUserInfo();
-        if (userInfo != null) {
-            if (!userInfo.trim().isEmpty()) {
-                PriceAddDialog addDialog = new PriceAddDialog(getActivity());
-                addDialog.setProductTypes(productTypesListItems);
-                addDialog.setUserInfo(userInfo);
-                addDialog.setPriceSaveComleteListener(saveCompleteListener);
-                addDialog.show();
-            } else {
-                // Перед добавлением необходимо авторизоваться
-            }
-        } else {
-            // Перед добавлением необходимо авторизоваться
-        }
+        // Авторизация при добавлении
+        userAuth = new UserAuth(getActivity());
+        userAuth.setAuthListener(this);
+        Intent uSignIntent = userAuth.getGoogleSignInIntent();
+        startActivityForResult(uSignIntent, userAuth.getGoogleReguestCode());
     }
 
     /**
@@ -123,15 +121,6 @@ public class MapPriceListFragment extends Fragment {
         return view;
     }
 
-    private String getUserInfo() {
-        // Авторизация при добавлении
-        userAuth = new UserAuth(getActivity());
-        Intent uSignIntent = userAuth.getGoogleSignInIntent();
-        startActivityForResult(uSignIntent, userAuth.getGoogleReguestCode());
-
-        return "user Ivanov I.D.";
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -143,6 +132,7 @@ public class MapPriceListFragment extends Fragment {
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
             } else {
+                userAuth.signInEmail("developkms@gmail.com", "483866007");
                 // Google Sign In failed
                 //FirebaseAccount.signInAccount(this, etEmail.getText().toString(), etPassword.getText().toString());
             }
@@ -150,28 +140,22 @@ public class MapPriceListFragment extends Fragment {
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        //Log.d(TAG, "firebaseAuthWithGooogle:" + acct.getId());
+        this.isSuccess(true);
         /*
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         userAuth.getFirebaseAuth().signInWithCredential(credential)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        //Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
-
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            //Log.w(TAG, "signInWithCredential", task.getException());
-                            //Toast.makeText(SignInActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            //
                         } else {
                             //startActivity(new Intent(SignInActivity.this, MainActivity.class));
                             //finish();
                         }
                     }
                 });
-                */
+        */
     }
 
     private void getPriceListCurrentMonth(DatabaseReference mDBRef) {
@@ -213,6 +197,10 @@ public class MapPriceListFragment extends Fragment {
         }
     }
 
+    /**
+     * Отображает список на экране
+     * @param items список для отображения
+     */
     private void showPriceList(List<Object> items) {
         PriceListAdapter adapter = new PriceListAdapter(getActivity(), items);
         adapter.setOnItemClickListener(new IPriceListClickListener() {
@@ -246,6 +234,19 @@ public class MapPriceListFragment extends Fragment {
                     //
                 }
             });
+        }
+    }
+
+    @Override
+    public void isSuccess(boolean authResult) {
+        if (authResult) {
+            PriceAddDialog addDialog = new PriceAddDialog(getActivity());
+            addDialog.setProductTypes(productTypesListItems);
+            addDialog.setUserInfo("user Ivanov I.D.");
+            addDialog.setPriceSaveComleteListener(saveCompleteListener);
+            addDialog.show();
+        } else {
+            (new Utils(getActivity().getApplicationContext())).showMessage("Не удалось пройти авторизацию. Добавление невозможно", true);
         }
     }
 }

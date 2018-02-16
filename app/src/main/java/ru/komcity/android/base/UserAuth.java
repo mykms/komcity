@@ -1,5 +1,6 @@
 package ru.komcity.android.base;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -25,6 +26,7 @@ public class UserAuth {
     private Utils utils = null;
     private final int GOOGLE_CODE_REQUEST = 900001;
     private Context context;
+    private IUserAuth iUserAuth = null;
 
     public UserAuth(Context mContext) {
         this.context = mContext;
@@ -76,57 +78,24 @@ public class UserAuth {
     }
 
     public void signInEmail(String email, String password) {
-        /*
-        // [START sign_in_with_email]
-    mAuth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
-
-                    // If sign in fails, display a message to the user. If sign in succeeds
-                    // the auth state listener will be notified and logic to handle the
-                    // signed in user can be handled in the listener.
-                    if (!task.isSuccessful()) {
-                        Log.w(TAG, "signInWithEmail:failed", task.getException());
-                        Toast.makeText(EmailPasswordActivity.this, R.string.auth_failed,
-                                Toast.LENGTH_SHORT).show();
+        uAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            if (iUserAuth != null)
+                                iUserAuth.isSuccess(true);
+                        } else {
+                            //не удалось войти. предложить зарегистрироваться
+                            if (iUserAuth != null)
+                                iUserAuth.isSuccess(false);
+                        }
                     }
-
-                    // [START_EXCLUDE]
-                    if (!task.isSuccessful()) {
-                        mStatusTextView.setText(R.string.auth_failed);
-                    }
-                    hideProgressDialog();
-                    // [END_EXCLUDE]
-                }
-            });
-    // [END sign_in_with_email]
-         */
+                });
     }
 
-    private void createUserWitEmail() {
-        /*
-        mAuth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-
-                    // If sign in fails, display a message to the user. If sign in succeeds
-                    // the auth state listener will be notified and logic to handle the
-                    // signed in user can be handled in the listener.
-                    if (!task.isSuccessful()) {
-                        Toast.makeText(EmailPasswordActivity.this, R.string.auth_failed,
-                                Toast.LENGTH_SHORT).show();
-                    }
-
-                    // [START_EXCLUDE]
-                    hideProgressDialog();
-                    // [END_EXCLUDE]
-                }
-            });
-         */
+    public void setAuthListener(IUserAuth iUserAuth) {
+        this.iUserAuth = iUserAuth;
     }
 
     private void signInAnonymous() {
