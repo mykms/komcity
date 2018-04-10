@@ -119,6 +119,16 @@ public class HtmlLoader {
                                                 utils.getException(ex);
                                             }
                                         }
+                                        // Удалим в конце ненужное слово
+                                        Elements b_tag = body.getElementsByTag("b");
+                                        for (int k = 0; k < b_tag.size(); k++) {
+                                            if (b_tag.get(k).text().equalsIgnoreCase("обсудить")) {
+                                                body.getElementsByTag("b").remove();
+                                            }
+                                            if (b_tag.get(k).text().toLowerCase().startsWith("посмотреть обсуждение")) {
+                                                body.getElementsByTag("b").remove();
+                                            }
+                                        }
                                         art = body.text().trim();
 
                                         if (art != null && theme != null && date != null) {

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import org.jsoup.nodes.Document;
@@ -58,6 +59,12 @@ public class NewsActivity extends AppCompatActivity implements IAsyncLoader, IHt
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.share_menu, menu);
+        return true;
+    }
+
     private void loadImages(String newsLink) {
         if (htmlLoader != null) {
             try {
@@ -73,6 +80,9 @@ public class NewsActivity extends AppCompatActivity implements IAsyncLoader, IHt
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                return true;
+            case R.id.news_share:
+                //
                 return true;
         }
         return super.onOptionsItemSelected(item);
