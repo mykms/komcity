@@ -7,12 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import org.jsoup.nodes.Document;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.komcity.android.CustomView.ImageSliderView;
+import ru.komcity.android.CustomView.ShareToSocial.ShareToSocial;
 import ru.komcity.android.R;
 import ru.komcity.android.base.AsyncLoader.HtmlLoader;
 import ru.komcity.android.base.AsyncLoader.IAsyncLoader;
@@ -20,14 +22,16 @@ import ru.komcity.android.base.AsyncLoader.IHtmlLoader;
 import ru.komcity.android.base.Utils;
 
 public class NewsActivity extends AppCompatActivity implements IAsyncLoader, IHtmlLoader {
+    private HtmlLoader htmlLoader = new HtmlLoader(this, this);
+    private Utils utils = new Utils();
+    private boolean isShowSocial = false;
 
     @BindView(R.id.toolbar_top)       Toolbar toolbar;
     @BindView(R.id.date_news)         TextView date_news;
     @BindView(R.id.title_news)        TextView title_news;
     @BindView(R.id.text_news)         TextView text_news;
     @BindView(R.id.image_slider_news) ImageSliderView slider;
-    private HtmlLoader htmlLoader = new HtmlLoader(this, this);
-    private Utils utils = new Utils();
+    @BindView(R.id.share_to_social)   ShareToSocial shareToSocial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +86,13 @@ public class NewsActivity extends AppCompatActivity implements IAsyncLoader, IHt
                 finish();
                 return true;
             case R.id.news_share:
-                //
+                if (isShowSocial) {
+                    shareToSocial.setVisibility(View.VISIBLE);
+                } else {
+                    shareToSocial.setVisibility(View.GONE);
+                }
+                isShowSocial = !isShowSocial;
+
                 return true;
         }
         return super.onOptionsItemSelected(item);

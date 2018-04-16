@@ -6,6 +6,7 @@ import org.jsoup.select.Elements;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -131,7 +132,9 @@ public class HtmlLoader {
                                         }
                                         art = body.text().trim();
 
-                                        if (art != null && theme != null && date != null) {
+                                        if (art != null && theme != null) {
+                                            if (date == null)
+                                                date = Calendar.getInstance().getTime().toString();
                                             item.setDate(date);
                                             item.setTitle(theme);
                                             item.setText(art);
