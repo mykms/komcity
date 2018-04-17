@@ -158,10 +158,15 @@ public class ShareToSocial extends RelativeLayout {
 
     @OnClick(R.id.img_share)
     public void OnShareClick() {
-        if (groupMessenger.getVisibility() == GONE)
+        int resId = R.drawable.vector_ic_arrow_back;
+        if (groupMessenger.getVisibility() == GONE) {
+            resId = R.drawable.vector_ic_arrow_next;
             groupMessenger.setVisibility(VISIBLE);
-        else
+        } else {
+            resId = R.drawable.vector_ic_arrow_back;
             groupMessenger.setVisibility(GONE);
+        }
+        imgShare.setImageDrawable(getResources().getDrawable(resId));
     }
 
     @OnClick(R.id.img_instagram)

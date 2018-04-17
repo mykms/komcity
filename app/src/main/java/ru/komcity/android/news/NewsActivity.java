@@ -86,12 +86,12 @@ public class NewsActivity extends AppCompatActivity implements IAsyncLoader, IHt
                 finish();
                 return true;
             case R.id.news_share:
+                isShowSocial = !isShowSocial;
                 if (isShowSocial) {
                     shareToSocial.setVisibility(View.VISIBLE);
                 } else {
                     shareToSocial.setVisibility(View.GONE);
                 }
-                isShowSocial = !isShowSocial;
 
                 return true;
         }

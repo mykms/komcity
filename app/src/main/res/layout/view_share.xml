@@ -76,5 +76,5 @@
         android:layout_toEndOf="@+id/group_icons"
         android:layout_toRightOf="@+id/group_icons"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/vector_ic_share" />
+        android:src="@drawable/vector_ic_arrow_back" />
 </RelativeLayout>
