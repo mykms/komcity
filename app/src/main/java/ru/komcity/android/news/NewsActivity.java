@@ -1,7 +1,10 @@
 package ru.komcity.android.news;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,9 +13,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import org.jsoup.nodes.Document;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.komcity.android.CustomView.ImageSlider.CompleteLoadImageListener;
 import ru.komcity.android.CustomView.ImageSliderView;
 import ru.komcity.android.CustomView.ShareToSocial.ShareToSocial;
 import ru.komcity.android.R;
@@ -25,6 +32,7 @@ public class NewsActivity extends AppCompatActivity implements IAsyncLoader, IHt
     private HtmlLoader htmlLoader = new HtmlLoader(this, this);
     private Utils utils = new Utils();
     private boolean isShowSocial = false;
+    private List<Bitmap> imageBmpList = new ArrayList<>();
 
     @BindView(R.id.toolbar_top)       Toolbar toolbar;
     @BindView(R.id.date_news)         TextView date_news;
@@ -52,6 +60,12 @@ public class NewsActivity extends AppCompatActivity implements IAsyncLoader, IHt
         // Расположение панели с кнопками
         if (slider != null) {
             slider.setRadioPanelGravity(ImageSliderView.Gravity.Bottom);
+            slider.setCompleteLoadImageListener(new CompleteLoadImageListener() {
+                @Override
+                public void onCompleteLoadBMP(Bitmap loadedBmp) {
+                    imageBmpList.add(loadedBmp);
+                }
+            });
         }
 
         Intent intent = getIntent();
@@ -89,6 +103,11 @@ public class NewsActivity extends AppCompatActivity implements IAsyncLoader, IHt
                 isShowSocial = !isShowSocial;
                 if (isShowSocial) {
                     shareToSocial.setVisibility(View.VISIBLE);
+                    shareToSocial.setTextForShare(text_news.getText().toString());
+                    if (imageBmpList.size() > 0) {
+                        String fname = "komcity" + Calendar.getInstance().getTime().getTime() + ".jpg";
+                        shareToSocial.setBitmapToShare(this, imageBmpList.get(0), fname);
+                    }
                 } else {
                     shareToSocial.setVisibility(View.GONE);
                 }
@@ -96,6 +115,21 @@ public class NewsActivity extends AppCompatActivity implements IAsyncLoader, IHt
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == Utils.REQUEST_FILE_SAVE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (imageBmpList.size() > 0) {
+                    String fname = "komcity" + Calendar.getInstance().getTime().getTime() + ".jpg";
+                    shareToSocial.setBitmapToShare(this, imageBmpList.get(0), fname);
+                }
+            } else {
+                new Utils(getApplicationContext()).showMessage("Вы сможете поделиться только текстом", true);
+            }
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package ru.komcity.android.CustomView;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.RelativeLayout;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.komcity.android.CustomView.ImageSlider.CompleteLoadImageListener;
 import ru.komcity.android.CustomView.ImageSlider.ImageSliderAdapter;
 import ru.komcity.android.R;
 import ru.komcity.android.base.Utils;
@@ -19,6 +21,7 @@ public class ImageSliderView extends RelativeLayout {
     @BindView(R.id.group_bottom) public RelativeLayout radioPanelLayout;
     @BindView(R.id.group_radio) public RadioGroup radioGroup;
     private Context context;
+    private CompleteLoadImageListener loadImageListener = null;
     private Utils utils = new Utils();
 
     public ImageSliderView(Context mContext, AttributeSet attrs) {
@@ -51,7 +54,19 @@ public class ImageSliderView extends RelativeLayout {
                 setVisibilityRadioPanel(false);
             }
             ImageSliderAdapter adapter = new ImageSliderAdapter(context, mItems);
+            adapter.setCompleteLoadImageListener(new CompleteLoadImageListener() {
+                @Override
+                public void onCompleteLoadBMP(Bitmap loadedBmp) {
+                    loadImageListener.onCompleteLoadBMP(loadedBmp);
+                }
+            });
             imageSlider.setAdapter(adapter);
+        }
+    }
+
+    public void setCompleteLoadImageListener(CompleteLoadImageListener listener) {
+        if (listener != null) {
+            loadImageListener = listener;
         }
     }
 

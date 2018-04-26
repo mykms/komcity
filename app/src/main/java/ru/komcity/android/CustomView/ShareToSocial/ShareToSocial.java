@@ -1,5 +1,6 @@
 package ru.komcity.android.CustomView.ShareToSocial;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -23,10 +25,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ru.komcity.android.R;
+import ru.komcity.android.base.Utils;
 
 public class ShareToSocial extends RelativeLayout {
     private Intent shareIntent = new Intent(Intent.ACTION_SEND);
     private String imgPath = "";
+    private String textForShare = "";
     @BindView(R.id.group_messenger) public LinearLayout groupMessenger;
     @BindView(R.id.img_share) public ImageView imgShare;
 
@@ -102,9 +106,9 @@ public class ShareToSocial extends RelativeLayout {
     /**
      * Устанавливает рисунок в виде bmp-данных, чтобы им поделиться
      * @param bmp Рисунок, представленный Bitmap данными
-     * @param fileName Путь для сохранения. Если null, то по умолчанию
+     * @param fName Путь для сохранения. Если null, то по умолчанию
      */
-    public void setBitmapToShare(Bitmap bmp, String fileName) {
+    public void setBitmapToShare(Activity activityForPermission, Bitmap bmp, String fName) {
         if (bmp == null) {
             // Создаем рисунок по умолчанию (логотип)
             bmp = BitmapFactory.decodeResource(getResources(), R.drawable.vector_ic_news);
@@ -113,32 +117,43 @@ public class ShareToSocial extends RelativeLayout {
             matrix.postScale(10, 15);
             matrix.postRotate(45);
         }
-        /*
-        if (fileName == null)
-            fileName = SharePhotoFragment.IMAGE_NAME;
-        imgPath = SharePhotoFragment.fullPathPicturesToSave;
-        Util.saveImageLocal(getContext(), bmp, fileName);
-        */
+
+        Utils utils = new Utils();
+        if (fName == null) {
+            fName = "img.jpg";
+        }
+        if (utils.saveImageLocal(activityForPermission, bmp, fName)) {
+            imgPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) +
+                    File.separator +
+                    fName;
+        }
+    }
+
+    public void setTextForShare(String text) {
+        if (text == null)
+            text = "";
+        textForShare = text;
     }
 
     private void shareToApp() {
         String type = "image/*";
+        String typeText = "text/plain";
 
         File media = new File(imgPath);
 
         try {
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            shareIntent.setType(type);
             if (media.exists()) {
                 Uri uri = Uri.fromFile(media);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     uri = FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".provider", media);
                 }
-                shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                shareIntent.setType(type);
-
                 shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                getContext().startActivity(Intent.createChooser(shareIntent, "Поделиться в"));
             }
+            shareIntent.putExtra(Intent.EXTRA_TEXT, textForShare);
+            getContext().startActivity(Intent.createChooser(shareIntent, "Поделиться в"));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
