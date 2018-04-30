@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.komcity.android.base.FragmentCore;
@@ -17,12 +20,13 @@ import ru.komcity.android.base.IMainActivityCommand;
 import ru.komcity.android.base.ModulesGraph;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IMainActivityCommand {
-
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.drawer_layout) DrawerLayout drawer;
-    @BindView(R.id.nav_view) NavigationView navigationView;
     private ModulesGraph modules = new ModulesGraph();
     private FragmentManager fragmentManager;
+    private ActionBarDrawerToggle toggle = null;
+
+    @BindView(R.id.toolbar)       Toolbar toolbar;
+    @BindView(R.id.drawer_layout) DrawerLayout drawer;
+    @BindView(R.id.nav_view)      NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +34,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                                                         this,
-                                                                drawer,
-                                                                toolbar,
+        // Доступ к верхней шапке
+        View navigationHeader = navigationView.getHeaderView(0);
+        if (navigationHeader != null) {
+            TextView tvMailSend = navigationHeader.findViewById(R.id.tv_navbar_mail);
+            tvMailSend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mailSendIntentCreate();
+                }
+            });
+        }
+
+        toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                                                                 R.string.navigation_drawer_open,
                                                                 R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -49,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            drawer.removeDrawerListener(toggle);
             super.onBackPressed();
         }
     }
@@ -58,13 +72,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_news) {
             showFragment(fragmentManager, modules.getNameNews());
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_forum) {
             showFragment(fragmentManager, modules.getNameForum());
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_announcement) {
             showFragment(fragmentManager, modules.getNameAnnouncement());
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_map_price) {
             showFragment(fragmentManager, modules.getNameMapPriceMain());
         } else if (id == R.id.nav_share) {
 
@@ -78,6 +92,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void showFragment(FragmentManager mFrManager, String fragmentTAG) {
         FragmentCore fragmentEngine = new FragmentCore(mFrManager);
         fragmentEngine.findFragment(fragmentTAG, 0);
+    }
+
+    private void mailSendIntentCreate() {
+        Intent mailIntent = new Intent(Intent.ACTION_SEND);
+        mailIntent.setType("plain/text");
+        mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { getString(R.string.email_for_send) });
+        mailIntent.putExtra(Intent.EXTRA_SUBJECT, "Сообщение из мобильного приложения");
+        startActivity(mailIntent);
     }
 
     @Override

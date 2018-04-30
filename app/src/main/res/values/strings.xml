@@ -20,9 +20,16 @@
     <string name="msg_not_contains_number">Значение должно содержать цифры!</string>
 
     <string name="btn_add_product_default">Добавить товар</string>
+    <string name="email_for_send">our_city@komcity.ru</string>
 
     <string name="Product">Продукт</string>
     <string name="Address">Адрес</string>
     <string name="Price">Цена</string>
     <string name="news_share">Поделиться</string>
+
+
+    <string name="menu_name_news">Новости</string>
+    <string name="menu_name_forum">Форум</string>
+    <string name="menu_name_announcement">Объявления</string>
+    <string name="menu_name_price_map">Карта цен</string>
 </resources>

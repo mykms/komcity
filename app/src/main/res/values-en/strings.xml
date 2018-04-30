@@ -15,10 +15,16 @@
     <string name="msg_not_contains_number">The value must contain digits</string>
 
     <string name="btn_add_product_default">Add product</string>
+    <string name="email_for_send">our_city@komcity.ru</string>
 
     <string name="app_name">Komcity.ru</string>
     <string name="Product">Product</string>
     <string name="Address">Address</string>
     <string name="Price">Price</string>
     <string name="news_share">Share</string>
+
+    <string name="menu_name_news">News</string>
+    <string name="menu_name_forum">Forum</string>
+    <string name="menu_name_announcement">Announcement</string>
+    <string name="menu_name_price_map">Map prices</string>
 </resources>

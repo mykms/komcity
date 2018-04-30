@@ -3,21 +3,21 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_news"
             android:icon="@drawable/vector_ic_news"
-            android:title="Новости" />
+            android:title="@string/menu_name_news" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_forum"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Форум" />
+            android:title="@string/menu_name_forum" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_announcement"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Объявления" />
+            android:title="@string/menu_name_announcement" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_map_price"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Карта цен" />
+            android:title="@string/menu_name_price_map" />
     </group>
 
     <item android:title="Communicate">
