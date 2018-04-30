@@ -41,7 +41,7 @@ public class AnnouncementShowAllActivity extends AppCompatActivity implements IA
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
-        String title = "Просмотр объявлений";
+        String title = getString(R.string.title_announcement);
         Intent intent = getIntent();
         if (intent != null) {
             newsLinkID = intent.getStringExtra(EXTRA_LINK_ID);

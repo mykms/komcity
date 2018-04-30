@@ -54,7 +54,7 @@ public class NewsActivity extends AppCompatActivity implements IAsyncLoader, IHt
         if (ab != null) {
             ab.setDisplayHomeAsUpEnabled(true);
             ab.setHomeButtonEnabled(true);
-            ab.setTitle("Просмотр новости");
+            ab.setTitle(getString(R.string.title_news));
         }
 
         // Расположение панели с кнопками
@@ -127,7 +127,7 @@ public class NewsActivity extends AppCompatActivity implements IAsyncLoader, IHt
                     shareToSocial.setBitmapToShare(this, imageBmpList.get(0), fname);
                 }
             } else {
-                new Utils(getApplicationContext()).showMessage("Вы сможете поделиться только текстом", true);
+                new Utils(getApplicationContext()).showMessage(getString(R.string.info_share_only_text), true);
             }
         }
     }

@@ -56,9 +56,9 @@ public class MapPriceFragment extends Fragment {
 
     private void setupViewPager(ViewPager viewPager) {
         MapPriceViewPageAdapter adapter = new MapPriceViewPageAdapter(getActivity().getFragmentManager());
-        adapter.addFragment(new MapPriceMapFragment(), "КАРТА");
-        adapter.addFragment(new MapPriceListFragment(), "СПИСОК");
-        adapter.addFragment(new MapPriceFavoriteFragment(), "ИЗБРАННОЕ");
+        adapter.addFragment(new MapPriceMapFragment(), getString(R.string.title_map));
+        adapter.addFragment(new MapPriceListFragment(), getString(R.string.title_list));
+        adapter.addFragment(new MapPriceFavoriteFragment(), getString(R.string.title_favorite));
         viewPager.setAdapter(adapter);
     }
 }

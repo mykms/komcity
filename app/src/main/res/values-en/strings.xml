@@ -16,15 +16,30 @@
 
     <string name="btn_add_product_default">Add product</string>
     <string name="email_for_send">our_city@komcity.ru</string>
+    <string name="copied_text">Copied</string>
+    <string name="copy_text">Copy text</string>
+    <string name="info_share_only_text">You can share only text</string>
 
     <string name="app_name">Komcity.ru</string>
     <string name="Product">Product</string>
     <string name="Address">Address</string>
     <string name="Price">Price</string>
-    <string name="news_share">Share</string>
+    <string name="share_to_social">Share</string>
 
     <string name="menu_name_news">News</string>
     <string name="menu_name_forum">Forum</string>
     <string name="menu_name_announcement">Announcement</string>
     <string name="menu_name_price_map">Map prices</string>
+
+    <string name="title_news">View news</string>
+    <string name="title_forum">View forums</string>
+    <string name="title_announcement">View announcement</string>
+    <string name="title_map">MAP</string>
+    <string name="title_list">LIST</string>
+    <string name="title_favorite">FAVORITE</string>
+
+    <string name="an_select_category">Select category</string>
+    <string name="an_select_last_value">Select value in last list</string>
+    <string name="an_empty_section">The section not have announcements</string>
+    <string name="an_select_all">Select all values from lists</string>
 </resources>

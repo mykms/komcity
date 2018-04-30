@@ -21,15 +21,29 @@
 
     <string name="btn_add_product_default">Добавить товар</string>
     <string name="email_for_send">our_city@komcity.ru</string>
+    <string name="copied_text">Скопировано</string>
+    <string name="copy_text">Скопировать текст</string>
+    <string name="info_share_only_text">Вы сможете поделиться только текстом</string>
 
     <string name="Product">Продукт</string>
     <string name="Address">Адрес</string>
     <string name="Price">Цена</string>
-    <string name="news_share">Поделиться</string>
-
+    <string name="share_to_social">Поделиться</string>
 
     <string name="menu_name_news">Новости</string>
     <string name="menu_name_forum">Форум</string>
     <string name="menu_name_announcement">Объявления</string>
     <string name="menu_name_price_map">Карта цен</string>
+
+    <string name="title_news">Просмотр новости</string>
+    <string name="title_forum">Просмотр форумов</string>
+    <string name="title_announcement">Просмотр объявлений</string>
+    <string name="title_map">КАРТА</string>
+    <string name="title_list">СПИСОК</string>
+    <string name="title_favorite">ИЗБРАННОЕ</string>
+
+    <string name="an_select_category">Выберите категорию</string>
+    <string name="an_select_last_value">Выберите значение в последнем списке</string>
+    <string name="an_empty_section">В данной рубрике объявлений нет</string>
+    <string name="an_select_all">Выберите все необходимые значения из списков</string>
 </resources>

@@ -87,7 +87,7 @@ public class AnnouncementFragment extends Fragment implements IAsyncLoader, IAnn
         swipeRefresh.setOnRefreshListener(this);
         swipeRefresh.setRefreshing(true); // включаем
 
-        category_list.setPrompt("Выберите категорию");
+        category_list.setPrompt(getString(R.string.an_select_category));
 
         loadAnnouncement();
 
@@ -116,7 +116,7 @@ public class AnnouncementFragment extends Fragment implements IAsyncLoader, IAnn
                 // Проверим, есть ли значения в последнем списке. Если есть, то выбраны ли они?
                 if (last_spinner.getCount() > 0) {
                     if (last_spinner.getSelectedItemPosition() < 0) {
-                        utils.showMessageSnackbar("Выберите значение в последнем списке", view);
+                        utils.showMessageSnackbar(getString(R.string.an_select_last_value), view);
                         return;
                     }
                     linkID = itemForLink.get(last_spinner.getSelectedItemPosition()).id;
@@ -131,10 +131,10 @@ public class AnnouncementFragment extends Fragment implements IAsyncLoader, IAnn
                 }
             } else {
                 // В данной рубрике объявлений нет
-                utils.showMessageSnackbar("В данной рубрике объявлений нет", view);
+                utils.showMessageSnackbar(getString(R.string.an_empty_section), view);
             }
         } else {
-            utils.showMessageSnackbar("Выберите все необходимые значения из списков", view);
+            utils.showMessageSnackbar(getString(R.string.an_select_all), view);
         }
     }
 

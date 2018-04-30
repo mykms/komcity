@@ -14,8 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import org.jsoup.nodes.Document;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.komcity.android.CustomView.ShareToSocial.ShareToSocial;
 import ru.komcity.android.R;
 import ru.komcity.android.base.AsyncLoader.HtmlLoader;
 import ru.komcity.android.base.AsyncLoader.IAsyncLoader;
@@ -23,13 +27,15 @@ import ru.komcity.android.base.AsyncLoader.IHtmlLoader;
 import ru.komcity.android.base.Utils;
 
 public class ForumDetailFragment extends Fragment implements IAsyncLoader, IHtmlLoader, SwipeRefreshLayout.OnRefreshListener {
-    @BindView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefresh;
-    @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.swipe_refresh)   SwipeRefreshLayout swipeRefresh;
+    @BindView(R.id.recycler_view)   RecyclerView mRecyclerView;
+    @BindView(R.id.share_to_social) ShareToSocial shareToSocial;
     private HtmlLoader htmlLoader = new HtmlLoader(this, this);
     private ForumDetailAdapter adapter = null;
     private Utils utils = new Utils();
     private IForumActivityCommand commandToMainActivity;
     private AppCompatActivity ownerActivity = null;
+    private Timer hideTimer = null;
     private String url = null;
 
     @Override
@@ -106,6 +112,44 @@ public class ForumDetailFragment extends Fragment implements IAsyncLoader, IHtml
     @Override
     public void onReadyToShow(List<Object> items) {
         adapter = new ForumDetailAdapter(getActivity(), items);
+        adapter.setShowSocialListener(new ISocialShowListener() {
+            @Override
+            public void showSocial(boolean isNeedShow, String textForShare) {
+                if (isNeedShow) {
+                    if (textForShare == null)
+                        textForShare = "";
+                    // Если спрятано, то покажем
+                    if (shareToSocial.getVisibility() == View.GONE) {
+                        shareToSocial.setVisibility(View.VISIBLE);
+                        shareToSocial.setTextForShare(textForShare);
+
+                        // Если таймер без работы
+                        if (hideTimer == null) {
+                            hideTimer = new Timer();
+                            hideTimer.schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    if (ownerActivity != null) {
+                                        ownerActivity.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (shareToSocial.getVisibility() == View.VISIBLE) {
+                                                    shareToSocial.setVisibility(View.GONE);
+                                                    if (hideTimer != null) {
+                                                        hideTimer.cancel();
+                                                        hideTimer = null;
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            }, 5 * 1000);// Скроем через 5 секунд
+                        }
+                    }
+                }
+            }
+        });
         mRecyclerView.setAdapter(adapter);
         swipeRefresh.setRefreshing(false); // выключаем
     }

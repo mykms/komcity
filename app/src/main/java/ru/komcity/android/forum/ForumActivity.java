@@ -29,10 +29,11 @@ public class ForumActivity extends AppCompatActivity implements IForumActivityCo
         setSupportActionBar(toolbar);
 
         ActionBar ab = getSupportActionBar();
+        String title = getString(R.string.title_forum);
         if (ab != null) {
             ab.setDisplayHomeAsUpEnabled(true);
             ab.setHomeButtonEnabled(true);
-            ab.setTitle("Просмотр форумов");
+            ab.setTitle(title);
         }
 
         fragmentEngine = new FragmentCore(getFragmentManager());
@@ -48,7 +49,7 @@ public class ForumActivity extends AppCompatActivity implements IForumActivityCo
                 if (fName != null)
                     ab.setTitle(fName);
                 else
-                    ab.setTitle("Просмотр форумов");
+                    ab.setTitle(title);
             }
             data.put("NAME", fName);
             data.put("URL", url);
