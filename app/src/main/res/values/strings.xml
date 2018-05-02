@@ -46,4 +46,5 @@
     <string name="an_select_last_value">Выберите значение в последнем списке</string>
     <string name="an_empty_section">В данной рубрике объявлений нет</string>
     <string name="an_select_all">Выберите все необходимые значения из списков</string>
+    <string name="an_show_all">Показать</string>
 </resources>

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="title_default">Заголовок окна</string>
+    <string name="navigation_drawer_open">Панель открыта</string>
+    <string name="navigation_drawer_close">Панель закрыта</string>
+
+    <string name="title_activity_map_price">Карта</string>
 
     <string name="input_prod_name_default">Введите наименование товара</string>
     <string name="input_prod_price_default">Введите Цену товара</string>
@@ -42,4 +46,5 @@
     <string name="an_select_last_value">Выберите значение в последнем списке</string>
     <string name="an_empty_section">В данной рубрике объявлений нет</string>
     <string name="an_select_all">Выберите все необходимые значения из списков</string>
+    <string name="an_show_all">Показать</string>
 </resources>

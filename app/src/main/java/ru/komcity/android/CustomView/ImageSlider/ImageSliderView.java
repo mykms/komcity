@@ -54,6 +54,7 @@ public class ImageSliderView extends RelativeLayout {
                 setVisibilityRadioPanel(false);
             }
             ImageSliderAdapter adapter = new ImageSliderAdapter(context, mItems);
+            adapter.setViewPager(imageSlider);
             adapter.setCompleteLoadImageListener(new CompleteLoadImageListener() {
                 @Override
                 public void onCompleteLoadBMP(Bitmap loadedBmp) {

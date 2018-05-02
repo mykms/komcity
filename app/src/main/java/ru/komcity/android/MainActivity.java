@@ -96,10 +96,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void mailSendIntentCreate() {
         Intent mailIntent = new Intent(Intent.ACTION_SEND);
+        mailIntent.setAction(Intent.ACTION_SEND);
+        mailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         mailIntent.setType("plain/text");
         mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { getString(R.string.email_for_send) });
         mailIntent.putExtra(Intent.EXTRA_SUBJECT, "Сообщение из мобильного приложения");
-        startActivity(mailIntent);
+        startActivity(Intent.createChooser(mailIntent, "Написать в"));
     }
 
     @Override

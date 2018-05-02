@@ -57,12 +57,14 @@
 
             <Button
                 android:id="@+id/show_announcement_button"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="#4CAF50"
+                android:textColor="@color/white"
+                android:textSize="18sp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="12dp"
-                android:text="Показать" />
+                android:text="@string/an_show_all" />
         </RelativeLayout>
 
     </android.support.v4.widget.SwipeRefreshLayout>

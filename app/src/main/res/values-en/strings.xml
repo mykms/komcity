@@ -2,6 +2,11 @@
 <resources>
     <string name="title_default">Window title</string>
 
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="title_activity_map_price">Map</string>
+
     <string name="input_prod_name_default">Input product name</string>
     <string name="input_prod_price_default">Input product price</string>
     <string name="input_market_name_default">Enter store name</string>
@@ -42,4 +47,5 @@
     <string name="an_select_last_value">Select value in last list</string>
     <string name="an_empty_section">The section not have announcements</string>
     <string name="an_select_all">Select all values from lists</string>
+    <string name="an_show_all">Show</string>
 </resources>
