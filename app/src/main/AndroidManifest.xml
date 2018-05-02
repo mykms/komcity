@@ -27,12 +27,11 @@
         <activity android:name=".forum.ForumActivity" />
         <activity android:name=".announcement.AnnouncementShowAllActivity" />
         <activity android:name=".CustomView.ImageSlider.ImageViewFullscreenActivity" />
+        <!-- activity android:name=".pricemap.CameraPriceActivity" /-->
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
-        <activity android:name=".pricemap.CameraPriceActivity"></activity>
     </application>
 
 </manifest>
