@@ -17,6 +17,7 @@
     <string name="msg_empty_prod_less_zero">Цена товара не может меньше 0!</string>
     <string name="msg_empty_market_name">Название магазина не может быть пустым!</string>
     <string name="msg_not_contains_number">Значение должно содержать цифры!</string>
+    <string name="msg_access_deny_location">Доступ к определению координат запрещен.\nВы не сможете видеть цены и магазины в близи себя!</string>
 
     <string name="btn_add_product_default">Добавить товар</string>
     <string name="email_for_send">our_city@komcity.ru</string>

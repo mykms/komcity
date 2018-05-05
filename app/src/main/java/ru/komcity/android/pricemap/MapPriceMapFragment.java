@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Fragment;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,22 +15,55 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import ru.komcity.android.R;
+import ru.komcity.android.base.RequestCodes;
+import ru.komcity.android.base.Utils;
 
-public class MapPriceMapFragment extends Fragment implements OnMapReadyCallback {
-    @BindView(R.id.google_map)
-    MapView googleMapView;
+public class MapPriceMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener {
     private GoogleMap map;
+    private Utils utils = new Utils();
+    private double latDef = 50.549923;
+    private double lngDef = 137.007948;
+    private double latDefmin = 50.0;
+    private double latDefmax = 51.0;
+    private double lngDefmin = 136.5;
+    private double lngDefmax = 137.2;
+    private LatLng latLngDef = new LatLng(latDef, lngDef);
+    private LatLng latLngDefMin = new LatLng(latDefmin, lngDefmin);
+    private LatLng latLngDefMax = new LatLng(latDefmax, lngDefmax);
+
+    @BindView(R.id.google_map)      MapView googleMapView;
+    @BindView(R.id.btnAddFloatPhoto)FloatingActionButton btnAddFloatPhoto;
+    @BindView(R.id.btnAddFloatText) FloatingActionButton btnAddFloatText;
+
+    @OnClick(R.id.btnAddFloat)
+    public void btnAddFloat_OnClick() {
+        showHideFloatButton();
+    }
+
+    @OnClick(R.id.btnAddFloatPhoto)
+    public void onAddProductPhoto_Click(View view) {
+        //
+    }
+
+    @OnClick(R.id.btnAddFloatText)
+    public void onAddProductText_Click(View view) {
+        //
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.mapprice_map_fragment, container, false);
         ButterKnife.bind(this, view);
+
+        utils = new Utils(getActivity());
 
         googleMapView.onCreate(savedInstanceState);
         googleMapView.getMapAsync(this);
@@ -40,27 +74,75 @@ public class MapPriceMapFragment extends Fragment implements OnMapReadyCallback 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        if (ActivityCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getActivity(),
-                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            //
-            return;
-        }
+        checkPermission();
+    }
 
-        LatLng latLng = new LatLng(43.1, -87.9);
-        map.getUiSettings().setMyLocationButtonEnabled(false);
-        map.setMyLocationEnabled(true);
-        map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        map.addMarker(new MarkerOptions().position(latLng).title("Marker"));
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10);
+    private void checkPermission() {
+        if ((ActivityCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
+            initMap();
+        } else {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, RequestCodes.LOCATION);
+        }
+    }
+
+    public void initMap() {
+        setMapSetting();
+        setMapLocation();
+        setMapListeners();
+    }
+
+    private void setMapSetting() {
+        UiSettings uiSettings = map.getUiSettings();
+        uiSettings.setTiltGesturesEnabled(false);//Жесты наклона
+        uiSettings.setRotateGesturesEnabled(true);//Жесты вращения
+        uiSettings.setScrollGesturesEnabled(true);//Жесты прокрутки
+        uiSettings.setZoomGesturesEnabled(true);//Жесты изменения масштаба
+        uiSettings.setZoomControlsEnabled(true);// кнопки изменения масштаба
+        uiSettings.setCompassEnabled(true);    // Компас
+        try {
+            // Кнопка определения текущего местоположения
+            uiSettings.setMyLocationButtonEnabled(true);
+            map.setMyLocationEnabled(true);
+            map.setOnMyLocationButtonClickListener(this);
+        } catch (SecurityException ex) {
+            utils.getException(ex);
+        }
+    }
+
+    private void setMapListeners() {
+        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                utils.showMessage("Щелчок по карте",true);
+            }
+        });
+        map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                utils.showMessage("Добавить цену в этом месте",true);
+            }
+        });
+        map.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
+            @Override
+            public void onCameraMoveStarted(int i) {
+                LatLng latLngCamera = map.getCameraPosition().target;
+            }
+        });
+        map.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+            @Override
+            public void onCameraMove() {
+                LatLng latLngCamera = map.getCameraPosition().target;
+            }
+        });
+    }
+
+    private void setMapLocation() {
+        map.moveCamera(CameraUpdateFactory.newLatLng(latLngDef));
+        map.addMarker(new MarkerOptions().position(latLngDef).title("Marker"));
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLngDef, 10);
         map.animateCamera(cameraUpdate);
-/*
-        // Add a marker in Sydney, Australia, and move the camera.
-        LatLng sydney = new LatLng(-34, 151);
-        map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-*/
     }
 
     @Override
@@ -69,6 +151,19 @@ public class MapPriceMapFragment extends Fragment implements OnMapReadyCallback 
         super.onResume();
     }
 
+    /**
+     * Прячет или показывает кнопки
+     */
+    private void showHideFloatButton() {
+        int visibleCode = View.GONE;
+        if (btnAddFloatPhoto.getVisibility() == View.GONE) {
+            visibleCode = View.VISIBLE;
+        } else {
+            visibleCode = View.GONE;
+        }
+        btnAddFloatPhoto.setVisibility(visibleCode);
+        btnAddFloatText.setVisibility(visibleCode);
+    }
 
     @Override
     public void onPause() {
@@ -86,5 +181,10 @@ public class MapPriceMapFragment extends Fragment implements OnMapReadyCallback 
     public void onLowMemory() {
         super.onLowMemory();
         googleMapView.onLowMemory();
+    }
+
+    @Override
+    public boolean onMyLocationButtonClick() {
+        return false;
     }
 }

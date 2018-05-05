@@ -19,31 +19,31 @@
                 android:id="@+id/lbl_product_name"
                 android:layout_width="@dimen/txt_product_width"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_marginLeft="@dimen/img_logo_size_wh"
                 android:layout_marginStart="@dimen/img_logo_size_wh"
+                android:gravity="center"
                 android:text="@string/Product" />
 
             <TextView
                 android:id="@+id/lbl_product_address"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_alignParentTop="true"
                 android:layout_toEndOf="@+id/lbl_product_name"
                 android:layout_toLeftOf="@+id/lbl_product_price"
                 android:layout_toRightOf="@+id/lbl_product_name"
                 android:layout_toStartOf="@+id/lbl_product_price"
+                android:gravity="center"
                 android:text="@string/Address" />
 
             <TextView
                 android:id="@+id/lbl_product_price"
                 android:layout_width="@dimen/txt_width_price"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
+                android:gravity="center"
                 android:text="@string/Price" />
         </RelativeLayout>
 
@@ -51,18 +51,50 @@
             android:id="@+id/prod_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/title_list"/>
+            android:layout_below="@+id/title_list" />
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnAddFloat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/vector_ic_plus_white"
+            app:backgroundTint="@color/colorAccent"
+            app:borderWidth="1dp"
+            app:fabSize="normal"
+            android:layout_marginRight="16dp"
+            android:layout_alignParentRight="true" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnAddFloatPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/btnAddFloat"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/btnAddFloat"
+            android:layout_toStartOf="@+id/btnAddFloat"
+            android:src="@drawable/vector_ic_photo_white"
+            app:fabSize="normal"
+            app:backgroundTint="@color/colorAccent"
+            android:visibility="gone" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnAddFloatText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/btnAddFloatPhoto"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/btnAddFloatPhoto"
+            android:layout_toStartOf="@+id/btnAddFloatPhoto"
+            android:src="@drawable/vector_ic_pen_white"
+            app:fabSize="normal"
+            app:backgroundTint="@color/colorAccent"
+            android:visibility="gone" />
     </RelativeLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/btnAddFloat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:src="@drawable/vector_ic_plus_black"
-        app:backgroundTint="@color/red_light"
-        app:borderWidth="1dp"
-        app:fabSize="normal" />
 </FrameLayout>

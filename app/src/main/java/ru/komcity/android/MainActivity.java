@@ -2,6 +2,8 @@ package ru.komcity.android;
 
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,17 +14,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.komcity.android.base.FragmentCore;
 import ru.komcity.android.base.IMainActivityCommand;
 import ru.komcity.android.base.ModulesGraph;
+import ru.komcity.android.base.RequestCodes;
+import ru.komcity.android.base.Utils;
+import ru.komcity.android.pricemap.MapPriceFragment;
+import ru.komcity.android.pricemap.MapPriceMapFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IMainActivityCommand {
     private ModulesGraph modules = new ModulesGraph();
     private FragmentManager fragmentManager;
     private ActionBarDrawerToggle toggle = null;
+    private Utils utils = new Utils();
 
     @BindView(R.id.toolbar)       Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
@@ -33,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        utils = new Utils(getApplicationContext());
 
         // Доступ к верхней шапке
         View navigationHeader = navigationView.getHeaderView(0);
@@ -110,5 +118,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (!mTitle.isEmpty())
                 if (toolbar != null)
                     toolbar.setTitle(mTitle);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode != RequestCodes.LOCATION) {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            return;
+        } else {
+            // Если есть доступ
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                try {
+                    MapPriceFragment curFragment = (MapPriceFragment) fragmentManager.findFragmentById(R.id.content_frame);
+                    curFragment.setInitInfoForMapFragment();
+                } catch (Exception ex) {
+                    utils.getException(ex);
+                }
+            } else {
+                utils.showMessage(getString(R.string.msg_access_deny_location), true);
+            }
+        }
     }
 }

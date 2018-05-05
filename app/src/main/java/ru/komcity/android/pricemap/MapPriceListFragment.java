@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -53,8 +54,21 @@ public class MapPriceListFragment extends Fragment implements IUserAuth {
     };
 
     @BindView(R.id.prod_list) public RecyclerView productList;
+    @BindView(R.id.btnAddFloatPhoto)FloatingActionButton btnAddFloatPhoto;
+    @BindView(R.id.btnAddFloatText) FloatingActionButton btnAddFloatText;
+
     @OnClick(R.id.btnAddFloat)
     public void onAddProduct_Click(View view) {
+        showHideFloatButton();
+    }
+
+    @OnClick(R.id.btnAddFloatPhoto)
+    public void onAddProductPhoto_Click(View view) {
+        //
+    }
+
+    @OnClick(R.id.btnAddFloatText)
+    public void onAddProductText_Click(View view) {
         // Авторизация при добавлении
         userAuth = new UserAuth(getActivity());
         userAuth.setAuthListener(this);
@@ -248,5 +262,19 @@ public class MapPriceListFragment extends Fragment implements IUserAuth {
         } else {
             (new Utils(getActivity().getApplicationContext())).showMessage("Не удалось пройти авторизацию. Добавление невозможно", true);
         }
+    }
+
+    /**
+     * Прячет или показывает кнопки
+     */
+    private void showHideFloatButton() {
+        int visibleCode = View.GONE;
+        if (btnAddFloatPhoto.getVisibility() == View.GONE) {
+            visibleCode = View.VISIBLE;
+        } else {
+            visibleCode = View.GONE;
+        }
+        btnAddFloatPhoto.setVisibility(visibleCode);
+        btnAddFloatText.setVisibility(visibleCode);
     }
 }
