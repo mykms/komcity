@@ -33,10 +33,10 @@ public class PriceListAdapter extends RecyclerView.Adapter<PriceListAdapter.Pric
     public void onBindViewHolder(PriceListViewHolder holder, int position) {
         final PriceListModel item = (PriceListModel)feedItemList.get(position);
 
-        holder.prodName.setText(item.prodName);         // Имя продукта
-        holder.marketName.setText(item.marketName);     // Название магазина
-        holder.prodPrice.setText(item.price + " Р");
-        holder.prodDate.setText(item.dateadd);          // Дата добавления продукта
+        holder.prodName.setText(item.getProdName());         // Имя продукта
+        holder.marketName.setText(item.getMarketName());     // Название магазина
+        holder.prodPrice.setText(item.getPrice() + " Р");
+        holder.prodDate.setText(item.getDate().toString());  // Дата добавления продукта
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override

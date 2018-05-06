@@ -137,8 +137,6 @@ public class MapPriceListFragment extends Fragment implements IUserAuth {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == userAuth.getGoogleReguestCode()) {
             GoogleSignInResult result = userAuth.getGoogleSignInResult(data);
             if (result.isSuccess()) {
@@ -150,6 +148,8 @@ public class MapPriceListFragment extends Fragment implements IUserAuth {
                 // Google Sign In failed
                 //FirebaseAccount.signInAccount(this, etEmail.getText().toString(), etPassword.getText().toString());
             }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 

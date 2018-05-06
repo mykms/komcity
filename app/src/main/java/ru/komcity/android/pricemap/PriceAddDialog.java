@@ -22,17 +22,18 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
 import ru.komcity.android.R;
+import ru.komcity.android.base.GeoMapUtils;
 import ru.komcity.android.base.Utils;
 
 public class PriceAddDialog extends Dialog {
-    @BindView(R.id.btn_add) public Button btn_add;
-    @BindView(R.id.btn_geo) public ImageButton btn_geo;
-    @BindView(R.id.lbl_title) public TextView lbl_title;
-    @BindView(R.id.lbl_prod_name_text) public EditText lbl_prod_name_text;
-    @BindView(R.id.lbl_prod_price_value) public EditText lbl_prod_price_value;
-    @BindView(R.id.lbl_market_name_text) public EditText lbl_market_name_text;
-    @BindView(R.id.lst_prod_type) public Spinner lst_prod_type;
-    @BindView(R.id.lst_prod_subtype) public Spinner lst_prod_subtype;
+    @BindView(R.id.btn_add)             public Button btn_add;
+    @BindView(R.id.btn_geo)             public ImageButton btn_geo;
+    @BindView(R.id.lbl_title)           public TextView lbl_title;
+    @BindView(R.id.lbl_prod_name_text)  public EditText lbl_prod_name_text;
+    @BindView(R.id.lbl_prod_price_value)public EditText lbl_prod_price_value;
+    @BindView(R.id.lbl_market_name_text)public EditText lbl_market_name_text;
+    @BindView(R.id.lst_prod_type)       public Spinner lst_prod_type;
+    @BindView(R.id.lst_prod_subtype)    public Spinner lst_prod_subtype;
 
     private HashMap<String, ArrayList<String>> productTypesListItems = null;
     private IPriceSaveCompleteListener saveCompleteListener = null;
@@ -66,7 +67,7 @@ public class PriceAddDialog extends Dialog {
         String prodPrice = "";
         double prodPriceValue = 0.0;
         String marketName = "";
-        String marketAddress = "ул. Дикопольцева, д.29/3";
+        String marketAddress = "Россия, Комсомольск-на-Амуре, ул.Дикопольцева, 29/3";
         ArrayList<Object> marketGeo = new ArrayList<>();
 
         // наименование товара
@@ -111,6 +112,8 @@ public class PriceAddDialog extends Dialog {
             }
         }
 
+        GeoMapUtils geoUtils = new GeoMapUtils(getContext());
+        marketGeo.add(geoUtils.getCoordinatesByAddressLatLng(marketAddress));
         // Добавляем товар
         PriceListModel price = new PriceListModel(  marketGeo, marketAddress, marketName,
                                                     prodPriceValue, prodName, prodType,

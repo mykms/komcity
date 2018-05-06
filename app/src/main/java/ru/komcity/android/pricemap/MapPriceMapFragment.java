@@ -1,7 +1,9 @@
 package ru.komcity.android.pricemap;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +20,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,7 +60,7 @@ public class MapPriceMapFragment extends Fragment implements OnMapReadyCallback,
 
     @OnClick(R.id.btnAddFloatText)
     public void onAddProductText_Click(View view) {
-        //
+        showDialogAddText();
     }
 
     @Override
@@ -121,7 +126,7 @@ public class MapPriceMapFragment extends Fragment implements OnMapReadyCallback,
         map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                utils.showMessage("Добавить цену в этом месте",true);
+                showDialogInfoForAddPrice();
             }
         });
         map.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
@@ -145,12 +150,6 @@ public class MapPriceMapFragment extends Fragment implements OnMapReadyCallback,
         map.animateCamera(cameraUpdate);
     }
 
-    @Override
-    public void onResume() {
-        googleMapView.onResume();
-        super.onResume();
-    }
-
     /**
      * Прячет или показывает кнопки
      */
@@ -163,6 +162,41 @@ public class MapPriceMapFragment extends Fragment implements OnMapReadyCallback,
         }
         btnAddFloatPhoto.setVisibility(visibleCode);
         btnAddFloatText.setVisibility(visibleCode);
+    }
+
+    private void showDialogInfoForAddPrice() {
+        AlertDialog.Builder addPriceDialog = new AlertDialog.Builder(getActivity());
+        addPriceDialog.setTitle(getString(R.string.btn_add_product_default))
+                .setIcon(R.drawable.vector_ic_komcity_logo)
+                .setCancelable(true)
+                .setMessage("Для добавление новой цены на карте воспользуйтесь кнопкой внизу экрана с правой стороны.\n" +
+                        "Выберите распознавание текста с фотографии или ввод текста самостоятельно.")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        addPriceDialog.create().show();
+    }
+
+    private void showDialogAddText() {
+        PriceAddDialog addDialog = new PriceAddDialog(getActivity());
+        addDialog.setProductTypes(new HashMap<String, ArrayList<String>>());
+        addDialog.setUserInfo("user Ivanov I.D.");
+        addDialog.setPriceSaveComleteListener(new IPriceSaveCompleteListener() {
+            @Override
+            public void onAddToDB(PriceListModel item) {
+                //
+            }
+        });
+        addDialog.show();
+    }
+
+    @Override
+    public void onResume() {
+        googleMapView.onResume();
+        super.onResume();
     }
 
     @Override

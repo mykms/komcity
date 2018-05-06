@@ -1,10 +1,13 @@
 package ru.komcity.android.pricemap;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class PriceListModel {
-    public String dateadd;
+    public String date;
     public ArrayList<Object> geo;
     public String marketAddress;
     public String marketName;
@@ -27,7 +30,7 @@ public class PriceListModel {
                           String prodSubType,
                           String user) {
 
-        this.dateadd = Calendar.getInstance().getTime().toString();
+        this.date = Calendar.getInstance().getTime().toString();
         this.geo = geo;
         this.marketAddress = marketAddress;
         this.marketName = marketName;
@@ -36,5 +39,29 @@ public class PriceListModel {
         this.prodType = prodType;
         this.prodSubType = prodSubType;
         this.user = user;
+    }
+
+    public Date getDate() {
+        SimpleDateFormat simpledateformat = new SimpleDateFormat("EEE MMM d HH:mm:ss zz yyyy", Locale.getDefault());
+
+        Date stringDate = Calendar.getInstance().getTime();
+        try {
+            simpledateformat.parse(date);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return stringDate;
+    }
+
+    public String getProdName() {
+        return prodName;
+    }
+
+    public String getMarketName() {
+        return marketName;
+    }
+
+    public double getPrice() {
+        return price;
     }
 }
