@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -30,6 +31,7 @@ import butterknife.OnClick;
 import ru.komcity.android.R;
 import ru.komcity.android.base.RequestCodes;
 import ru.komcity.android.base.Utils;
+import ru.komcity.android.pricemap.OcrForPrice.CameraPriceActivity;
 
 public class MapPriceMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener {
     private GoogleMap map;
@@ -55,7 +57,8 @@ public class MapPriceMapFragment extends Fragment implements OnMapReadyCallback,
 
     @OnClick(R.id.btnAddFloatPhoto)
     public void onAddProductPhoto_Click(View view) {
-        //
+        Intent photoIntent = new Intent(getActivity(), CameraPriceActivity.class);
+        startActivity(photoIntent);
     }
 
     @OnClick(R.id.btnAddFloatText)

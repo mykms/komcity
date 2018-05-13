@@ -3,17 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.komcity.android.pricemap.CameraPriceActivity">
-<!--
-    <com.google.android.gms.samples.vision.ocrreader.ui.camera.CameraSourcePreview
+    tools:context="ru.komcity.android.pricemap.OcrForPrice.CameraPriceActivity">
+
+    <ru.komcity.android.CustomView.CameraOCR.CameraSourcePreview
         android:id="@+id/preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.gms.samples.vision.ocrreader.ui.camera.GraphicOverlay
+        <ru.komcity.android.CustomView.CameraOCR.GraphicOverlay
             android:id="@+id/graphicOverlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </com.google.android.gms.samples.vision.ocrreader.ui.camera.CameraSourcePreview>
--->
+
+    </ru.komcity.android.CustomView.CameraOCR.CameraSourcePreview>
 </RelativeLayout>

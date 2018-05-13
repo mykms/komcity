@@ -41,6 +41,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-auth:$googleFireBaseLib"
     implementation "com.google.firebase:firebase-database:$googleFireBaseLib"
     implementation "com.google.firebase:firebase-auth:$googleFireBaseLib"
+    implementation "com.google.android.gms:play-services-vision:$googleFireBaseLib"
     implementation 'org.jsoup:jsoup:1.10.3'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     testImplementation 'junit:junit:4.12'

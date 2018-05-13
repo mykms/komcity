@@ -3,7 +3,6 @@ package ru.komcity.android.pricemap;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,11 +12,6 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,6 +30,7 @@ import ru.komcity.android.R;
 import ru.komcity.android.base.IUserAuth;
 import ru.komcity.android.base.UserAuth;
 import ru.komcity.android.base.Utils;
+import ru.komcity.android.pricemap.OcrForPrice.CameraPriceActivity;
 
 public class MapPriceListFragment extends Fragment implements IUserAuth {
     private FirebaseDatabase db = FirebaseDatabase.getInstance();
@@ -64,7 +59,8 @@ public class MapPriceListFragment extends Fragment implements IUserAuth {
 
     @OnClick(R.id.btnAddFloatPhoto)
     public void onAddProductPhoto_Click(View view) {
-        //
+        Intent photoIntent = new Intent(getActivity(), CameraPriceActivity.class);
+        startActivity(photoIntent);
     }
 
     @OnClick(R.id.btnAddFloatText)
