@@ -16,11 +16,14 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.vision.Detector;
+import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
@@ -97,19 +100,19 @@ public class CameraPriceActivity extends AppCompatActivity {
         // Проверка поддержки устройства сервиса Гугла
         int code = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(getApplicationContext());
         if (code != ConnectionResult.SUCCESS) {
-            //Dialog dlg = GoogleApiAvailability.getInstance().getErrorDialog(this, code, RC_HANDLE_GMS);
-            //dlg.show();
+            Dialog dlg = GoogleApiAvailability.getInstance().getErrorDialog(this,
+                    code,
+                    REQUEST_CAMERA_PERM);
+            dlg.show();
         } else {
-            /*
-            if (mCameraSource != null) {
-            try {
-                mPreview.start(mCameraSource, mGraphicOverlay);
-            } catch (IOException e) {
-                mCameraSource.release();
-                mCameraSource = null;
-            }
+            if (cameraSource != null) {
+                try {
+                    preview.start(cameraSource, graphicOverlay);
+                } catch (IOException e) {
+                    cameraSource.release();
+                    cameraSource = null;
                 }
-             */
+            }
         }
     }
 
@@ -122,6 +125,7 @@ public class CameraPriceActivity extends AppCompatActivity {
         // graphics for each text block on screen.  The factory is used by the multi-processor to
         // create a separate tracker instance for each text block.
         TextRecognizer textRecognizer = new TextRecognizer.Builder(context).build();
+        textRecognizer.setProcessor((Detector.Processor<TextBlock>) new OcrDetectorProcessor(graphicOverlay));
         //textRecognizer.setProcessor(new OcrDetectorProcessor(graphicOverlay));
 
         if (!textRecognizer.isOperational()) {
@@ -176,27 +180,6 @@ public class CameraPriceActivity extends AppCompatActivity {
         super.onDestroy();
         if (camera != null) {
             camera.release();
-        }
-    }
-
-    private void startCameraSource() throws SecurityException {
-        // check that the device has play services available.
-        int code = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(
-                getApplicationContext());
-        if (code != ConnectionResult.SUCCESS) {
-            Dialog dlg =
-                    GoogleApiAvailability.getInstance().getErrorDialog(this, code, REQUEST_CAMERA_PERM);
-            dlg.show();
-        }
-
-        if (cameraSource != null) {
-            try {
-                preview.start(cameraSource, graphicOverlay);
-            } catch (IOException e) {
-                Log.e("TAG", "Unable to start camera source.", e);
-                cameraSource.release();
-                cameraSource = null;
-            }
         }
     }
 
