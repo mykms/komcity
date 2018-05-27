@@ -3,16 +3,16 @@ package ru.komcity.android.pricemap;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,9 +21,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,7 +31,6 @@ import butterknife.OnClick;
 import ru.komcity.android.R;
 import ru.komcity.android.base.RequestCodes;
 import ru.komcity.android.base.Utils;
-import ru.komcity.android.pricemap.OcrForPrice.CameraPriceActivity;
 
 public class MapPriceMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener {
     private GoogleMap map;
@@ -46,24 +45,24 @@ public class MapPriceMapFragment extends Fragment implements OnMapReadyCallback,
     private LatLng latLngDefMin = new LatLng(latDefmin, lngDefmin);
     private LatLng latLngDefMax = new LatLng(latDefmax, lngDefmax);
 
-    @BindView(R.id.google_map)      MapView googleMapView;
-    @BindView(R.id.btnAddFloatPhoto)FloatingActionButton btnAddFloatPhoto;
-    @BindView(R.id.btnAddFloatText) FloatingActionButton btnAddFloatText;
+    @BindView(R.id.google_map) MapView googleMapView;
 
     @OnClick(R.id.btnAddFloat)
     public void btnAddFloat_OnClick() {
-        showHideFloatButton();
-    }
-
-    @OnClick(R.id.btnAddFloatPhoto)
-    public void onAddProductPhoto_Click(View view) {
-        Intent photoIntent = new Intent(getActivity(), CameraPriceActivity.class);
-        startActivity(photoIntent);
-    }
-
-    @OnClick(R.id.btnAddFloatText)
-    public void onAddProductText_Click(View view) {
-        showDialogAddText();
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+            TelephonyManager telMng = (TelephonyManager)getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+            if (telMng != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    String imei = telMng.getImei();
+                } else {
+                    String imei = telMng.getDeviceId();
+                }
+            }
+            showDialogAddText();
+        } else {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.READ_PHONE_STATE}, RequestCodes.PHONE);
+        }
     }
 
     @Override
@@ -82,10 +81,10 @@ public class MapPriceMapFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        checkPermission();
+        checkPermissionLocation();
     }
 
-    private void checkPermission() {
+    private void checkPermissionLocation() {
         if ((ActivityCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
             initMap();
@@ -153,27 +152,12 @@ public class MapPriceMapFragment extends Fragment implements OnMapReadyCallback,
         map.animateCamera(cameraUpdate);
     }
 
-    /**
-     * Прячет или показывает кнопки
-     */
-    private void showHideFloatButton() {
-        int visibleCode = View.GONE;
-        if (btnAddFloatPhoto.getVisibility() == View.GONE) {
-            visibleCode = View.VISIBLE;
-        } else {
-            visibleCode = View.GONE;
-        }
-        btnAddFloatPhoto.setVisibility(visibleCode);
-        btnAddFloatText.setVisibility(visibleCode);
-    }
-
     private void showDialogInfoForAddPrice() {
         AlertDialog.Builder addPriceDialog = new AlertDialog.Builder(getActivity());
         addPriceDialog.setTitle(getString(R.string.btn_add_product_default))
                 .setIcon(R.drawable.vector_ic_komcity_logo)
                 .setCancelable(true)
-                .setMessage("Для добавление новой цены на карте воспользуйтесь кнопкой внизу экрана с правой стороны.\n" +
-                        "Выберите распознавание текста с фотографии или ввод текста самостоятельно.")
+                .setMessage("Для добавление новой цены на карте воспользуйтесь кнопкой внизу экрана с правой стороны.")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -186,11 +170,25 @@ public class MapPriceMapFragment extends Fragment implements OnMapReadyCallback,
     private void showDialogAddText() {
         PriceAddDialog addDialog = new PriceAddDialog(getActivity());
         addDialog.setProductTypes(new HashMap<String, ArrayList<String>>());
-        addDialog.setUserInfo("user Ivanov I.D.");
-        addDialog.setPriceSaveComleteListener(new IPriceSaveCompleteListener() {
+        addDialog.setUserInfo("user Petrov I.D.");
+        addDialog.setPriceSaveComleteListener(new IProductDBListener() {
             @Override
-            public void onAddToDB(PriceListModel item) {
-                //
+            public void onSaveProductResult(boolean result) {
+                if (result) {
+                    (new Utils(getActivity().getApplicationContext())).showMessage("Сбой при добавлении товара", true);
+                } else {
+                    (new Utils(getActivity().getApplicationContext())).showMessage("Добавлен 1 товар", false);
+                }
+            }
+
+            @Override
+            public void onProductTypesLoadComplete(HashMap<String, ArrayList<String>> items) {
+
+            }
+
+            @Override
+            public void onProductLoadComplete(List<Object> items) {
+
             }
         });
         addDialog.show();

@@ -33,7 +33,7 @@ public class MapPriceFragment extends Fragment {
     }
 
     private void setIMainActivityCommand(Object activity) {
-        if (activity instanceof AppCompatActivity){
+        if (activity instanceof AppCompatActivity) {
             AppCompatActivity mainActivity = (AppCompatActivity)activity;
             commandToMainActivity = (IMainActivityCommand)mainActivity;
             commandToMainActivity.onSetTitle(modules.getTitleMapPriceMain());

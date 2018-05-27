@@ -26,7 +26,6 @@ public class UserAuth {
     private Utils utils = null;
     private final int GOOGLE_CODE_REQUEST = 900001;
     private Context context;
-    private IUserAuth iUserAuth = null;
 
     public UserAuth(Context mContext) {
         this.context = mContext;
@@ -71,31 +70,6 @@ public class UserAuth {
 
     public int getGoogleReguestCode() {
         return GOOGLE_CODE_REQUEST;
-    }
-
-    public FirebaseAuth getFirebaseAuth() {
-        return uAuth;
-    }
-
-    public void signInEmail(String email, String password) {
-        uAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            if (iUserAuth != null)
-                                iUserAuth.isSuccess(true);
-                        } else {
-                            //не удалось войти. предложить зарегистрироваться
-                            if (iUserAuth != null)
-                                iUserAuth.isSuccess(false);
-                        }
-                    }
-                });
-    }
-
-    public void setAuthListener(IUserAuth iUserAuth) {
-        this.iUserAuth = iUserAuth;
     }
 
     private void signInAnonymous() {

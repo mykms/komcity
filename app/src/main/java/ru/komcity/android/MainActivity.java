@@ -122,21 +122,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode != RequestCodes.LOCATION) {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-            return;
-        } else {
-            // Если есть доступ
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                try {
-                    MapPriceFragment curFragment = (MapPriceFragment) fragmentManager.findFragmentById(R.id.content_frame);
-                    curFragment.setInitInfoForMapFragment();
-                } catch (Exception ex) {
-                    utils.getException(ex);
-                }
-            } else {
-                utils.showMessage(getString(R.string.msg_access_deny_location), true);
+        switch (requestCode) {
+            case RequestCodes.LOCATION: {
+                checkLocation(grantResults);
+                break;
             }
+            case RequestCodes.PHONE: {
+                if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //
+                } else {
+                    utils.showMessage(getString(R.string.msg_access_deny_location), true);
+                }
+                break;
+            }
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                break;
+        }
+    }
+
+    private void checkLocation(@NonNull int[] grantResults) {
+        if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            try {
+                MapPriceFragment curFragment = (MapPriceFragment) fragmentManager.findFragmentById(R.id.content_frame);
+                curFragment.setInitInfoForMapFragment();
+            } catch (Exception ex) {
+                utils.getException(ex);
+            }
+        } else {
+            utils.showMessage(getString(R.string.msg_access_deny_location), true);
         }
     }
 }

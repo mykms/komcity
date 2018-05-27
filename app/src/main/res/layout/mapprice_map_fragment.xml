@@ -35,33 +35,5 @@
             app:fabSize="normal"
             android:layout_marginRight="16dp"
             android:layout_alignParentRight="true" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/btnAddFloatPhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/btnAddFloat"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@+id/btnAddFloat"
-            android:layout_toStartOf="@+id/btnAddFloat"
-            android:src="@drawable/vector_ic_photo_white"
-            app:fabSize="normal"
-            app:backgroundTint="@color/colorAccent"
-            android:visibility="gone" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/btnAddFloatText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/btnAddFloatPhoto"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@+id/btnAddFloatPhoto"
-            android:layout_toStartOf="@+id/btnAddFloatPhoto"
-            android:src="@drawable/vector_ic_pen_white"
-            app:fabSize="normal"
-            app:backgroundTint="@color/colorAccent"
-            android:visibility="gone" />
     </RelativeLayout>
 </FrameLayout>

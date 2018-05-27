@@ -20,7 +20,8 @@
     <string name="msg_not_contains_number">Значение должно содержать цифры!</string>
     <string name="msg_access_deny_location">Доступ к определению координат запрещен.\nВы не сможете видеть цены и магазины в близи себя!</string>
 
-    <string name="btn_add_product_default">Добавить товар</string>
+    <string name="btn_add_product_default">Добавить</string>
+    <string name="btn_add_product_cancel">Отмена</string>
     <string name="email_for_send">our_city@komcity.ru</string>
     <string name="copied_text">Скопировано</string>
     <string name="copy_text">Скопировать текст</string>

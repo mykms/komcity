@@ -20,7 +20,8 @@
     <string name="msg_not_contains_number">The value must contain digits</string>
     <string name="msg_access_deny_location">Access to location is deny.\nYou not see price and market beside you!</string>
 
-    <string name="btn_add_product_default">Add product</string>
+    <string name="btn_add_product_default">Add</string>
+    <string name="btn_add_product_cancel">Cancel</string>
     <string name="email_for_send">our_city@komcity.ru</string>
     <string name="copied_text">Copied</string>
     <string name="copy_text">Copy text</string>

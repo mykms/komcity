@@ -3,7 +3,6 @@ package ru.komcity.android.pricemap;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -13,7 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,22 +22,22 @@ import butterknife.OnClick;
 import butterknife.OnItemSelected;
 import ru.komcity.android.R;
 import ru.komcity.android.base.GeoMapUtils;
+import ru.komcity.android.base.ProductBase;
 import ru.komcity.android.base.Utils;
 
 public class PriceAddDialog extends Dialog {
+    private HashMap<String, ArrayList<String>> productTypesListItems = null;
+    private IProductDBListener productDBListener = null;
+    private String currentUser = "Anonymous";
+    private Utils utils = null;
+
     @BindView(R.id.btn_add)             public Button btn_add;
     @BindView(R.id.btn_geo)             public ImageButton btn_geo;
-    @BindView(R.id.lbl_title)           public TextView lbl_title;
     @BindView(R.id.lbl_prod_name_text)  public EditText lbl_prod_name_text;
     @BindView(R.id.lbl_prod_price_value)public EditText lbl_prod_price_value;
     @BindView(R.id.lbl_market_name_text)public EditText lbl_market_name_text;
     @BindView(R.id.lst_prod_type)       public Spinner lst_prod_type;
     @BindView(R.id.lst_prod_subtype)    public Spinner lst_prod_subtype;
-
-    private HashMap<String, ArrayList<String>> productTypesListItems = null;
-    private IPriceSaveCompleteListener saveCompleteListener = null;
-    private String currentUser = "Anonymous";
-    private Utils utils = null;
 
     @OnItemSelected(R.id.lst_prod_type)
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -118,9 +117,15 @@ public class PriceAddDialog extends Dialog {
         PriceListModel price = new PriceListModel(  marketGeo, marketAddress, marketName,
                                                     prodPriceValue, prodName, prodType,
                                                     prodSybType, currentUser);
-        if (this.saveCompleteListener != null) {
-            this.saveCompleteListener.onAddToDB(price);
-        }
+
+        ProductBase productBase = new ProductBase(productDBListener);
+        productBase.addPriceToDB(price);
+
+        this.dismiss();
+    }
+
+    @OnClick(R.id.btn_cancel)
+    public void onClickCancel(View view) {
         this.dismiss();
     }
 
@@ -134,23 +139,10 @@ public class PriceAddDialog extends Dialog {
         utils = new Utils(context);
 
         ButterKnife.bind(this);
-
     }
 
-    public void setPriceSaveComleteListener(IPriceSaveCompleteListener saveComleteListener) {
-        this.saveCompleteListener = saveComleteListener;
-    }
-
-    /**
-     * Устанавливает (переопределяет) заголовок в диалоге
-     * @param title
-     */
-    @Override
-    public void setTitle(@Nullable CharSequence title) {
-        if (title == null)
-            if (!title.toString().isEmpty()) {
-                lbl_title.setText(title);
-            }
+    public void setPriceSaveComleteListener(IProductDBListener productDBListener) {
+        this.productDBListener = productDBListener;
     }
 
     public void setProductTypes(HashMap<String, ArrayList<String>> productTypesListItems) {
@@ -178,10 +170,5 @@ public class PriceAddDialog extends Dialog {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, lst);
             lst_prod_type.setAdapter(adapter);
         }
-    }
-
-    @OnClick(R.id.btn_close_dialog)
-    public void onCloseDialog(View view) {
-        this.dismiss();
     }
 }
