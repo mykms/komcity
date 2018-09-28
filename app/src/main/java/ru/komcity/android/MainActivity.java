@@ -22,7 +22,6 @@ import ru.komcity.android.base.ModulesGraph;
 import ru.komcity.android.base.RequestCodes;
 import ru.komcity.android.base.Utils;
 import ru.komcity.android.pricemap.MapPriceFragment;
-import ru.komcity.android.pricemap.MapPriceMapFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IMainActivityCommand {
     private ModulesGraph modules = new ModulesGraph();
@@ -88,10 +87,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             showFragment(fragmentManager, modules.getNameAnnouncement());
         } else if (id == R.id.nav_map_price) {
             showFragment(fragmentManager, modules.getNameMapPriceMain());
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_exit) {
+            finish();
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

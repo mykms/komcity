@@ -26,6 +26,9 @@
     <string name="copied_text">Copied</string>
     <string name="copy_text">Copy text</string>
     <string name="info_share_only_text">You can share only text</string>
+    <string name="menu_other">Other</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_exit">Exit</string>
 
     <string name="app_name">Komcity.ru</string>
     <string name="Product">Product</string>

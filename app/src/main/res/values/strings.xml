@@ -12,6 +12,9 @@
     <string name="input_market_name_default">Введите название магазина</string>
     <string name="input_select_default">Выберите значение</string>
     <string name="spinner_select_default">&lt;Выберите из списка&gt;</string>
+    <string name="menu_other">Прочее</string>
+    <string name="menu_share">Поделиться</string>
+    <string name="menu_exit">Выход</string>
 
     <string name="msg_empty_prod_name">Наименование товара не может быть пустым!</string>
     <string name="msg_empty_prod_price">Цена товара не может быть пустым!</string>

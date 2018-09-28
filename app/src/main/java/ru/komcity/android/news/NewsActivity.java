@@ -1,11 +1,8 @@
 package ru.komcity.android.news;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -16,12 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import org.jsoup.nodes.Document;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.komcity.android.CustomView.ImageSlider.CompleteLoadImageListener;
