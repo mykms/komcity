@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.komcity.android.pricemap.MapPriceListFragment">
+    tools:context="ru.komcity.mobile.pricemap.MapPriceListFragment">
 
     <RelativeLayout
         android:id="@+id/group_all"

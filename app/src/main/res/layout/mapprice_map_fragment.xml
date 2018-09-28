@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:tag="map_price_fragment"
-    tools:context="ru.komcity.android.pricemap.MapPriceMapFragment">
+    tools:context="ru.komcity.mobile.pricemap.MapPriceMapFragment">
 
     <RelativeLayout
         android:id="@+id/droup_all_content_map"

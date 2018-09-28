@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.komcity.android.pricemap.OcrForPrice.CameraPriceActivity">
+    tools:context="ru.komcity.mobile.pricemap.OcrForPrice.CameraPriceActivity">
 
-    <ru.komcity.android.CustomView.CameraOCR.CameraSourcePreview
+    <ru.komcity.mobile.CustomView.CameraOCR.CameraSourcePreview
         android:id="@+id/preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -15,5 +15,5 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </ru.komcity.android.CustomView.CameraOCR.CameraSourcePreview>
+    </ru.komcity.mobile.CustomView.CameraOCR.CameraSourcePreview>
 </RelativeLayout>

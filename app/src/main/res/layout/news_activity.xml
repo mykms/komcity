@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.komcity.android.news.NewsActivity">
+    tools:context="ru.komcity.mobile.news.NewsActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_top"
@@ -47,7 +47,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true">
 
-            <ru.komcity.android.CustomView.ShareToSocial.ShareToSocial
+            <ru.komcity.mobile.CustomView.ShareToSocial.ShareToSocial
                 android:id="@+id/share_to_social"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
             android:layout_marginTop="5dp"
             android:orientation="vertical">
 
-            <ru.komcity.android.CustomView.ImageSliderView
+            <ru.komcity.mobile.CustomView.ImageSliderView
                 android:id="@+id/image_slider_news"
                 android:layout_width="match_parent"
                 android:layout_height="180dp"

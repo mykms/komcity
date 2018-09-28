@@ -16,7 +16,7 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <ru.komcity.android.CustomView.ShareToSocial.ShareToSocial
+    <ru.komcity.mobile.CustomView.ShareToSocial.ShareToSocial
         android:id="@+id/share_to_social"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
