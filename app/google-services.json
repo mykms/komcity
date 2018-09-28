@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:441743854542:android:abb19a1262b676f6",
         "android_client_info": {
-          "package_name": "ru.komcity.android"
+          "package_name": "ru.komcity.mobile"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "441743854542-158384q2o94e98aqhtmkotekf8seui0q.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "ru.komcity.android",
+            "package_name": "ru.komcity.mobile",
             "certificate_hash": "816120c680c380c6623c7adfe71656d871e1bc04"
           }
         },
@@ -26,7 +26,7 @@
           "client_id": "441743854542-m8cafon6u02p0fq9481r2rqp2rjubck1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "ru.komcity.android",
+            "package_name": "ru.komcity.mobile",
             "certificate_hash": "c43bbf9b890922110bba0a0a0025af0ce91c592c"
           }
         },

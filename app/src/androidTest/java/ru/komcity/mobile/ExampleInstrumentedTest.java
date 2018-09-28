@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("ru.komcity.android", appContext.getPackageName());
+        assertEquals("ru.komcity.mobile", appContext.getPackageName());
     }
 }
