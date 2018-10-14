@@ -36,6 +36,7 @@
     <string name="Price">Price</string>
     <string name="share_to_social">Share</string>
 
+    <string name="menu_icon_news">Calendar</string>
     <string name="menu_name_news">News</string>
     <string name="menu_name_forum">Forum</string>
     <string name="menu_name_announcement">Announcement</string>

@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,15 +26,13 @@ public class FragmentCore {
         fragmentManager = mFragTrans;
     }
 
-    public void replaceFragment(Fragment fragment, @IdRes int ResID) {
+    private void replaceFragment(Fragment fragment, @IdRes int ResID) {
         @IdRes int contentResourse = R.id.content_frame;
         if (ResID != 0) {
             contentResourse = ResID;
         }
 
-        FragmentTransaction fragmentTransaction = fragmentManager
-                .beginTransaction()
-                //.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
                 .replace(contentResourse, fragment);
         fragmentTransaction.commit();
     }
@@ -67,6 +66,10 @@ public class FragmentCore {
      * @return Возвращает найденный фрагмент
      */
     public Fragment findFragment(String fragmentTAG, @IdRes int ResID) {
+        return findFragment(fragmentTAG, ResID, null);
+    }
+
+    public Fragment findFragment(String fragmentTAG, @IdRes int ResID, @Nullable Bundle args) {
         Fragment fragment = null;
         fragment = fragmentManager.findFragmentByTag(fragmentTAG);
         ModulesGraph modules = new ModulesGraph();
@@ -88,12 +91,13 @@ public class FragmentCore {
             }
         }
 
-        if (fragment != null) {
-            if (bundle != null) {
-                fragment.setArguments(bundle);
-            }
-            replaceFragment(fragment, ResID);
+        if (args != null) {
+            fragment.setArguments(args);
         }
+        if (bundle != null) {
+            fragment.setArguments(args);
+        }
+        replaceFragment(fragment, ResID);
         return fragment;
     }
 }

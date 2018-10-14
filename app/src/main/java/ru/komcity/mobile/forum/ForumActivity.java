@@ -1,6 +1,8 @@
 package ru.komcity.mobile.forum;
 
+import android.app.Fragment;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -82,6 +84,32 @@ public class ForumActivity extends AppCompatActivity implements IForumActivityCo
             if (!mTitle.isEmpty())
                 if (toolbar != null)
                     toolbar.setTitle(mTitle);
+    }
+
+    @Override
+    public void setVisibleMenuIcon(boolean isVisible) {
+        //
+    }
+
+    @Override
+    public void setCurrentFragment(Fragment fragment) {
+        //
+    }
+
+    @Override
+    public void onLoadFragment(String fragmentName, Bundle args) {
+
+    }
+
+    @Override
+    public void onError(String message) {
+        if (message == null) {
+            message = "";
+        }
+        if (!message.isEmpty()) {
+            Snackbar.make(this.getWindow().getDecorView(), message, Snackbar.LENGTH_SHORT)
+                    .show();
+        }
     }
 
     @Override

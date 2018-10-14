@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,37 +16,35 @@ import android.view.ViewGroup;
 import org.jsoup.nodes.Document;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.komcity.mobile.FragmentBaseListener;
 import ru.komcity.mobile.R;
 import ru.komcity.mobile.base.AsyncLoader.HtmlLoader;
 import ru.komcity.mobile.base.AsyncLoader.IAsyncLoader;
 import ru.komcity.mobile.base.AsyncLoader.IHtmlLoader;
+import ru.komcity.mobile.base.ExtraConst;
 import ru.komcity.mobile.base.IMainActivityCommand;
 import ru.komcity.mobile.base.ModulesGraph;
 import ru.komcity.mobile.base.Utils;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
-public class NewsFragment extends Fragment implements IAsyncLoader, IHtmlLoader, SwipeRefreshLayout.OnRefreshListener {
-    @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
-    @BindView(R.id.swipe_refresh) SwipeRefreshLayout swipeRefresh;
-
+public class NewsFragment extends Fragment implements IAsyncLoader, IHtmlLoader,
+        CalendarClickListener, FragmentBaseListener, SwipeRefreshLayout.OnRefreshListener {
+    private long dateForStartSearch = 0;
     private IMainActivityCommand commandToMainActivity;
     private NewsAdapter adapter;
     private Utils utils;
     private ModulesGraph modules = new ModulesGraph();
     private HtmlLoader htmlLoader = new HtmlLoader(this, this);
 
+    @BindView(R.id.recycler_view)   RecyclerView mRecyclerView;
+    @BindView(R.id.swipe_refresh)   SwipeRefreshLayout swipeRefresh;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         setIMainActivityCommand(activity);
-    }
-
-    private void setIMainActivityCommand(Object activity) {
-        if (activity instanceof AppCompatActivity){
-            AppCompatActivity mainActivity = (AppCompatActivity)activity;
-            commandToMainActivity = (IMainActivityCommand)mainActivity;
-            commandToMainActivity.onSetTitle(modules.getTitleNews());
-        }
     }
 
     @Override
@@ -56,10 +53,21 @@ public class NewsFragment extends Fragment implements IAsyncLoader, IHtmlLoader,
         setIMainActivityCommand(context);
     }
 
+    private void setIMainActivityCommand(Object activity) {
+        if (activity instanceof IMainActivityCommand){
+            this.commandToMainActivity = (IMainActivityCommand)activity;
+        }
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        setHasOptionsMenu(true);
+        Bundle args = getArguments();
+        if (args != null) {
+            this.dateForStartSearch = args.getLong(ExtraConst.EXTRA_DATE_SEARCH_START, 0);
+        }
     }
 
     @Override
@@ -82,15 +90,59 @@ public class NewsFragment extends Fragment implements IAsyncLoader, IHtmlLoader,
         swipeRefresh.setOnRefreshListener(this);
         swipeRefresh.setRefreshing(true); // включаем
 
-        loadNews();
-
         return view;
     }
 
-    private void loadNews() {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initParams();
+        loadNews(getLinkArchive());
+        commandToMainActivity.onSetTitle(getTitle());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        commandToMainActivity.onSetTitle(getTitle());
+    }
+
+    private String getLinkArchive() {
+        if (this.dateForStartSearch > 0) {
+            Calendar curCalendar = Calendar.getInstance();
+            curCalendar.setTimeInMillis(this.dateForStartSearch);
+            String year = curCalendar.get(Calendar.YEAR) + "";
+            int mm = curCalendar.get(Calendar.MONTH) + 1;
+            String month = mm >= 10 ? mm + "" : "0" + mm;
+            return "archive/" + year + "_" + month + "/";
+        } else {
+            return "";
+        }
+    }
+
+    private String getTitle() {
+        Calendar curCalendar = Calendar.getInstance();
+        curCalendar.setTimeInMillis(this.dateForStartSearch);
+        String year = curCalendar.get(Calendar.YEAR) + "";
+        String month = curCalendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault());
+        return this.dateForStartSearch > 0 ? modules.getTitleNews() + " за " + month + " " + year : modules.getTitleNews();
+    }
+
+    private void initParams() {
+        if (this.commandToMainActivity != null) {
+            commandToMainActivity.onSetTitle(modules.getTitleNews());
+            commandToMainActivity.setCurrentFragment(this);
+            commandToMainActivity.setVisibleMenuIcon(this.dateForStartSearch <= 0);
+        }
+    }
+
+    private void loadNews(String path) {
         if (htmlLoader != null) {
             try {
-                htmlLoader.htmlAddressToParse("news/");
+                if (path == null) {
+                    path = "";
+                }
+                htmlLoader.htmlAddressToParse("news/" + path);
             } catch (Exception ex) {
                 utils.getException(ex);
             }
@@ -99,29 +151,63 @@ public class NewsFragment extends Fragment implements IAsyncLoader, IHtmlLoader,
 
     @Override
     public void onCompletedLoading(Document html) {
-        htmlLoader.parseNews(html);
+        if (this.dateForStartSearch > 0) {
+            htmlLoader.parseNewsArchiveLinks(html, getLinkArchive());
+        } else {
+            htmlLoader.parseNews(html);
+        }
     }
 
     @Override
     public void onReadyToShow(List<Object> items) {
-        adapter = new NewsAdapter(getActivity(), items);
-        mRecyclerView.setAdapter(adapter);
-        swipeRefresh.setRefreshing(false); // включаем
-        adapter.setOnItemClickListener(new NewsClickListener() {
-            @Override
-            public void onItemClick(NewsItem item) {
-                Intent intent = new Intent(getActivity(), NewsActivity.class);
-                intent.putExtra("DATE", item.getDate());
-                intent.putExtra("TITLE", item.getTitle());
-                intent.putExtra("URL", item.getUrl());
-                intent.putExtra("TEXT", item.getText());
-                startActivity(intent);
-            }
-        });
+        if (this.dateForStartSearch > 0) {
+            //adapter = new NewsAdapter(getActivity(), items);
+            //mRecyclerView.setAdapter(adapter);
+            swipeRefresh.setRefreshing(false); // включаем
+        } else {
+            adapter = new NewsAdapter(getActivity(), items);
+            mRecyclerView.setAdapter(adapter);
+            swipeRefresh.setRefreshing(false); // включаем
+            adapter.setOnItemClickListener(new NewsClickListener() {
+                @Override
+                public void onItemClick(NewsItem item) {
+                    Intent intent = new Intent(getActivity(), NewsActivity.class);
+                    intent.putExtra("DATE", item.getDate());
+                    intent.putExtra("TITLE", item.getTitle());
+                    intent.putExtra("URL", item.getUrl());
+                    intent.putExtra("TEXT", item.getText());
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                }
+            });
+        }
     }
 
     @Override
     public void onRefresh() {
-        loadNews();
+        loadNews("");
+    }
+
+    @Override
+    public void onDateSelected(long dateTime) {
+        Calendar curCalendar = Calendar.getInstance();
+        Calendar startCalendar = Calendar.getInstance();
+        startCalendar.set(2002, 11, 1);
+        if (this.commandToMainActivity != null) {
+            if (dateTime > curCalendar.getTimeInMillis() || dateTime < startCalendar.getTimeInMillis()) {
+                commandToMainActivity.onError("Вы не можете просмотреть новость за выбранную дату!");
+            } else {
+                Bundle args = new Bundle();
+                args.putLong(ExtraConst.EXTRA_DATE_SEARCH_START, dateTime);
+                commandToMainActivity.onLoadFragment(modules.getNameNews(), args);
+            }
+        }
+    }
+
+    @Override
+    public void getToolbarTitle() {
+        if (this.commandToMainActivity != null) {
+            commandToMainActivity.onSetTitle(getTitle());
+        }
     }
 }

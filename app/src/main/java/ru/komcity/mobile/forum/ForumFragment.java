@@ -48,6 +48,8 @@ public class ForumFragment extends Fragment implements IAsyncLoader, IHtmlLoader
             AppCompatActivity mainActivity = (AppCompatActivity)activity;
             commandToMainActivity = (IMainActivityCommand)mainActivity;
             commandToMainActivity.onSetTitle(modules.getTitleForum());
+            commandToMainActivity.setVisibleMenuIcon(false);
+            commandToMainActivity.setCurrentFragment(this);
         }
     }
 

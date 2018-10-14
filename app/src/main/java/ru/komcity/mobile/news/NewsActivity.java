@@ -97,6 +97,7 @@ public class NewsActivity extends AppCompatActivity implements IAsyncLoader, IHt
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 return true;
             case R.id.news_share:
                 isShowSocial = !isShowSocial;

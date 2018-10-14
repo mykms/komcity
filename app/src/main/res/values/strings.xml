@@ -35,6 +35,7 @@
     <string name="Price">Цена</string>
     <string name="share_to_social">Поделиться</string>
 
+    <string name="menu_icon_news">Календарь</string>
     <string name="menu_name_news">Новости</string>
     <string name="menu_name_forum">Форум</string>
     <string name="menu_name_announcement">Объявления</string>

@@ -10,6 +10,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.TreeSet;
 import ru.komcity.mobile.announcement.AnnouncementData;
 import ru.komcity.mobile.announcement.AnnouncementSubCategoryItemModel;
 import ru.komcity.mobile.announcement.AnnouncementSubCategoryModel;
@@ -29,7 +31,7 @@ public class HtmlLoader {
     private IHtmlLoader iHtmlLoader = null;
     private IAsyncLoader iAsyncLoader = null;
     private Utils utils = new Utils();
-    private List<String > announcementLinksList = new ArrayList<>();
+    private List<String> announcementLinksList = new ArrayList<>();
 
     public HtmlLoader(IHtmlLoader mIHtmlLoader, IAsyncLoader mIAsyncLoader) {
         iHtmlLoader = mIHtmlLoader;
@@ -47,10 +49,12 @@ public class HtmlLoader {
      * @return Возвращает html-документ типа Document
      */
     public void htmlAddressToParse(String mAddress) {
-        if (mAddress != null) {
-            if (!mAddress.isEmpty()) {
-                AsyncLoader asyncLoader = new AsyncLoader(iAsyncLoader, rootAddress + mAddress);
-                asyncLoader.execute();
+        if (mAddress != null && !mAddress.isEmpty()) {
+            AsyncLoader asyncLoader = new AsyncLoader(iAsyncLoader, rootAddress + mAddress);
+            asyncLoader.execute();
+        } else {
+            if (iHtmlLoader != null) {
+                iHtmlLoader.onReadyToShow(new ArrayList<Object>());
             }
         }
     }
@@ -181,6 +185,30 @@ public class HtmlLoader {
         }
         if (iHtmlLoader != null)
             iHtmlLoader.onReadyToShow(imageLinkList);
+    }
+
+    public void parseNewsArchiveLinks(Document mHtmlDoc, String url) {
+        List<Object> newsArchiveLinks = new ArrayList<>();
+        if (mHtmlDoc != null) {
+            Elements rootA = mHtmlDoc.getElementsByTag("a").attr("class", "normallink");
+            if (rootA != null) {
+                for (int i = 0; i < rootA.size(); i++) {
+                    Element element = rootA.get(i);
+                    if (    element.attr("href") != null &&
+                            element.attr("href").contains(url) &&
+                            !element.text().contains("&gt;")) {
+                        newsArchiveLinks.add(element.attr("href"));
+                    }
+                }
+            }
+        }
+        if (iHtmlLoader != null) {
+            Set<Object> normalLinks = new TreeSet<>();
+            normalLinks.addAll(newsArchiveLinks);
+            newsArchiveLinks.clear();
+            newsArchiveLinks.addAll(normalLinks);
+            iHtmlLoader.onReadyToShow(newsArchiveLinks);
+        }
     }
 
     public void parseForum(Document mHtmlDoc) {
