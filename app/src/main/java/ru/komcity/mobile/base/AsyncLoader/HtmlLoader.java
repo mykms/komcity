@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -19,6 +20,8 @@ import ru.komcity.mobile.announcement.IAnnoncementHtmlLoader;
 import ru.komcity.mobile.base.Utils;
 import ru.komcity.mobile.forum.ForumDetailItem;
 import ru.komcity.mobile.forum.ForumItem;
+import ru.komcity.mobile.news.INewsLoader;
+import ru.komcity.mobile.news.NewsArchiveLinkItem;
 import ru.komcity.mobile.news.NewsItem;
 
 public class HtmlLoader {
@@ -188,7 +191,7 @@ public class HtmlLoader {
     }
 
     public void parseNewsArchiveLinks(Document mHtmlDoc, String url) {
-        List<Object> newsArchiveLinks = new ArrayList<>();
+        List<NewsArchiveLinkItem> newsArchiveLinks = new ArrayList<>();
         if (mHtmlDoc != null) {
             Elements rootA = mHtmlDoc.getElementsByTag("a").attr("class", "normallink");
             if (rootA != null) {
@@ -197,17 +200,31 @@ public class HtmlLoader {
                     if (    element.attr("href") != null &&
                             element.attr("href").contains(url) &&
                             !element.text().contains("&gt;")) {
-                        newsArchiveLinks.add(element.attr("href"));
+                        String link = element.attr("href");
+                        int page = 0;
+                        try {
+                            page = Integer.parseInt(link.substring(link.indexOf("=") + 1));
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                        newsArchiveLinks.add(new NewsArchiveLinkItem(link, page));
                     }
                 }
             }
         }
         if (iHtmlLoader != null) {
-            Set<Object> normalLinks = new TreeSet<>();
+            Set<NewsArchiveLinkItem> normalLinks = new TreeSet<>(new Comparator<NewsArchiveLinkItem>() {
+                @Override
+                public int compare(NewsArchiveLinkItem o1, NewsArchiveLinkItem o2) {
+                    return o1.getPage() - o2.getPage();
+                }
+            });
             normalLinks.addAll(newsArchiveLinks);
             newsArchiveLinks.clear();
             newsArchiveLinks.addAll(normalLinks);
-            iHtmlLoader.onReadyToShow(newsArchiveLinks);
+            if (iHtmlLoader instanceof INewsLoader) {
+                ((INewsLoader)iHtmlLoader).onLinksLoaded(newsArchiveLinks);
+            }
         }
     }
 

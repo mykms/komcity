@@ -9,18 +9,25 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.komcity.mobile.R;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
-    private List<Object> feedItemList;
+    private List<Object> items = new ArrayList<>();
     private Context mContext;
-    private NewsClickListener onItemClickListener;
+    private NewsClickListener onItemClickListener = null;
 
     public NewsAdapter(Context context, List<Object> feedItemList) {
-        this.feedItemList = feedItemList;
+        if (feedItemList == null) {
+            new ArrayList<>();
+        }
+        this.items.clear();
+        this.items.addAll(feedItemList);
         this.mContext = context;
     }
 
@@ -33,7 +40,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
     @Override
     public void onBindViewHolder(NewsViewHolder newsHolder, int i) {
-        final NewsItem item = (NewsItem)feedItemList.get(i);
+        final NewsItem item = (NewsItem) items.get(i);
 
         //Download image using picasso library
         if (!TextUtils.isEmpty(item.getImage())) {
@@ -51,7 +58,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClickListener.onItemClick(item);
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(item);
+                }
             }
         };
         newsHolder.imageNews.setOnClickListener(listener);
@@ -59,9 +68,25 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         newsHolder.lbl_text_news.setOnClickListener(listener);
     }
 
+    public void addItem(Object item) {
+        items.add(item);
+    }
+
+    public void addItems(Collection<? extends Object> col) {
+        items.addAll(col);
+    }
+
+    public List<Object> getItems() {
+        return items;
+    }
+
+    public int getSize() {
+        return items.size();
+    }
+
     @Override
     public int getItemCount() {
-        return (null != feedItemList ? feedItemList.size() : 0);
+        return (null != items ? items.size() : 0);
     }
 
     class NewsViewHolder extends RecyclerView.ViewHolder {

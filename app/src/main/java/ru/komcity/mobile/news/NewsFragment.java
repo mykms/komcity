@@ -20,23 +20,35 @@ import ru.komcity.mobile.FragmentBaseListener;
 import ru.komcity.mobile.R;
 import ru.komcity.mobile.base.AsyncLoader.HtmlLoader;
 import ru.komcity.mobile.base.AsyncLoader.IAsyncLoader;
-import ru.komcity.mobile.base.AsyncLoader.IHtmlLoader;
 import ru.komcity.mobile.base.ExtraConst;
 import ru.komcity.mobile.base.IMainActivityCommand;
 import ru.komcity.mobile.base.ModulesGraph;
 import ru.komcity.mobile.base.Utils;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.TreeSet;
 
-public class NewsFragment extends Fragment implements IAsyncLoader, IHtmlLoader,
+public class NewsFragment extends Fragment implements IAsyncLoader, INewsLoader,
         CalendarClickListener, FragmentBaseListener, SwipeRefreshLayout.OnRefreshListener {
     private long dateForStartSearch = 0;
+    private int currentPage = 0;
     private IMainActivityCommand commandToMainActivity;
     private NewsAdapter adapter;
+    private LinearLayoutManager layoutManager = null;
+    private List<NewsArchiveLinkItem> newsArchiveLinks = new ArrayList<>();
     private Utils utils;
     private ModulesGraph modules = new ModulesGraph();
     private HtmlLoader htmlLoader = new HtmlLoader(this, this);
+    private Set<NewsArchiveLinkItem> normalLinks = new TreeSet<>(new Comparator<NewsArchiveLinkItem>() {
+        @Override
+        public int compare(NewsArchiveLinkItem o1, NewsArchiveLinkItem o2) {
+            return o1.getPage() - o2.getPage();
+        }
+    });
 
     @BindView(R.id.recycler_view)   RecyclerView mRecyclerView;
     @BindView(R.id.swipe_refresh)   SwipeRefreshLayout swipeRefresh;
@@ -76,9 +88,9 @@ public class NewsFragment extends Fragment implements IAsyncLoader, IHtmlLoader,
         ButterKnife.bind(this, view);
 
         utils = new Utils();
-
+        adapter = new NewsAdapter(getActivity(), new ArrayList<Object>());
         mRecyclerView.setHasFixedSize(true);    // Не будем динамически изменять размеры
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
                                                             mRecyclerView.getContext(),
@@ -152,6 +164,9 @@ public class NewsFragment extends Fragment implements IAsyncLoader, IHtmlLoader,
     @Override
     public void onCompletedLoading(Document html) {
         if (this.dateForStartSearch > 0) {
+            if (this.newsArchiveLinks.isEmpty()) {
+                htmlLoader.parseNews(html);
+            }
             htmlLoader.parseNewsArchiveLinks(html, getLinkArchive());
         } else {
             htmlLoader.parseNews(html);
@@ -160,26 +175,69 @@ public class NewsFragment extends Fragment implements IAsyncLoader, IHtmlLoader,
 
     @Override
     public void onReadyToShow(List<Object> items) {
+        swipeRefresh.setRefreshing(false); // выключаем
+
+        if (adapter.getSize() >= items.size()) {
+            mRecyclerView.scrollToPosition(adapter.getSize());
+        }
+        adapter.addItems(items);
+        mRecyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new NewsClickListener() {
+            @Override
+            public void onItemClick(NewsItem item) {
+                Intent intent = new Intent(getActivity(), NewsActivity.class);
+                intent.putExtra("DATE", item.getDate());
+                intent.putExtra("TITLE", item.getTitle());
+                intent.putExtra("URL", item.getUrl());
+                intent.putExtra("TEXT", item.getText());
+                startActivity(intent);
+                getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            }
+        });
         if (this.dateForStartSearch > 0) {
-            //adapter = new NewsAdapter(getActivity(), items);
-            //mRecyclerView.setAdapter(adapter);
-            swipeRefresh.setRefreshing(false); // включаем
-        } else {
-            adapter = new NewsAdapter(getActivity(), items);
-            mRecyclerView.setAdapter(adapter);
-            swipeRefresh.setRefreshing(false); // включаем
-            adapter.setOnItemClickListener(new NewsClickListener() {
+            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
-                public void onItemClick(NewsItem item) {
-                    Intent intent = new Intent(getActivity(), NewsActivity.class);
-                    intent.putExtra("DATE", item.getDate());
-                    intent.putExtra("TITLE", item.getTitle());
-                    intent.putExtra("URL", item.getUrl());
-                    intent.putExtra("TEXT", item.getText());
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                }
+
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    if (layoutManager != null && !swipeRefresh.isRefreshing() && (currentPage + 1 < newsArchiveLinks.size()) ) {
+                        int visibleItemCount = layoutManager.getChildCount();
+                        int totalItemCount = layoutManager.getItemCount();
+                        int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
+                        if (pastVisibleItems + visibleItemCount >= totalItemCount) {
+                            if (!newsArchiveLinks.isEmpty()) {
+                                NewsArchiveLinkItem item = newsArchiveLinks.get(currentPage + 1);
+                                dateForStartSearch = 0;
+                                swipeRefresh.setRefreshing(true);
+                                currentPage = item.getPage() - 1;
+                                loadNews(item.getLink().replace("/news/", ""));
+                            }
+                        }
+                    }
                 }
             });
+        }
+    }
+
+    @Override
+    public void onLinksLoaded(List<NewsArchiveLinkItem> links) {
+        if (links == null) {
+            links = new ArrayList<>();
+        }
+        int curPage = this.newsArchiveLinks.isEmpty() ? 1 : this.newsArchiveLinks.get(this.newsArchiveLinks.size() - 1).getPage();
+        int nextPage = links.isEmpty() ? 1 : links.get(links.size() - 1).getPage();
+        if (curPage < nextPage) {
+            this.normalLinks.addAll(links);
+            this.newsArchiveLinks.clear();
+            this.newsArchiveLinks.add(new NewsArchiveLinkItem(getLinkArchive(), 1));
+            this.newsArchiveLinks.addAll(this.normalLinks);
+            loadNews(links.get(links.size() - 1).getLink());// Пройдем по последней ссылке в списке
+        } else {
+            // Отобразим новости архивные
+            //Set<NewsArchiveLinkItem> uniqueLinks = new TreeSet<>(this.newsArchiveLinks);
         }
     }
 

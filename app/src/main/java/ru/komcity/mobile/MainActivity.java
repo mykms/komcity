@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DatePickerDialog dpDialog = new DatePickerDialog(this, R.style.DateCalendar, getDateListener(),
                 curCalendar.get(Calendar.YEAR),
                 curCalendar.get(Calendar.MONTH), curCalendar.get(Calendar.DAY_OF_MONTH));
-        dpDialog.setTitle("За какую дату вы хотите просмотреть новость?");
+        dpDialog.setTitle("Новости за весь месяц\nВыберите любой день");
         dpDialog.show();
     }
 
