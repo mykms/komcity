@@ -175,10 +175,13 @@ public class NewsFragment extends Fragment implements IAsyncLoader, INewsLoader,
 
     @Override
     public void onReadyToShow(List<Object> items) {
+        if (items == null) {
+            items = new ArrayList<>();
+        }
         swipeRefresh.setRefreshing(false); // выключаем
 
-        if (adapter.getSize() >= items.size()) {
-            mRecyclerView.scrollToPosition(adapter.getSize());
+        if (adapter.getSize() >= items.size() && adapter.getSize() > 1) {
+            mRecyclerView.scrollToPosition(adapter.getSize() - 1);
         }
         adapter.addItems(items);
         mRecyclerView.setAdapter(adapter);
