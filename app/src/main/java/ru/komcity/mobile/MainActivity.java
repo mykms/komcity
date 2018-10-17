@@ -118,6 +118,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
+        if (id != R.id.nav_news) {
+            this.fragmentBaseListener = null;
+        }
 
         if (id == R.id.nav_news) {
             showFragment(fragmentManager, modules.getNameNews());

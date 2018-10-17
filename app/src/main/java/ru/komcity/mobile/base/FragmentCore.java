@@ -95,7 +95,7 @@ public class FragmentCore {
             fragment.setArguments(args);
         }
         if (bundle != null) {
-            fragment.setArguments(args);
+            fragment.setArguments(bundle);
         }
         replaceFragment(fragment, ResID);
         return fragment;
