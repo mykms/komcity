@@ -45,7 +45,8 @@
             <RadioButton
                 android:id="@+id/radioButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:button="@null"/>
         </RadioGroup>
     </RelativeLayout>
 </RelativeLayout>

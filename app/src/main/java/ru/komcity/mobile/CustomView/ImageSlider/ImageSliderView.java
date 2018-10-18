@@ -88,8 +88,12 @@ public class ImageSliderView extends RelativeLayout {
                 try {
                     radioButton[i] = new RadioButton(context);
                     radioButton[i].setId(i);
-                    if (i == 0)
+                    if (i == 0) {
                         radioButton[i].setChecked(true);    // Установим, что первый элемент выбран
+                        //radioButton[i].setBackgroundDrawable(getResources().getDrawable(R.drawable.rb_bg_active));
+                    } else {
+                        //radioButton[i].setBackgroundDrawable(getResources().getDrawable(R.drawable.rb_bg_in_active));
+                    }
                     if (radioGroup != null) {
                         radioGroup.addView(radioButton[i]);
                     }

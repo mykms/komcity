@@ -62,6 +62,7 @@ public class AnnouncementFragment extends Fragment implements IAsyncLoader, IAnn
         if (activity instanceof AppCompatActivity){
             AppCompatActivity mainActivity = (AppCompatActivity)activity;
             commandToMainActivity = (IMainActivityCommand)mainActivity;
+            commandToMainActivity.setVisibleMenuIcon(false);
             commandToMainActivity.onSetTitle(modules.getTitleAnnouncement());
         }
     }

@@ -22,12 +22,14 @@ import android.widget.TextView;
 import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ru.komcity.mobile.base.ExtraConst;
 import ru.komcity.mobile.base.FragmentCore;
 import ru.komcity.mobile.base.IMainActivityCommand;
 import ru.komcity.mobile.base.ModulesGraph;
 import ru.komcity.mobile.base.RequestCodes;
 import ru.komcity.mobile.base.Utils;
 import ru.komcity.mobile.news.CalendarClickListener;
+import ru.komcity.mobile.news.NewsFragment;
 import ru.komcity.mobile.pricemap.MapPriceFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, IMainActivityCommand {
@@ -111,7 +113,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         } else {
             drawer.removeDrawerListener(toggle);
-            super.onBackPressed();
+            if (this.fragmentBaseListener == null) {
+                super.onBackPressed();
+            } else {
+                if (((NewsFragment) this.fragmentBaseListener).getArguments() != null) {
+                    long val = ((NewsFragment) this.fragmentBaseListener).getArguments().getLong(ExtraConst.EXTRA_DATE_SEARCH_START, 0);
+                    if (val > 0) {
+                        showFragment(fragmentManager, modules.getNameNews());
+                    } else {
+                        finish();
+                    }
+                } else {
+                    finish();
+                }
+            }
         }
     }
 
