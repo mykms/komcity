@@ -12,6 +12,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import org.jsoup.nodes.Document;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,6 +48,13 @@ public class NewsActivity extends AppCompatActivity implements IAsyncLoader, IHt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.news_activity);
         ButterKnife.bind(this);
+
+
+        Bundle params = new Bundle();
+        params.putString("screen_02", this.getClass().getName());
+        FirebaseAnalytics
+                .getInstance(getApplicationContext())
+                .logEvent("test_event_01", params);
 
         setSupportActionBar(toolbar);
 

@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        ProdBuild {
+            keyAlias 'komcity'
+            keyPassword 'ButerBroD37'
+            storeFile file('C:/Users/Aleksey/AndroidStudioProjects/komcity/keystore/keystore.jks')
+            storePassword 'StoRe_kms37'
+        }
+    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "ru.komcity.mobile"
@@ -21,7 +29,7 @@ android {
 ext {
     supportLibVersion = '27.1.1'
     butterKnifeLib = '8.8.1'
-    googleFireBaseLib ='15.0.0'
+    googleFireBaseLib = '15.0.0'
 }
 
 dependencies {
@@ -36,6 +44,7 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation "com.jakewharton:butterknife:$butterKnifeLib"
     implementation "com.jakewharton:butterknife-compiler:$butterKnifeLib"
+    implementation 'com.google.firebase:firebase-core:16.0.3'
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterKnifeLib"
     implementation "com.google.android.gms:play-services-maps:$googleFireBaseLib"
     implementation "com.google.android.gms:play-services-auth:$googleFireBaseLib"

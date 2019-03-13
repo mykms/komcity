@@ -19,6 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean isVisibleMenuIcon = true;
     private CalendarClickListener calendarClickListener = null;
     private FragmentBaseListener fragmentBaseListener = null;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @BindView(R.id.toolbar)       Toolbar toolbar;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
@@ -50,6 +54,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        Bundle params = new Bundle();
+        params.putString("screen_01", this.getClass().getName());
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        mFirebaseAnalytics.logEvent("test_event_01", params);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params);
 
         setSupportActionBar(toolbar);
 
