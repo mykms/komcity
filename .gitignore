@@ -1,10 +1,12 @@
+*.iml
 .idea
 .gradle
-/build
-/gradle
-/keystore
+.DS_Store
+/local.properties
+/.idea
+build
 build/
+gradle
 gradle/
 keystore/
 local.properties
-*.iml
