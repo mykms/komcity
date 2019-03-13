@@ -20,7 +20,7 @@
             app:mapType="normal"
             app:cameraZoom="13"/>
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnAddFloat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
