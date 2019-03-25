@@ -53,4 +53,7 @@
     <string name="an_empty_section">В данной рубрике объявлений нет</string>
     <string name="an_select_all">Выберите все необходимые значения из списков</string>
     <string name="an_show_all">Показать</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
