@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">Komcity.ru</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="google_maps_key">AIzaSyBSYCnoSBckEmQ2bhsVz9MIjWNPzVcyMog</string>
     <string name="title_activity_map_price">Map</string>
 
@@ -12,7 +9,7 @@
     <string name="input_market_name_default">Введите название магазина</string>
     <string name="input_select_default">Выберите значение</string>
     <string name="spinner_select_default">&lt;Выберите из списка&gt;</string>
-    <string name="menu_other">Прочее</string>
+    <string name="menu_info">Информация</string>
     <string name="menu_share">Поделиться</string>
     <string name="menu_exit">Выход</string>
 

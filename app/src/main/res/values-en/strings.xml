@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="title_default">Window title</string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="title_activity_map_price">Map</string>
 
     <string name="input_prod_name_default">Input product name</string>
@@ -26,7 +22,7 @@
     <string name="copied_text">Copied</string>
     <string name="copy_text">Copy text</string>
     <string name="info_share_only_text">You can share only text</string>
-    <string name="menu_other">Other</string>
+    <string name="menu_info">Information</string>
     <string name="menu_share">Share</string>
     <string name="menu_exit">Exit</string>
 

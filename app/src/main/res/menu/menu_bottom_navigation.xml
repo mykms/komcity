@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/newsListFragment"
+        android:title="@string/menu_name_news"
+        android:icon="@drawable/vector_ic_news"
+        app:showAsAction="ifRoom|withText"/>
+
+    <item android:id="@+id/forumListFragment"
+        android:title="@string/menu_name_forum"
+        android:icon="@drawable/vector_ic_forum"
+        app:showAsAction="ifRoom|withText"/>
+
+    <item android:id="@+id/announcementSearchFragment"
+        android:title="@string/menu_name_announcement"
+        android:icon="@drawable/vector_ic_announcement"
+        app:showAsAction="ifRoom|withText"/>
+
+    <item android:id="@+id/infoFragment"
+        android:title="@string/menu_info"
+        android:icon="@drawable/vector_ic_exit"
+        app:showAsAction="ifRoom|withText"/>
+</menu>

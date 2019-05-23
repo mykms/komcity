@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="title_default">Заголовок окна</string>
-    <string name="navigation_drawer_open">Панель открыта</string>
-    <string name="navigation_drawer_close">Панель закрыта</string>
 
     <string name="title_activity_map_price">Карта</string>
 
@@ -31,7 +29,7 @@
     <string name="Address">Адрес</string>
     <string name="Price">Цена</string>
     <string name="share_to_social">Поделиться</string>
-    <string name="menu_other">Прочее</string>
+    <string name="menu_info">Информация</string>
     <string name="menu_share">Поделиться</string>
     <string name="menu_exit">Выход</string>
 
