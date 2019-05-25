@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     signingConfigs {
@@ -17,7 +18,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 5
-        versionName "1.1.0"
+        versionName "1.0.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -39,6 +40,7 @@ repositories {
 ext {
     supportLibVer = '1.1.0-alpha05'
     navLibVer = '1.0.0'
+    moxyLibVer = '1.5.0'
 }
 
 dependencies {
@@ -50,6 +52,12 @@ dependencies {
 
     implementation "android.arch.navigation:navigation-ui:$navLibVer"
     implementation "android.arch.navigation:navigation-fragment:$navLibVer"
+
+    implementation "com.arello-mobile:moxy:$moxyLibVer"
+    implementation "com.arello-mobile:moxy-app-compat:$moxyLibVer"
+    implementation "com.arello-mobile:moxy-android:$moxyLibVer"
+    kapt "com.arello-mobile:moxy-compiler:$moxyLibVer"
+
     implementation "org.jsoup:jsoup:1.10.3"
     implementation "com.squareup.picasso:picasso:2.71828"
 
