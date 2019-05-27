@@ -1,7 +1,8 @@
 package ru.komcity.mobile.UI.Adapter
 
 import android.view.View
-import kotlinx.android.synthetic.main.item_news.*
+import android.widget.ImageView
+import android.widget.TextView
 import ru.komcity.mobile.Model.ImageLoader.ImageCropType
 import ru.komcity.mobile.Model.ImageLoader.ImageLoader
 import ru.komcity.mobile.Model.NewsItem
@@ -22,7 +23,11 @@ class NewsAdapter(items: List<NewsItem>) : BaseListAdapter<NewsAdapter.NewsHolde
         //
     }
 
-    inner class NewsHolder(override val containerView: View) : BaseHolder<NewsItem>(containerView) {
+    inner class NewsHolder(containerView: View) : BaseHolder<NewsItem>(containerView) {
+        private val tvNewsDate = containerView.findViewById<TextView>(R.id.tvNewsDate)
+        private val tvNewsTitle = containerView.findViewById<TextView>(R.id.tvNewsTitle)
+        private val tvNewsShortText = containerView.findViewById<TextView>(R.id.tvNewsShortText)
+        private val ivNews = containerView.findViewById<ImageView>(R.id.ivNews)
 
         override fun setData(item: NewsItem) {
             tvNewsDate.text = item.date
