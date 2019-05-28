@@ -36,6 +36,6 @@ class NewsListFragment : BaseFragment(), NewsListView {
     }
 
     override fun onNewsLoaded(items: List<NewsItem>) {
-        rvListNews.adapter = NewsAdapter(listOf())
+        rvListNews.adapter = NewsAdapter(items)
     }
 }
