@@ -19,4 +19,11 @@
     <dimen name="btn_close_width">35dp</dimen>
     <dimen name="btn_add_margin_top">40dp</dimen>
     <dimen name="btn_add_margin_bottom">20dp</dimen>
+
+    <dimen name="marginTopDate">4dp</dimen>
+    <dimen name="marginTopTitle">4dp</dimen>
+    <dimen name="marginTopText">8dp</dimen>
+
+    <dimen name="marginRight">8dp</dimen>
+    <dimen name="marginLeft">8dp</dimen>
 </resources>

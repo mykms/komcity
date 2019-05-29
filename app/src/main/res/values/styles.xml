@@ -22,29 +22,37 @@
         <!-- Цвета так задуманы -->
     </style>
 
-    <style name="text_date">
+    <style name="textDate">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/marginTopDate</item>
+        <item name="android:layout_marginLeft">@dimen/marginLeft</item>
+        <item name="android:layout_marginRight">@dimen/marginRight</item>
+        <item name="android:maxLines">1</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="text_title">
+    <style name="textTitle">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/marginTopTitle</item>
+        <item name="android:layout_marginLeft">@dimen/marginLeft</item>
+        <item name="android:layout_marginRight">@dimen/marginRight</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:maxLines">2</item>
         <item name="android:ellipsize">end</item>
-        <item name="android:layout_marginTop">3dp</item>
     </style>
 
-    <style name="text_main">
+    <style name="textMain">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/gray</item>
-        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginTop">@dimen/marginTopText</item>
+        <item name="android:layout_marginLeft">4dp</item>
+        <item name="android:layout_marginRight">@dimen/marginRight</item>
         <item name="android:maxLines">5</item>
         <item name="android:ellipsize">end</item>
     </style>

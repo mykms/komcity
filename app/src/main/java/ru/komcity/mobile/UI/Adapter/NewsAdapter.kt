@@ -33,7 +33,7 @@ class NewsAdapter(items: List<NewsItem>) : BaseListAdapter<NewsAdapter.NewsHolde
             tvNewsDate.text = item.date
             tvNewsTitle.text = item.title
             tvNewsShortText.text = item.shortText
-            ImageLoader(item.imageUrl, ivNews, ImageCropType.CROP_ROUNDED)
+            ImageLoader(item.imageUrl, ivNews, ImageCropType.CROP_NO)
         }
 
         override fun setItemClickListener(listener: View.OnClickListener?) {

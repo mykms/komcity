@@ -24,7 +24,12 @@ class NewsPresenter: MvpPresenter<NewsListView>() {
     private suspend fun getHtml(url: String): Document =
             coroutineScope {
                 async {
-                    Jsoup.connect(url).get()
+                    try {
+                        Jsoup.connect(url).get()
+                    } catch (ex: Exception) {
+                        ex.printStackTrace()
+                        Document("")
+                    }
                 }
             }.await()
 
