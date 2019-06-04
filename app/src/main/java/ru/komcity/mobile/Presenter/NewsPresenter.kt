@@ -6,6 +6,9 @@ import kotlinx.coroutines.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
+import ru.komcity.mobile.Common.toCalendar
+import ru.komcity.mobile.Common.toPattern
+import ru.komcity.mobile.Common.toUserFriendly
 import ru.komcity.mobile.Model.NewsItem
 import ru.komcity.mobile.View.NewsListView
 import java.text.ParseException
@@ -54,7 +57,7 @@ class NewsPresenter: MvpPresenter<NewsListView>() {
         //Если всё считалось, что вытаскиваем из считанного html документа table
         if (mHtmlDoc != null) {
             val rootTR: Elements = mHtmlDoc.getElementsByTag(tr)
-            var date: String = ""
+            var dateTime: Calendar = Calendar.getInstance()
             var title: String = ""
             var art: String = ""
             var imgUrl = ""
@@ -69,12 +72,9 @@ class NewsPresenter: MvpPresenter<NewsListView>() {
                             if (text.length < textLen)
                                 continue
                             // Ищем время публикации
-                            try {
-                                val formatTime = SimpleDateFormat("HH:mm dd MMMM yyyy", Locale.getDefault())
-                                val time = formatTime.parse(text)
-                                date = text// поймали дату / время
-                            } catch (ex: ParseException) {
-                                ex.printStackTrace()
+                            val tmpDate = text.toCalendar("HH:mm dd MMMM yyyy")
+                            if (tmpDate.get(Calendar.YEAR) != 1800) {
+                                dateTime = tmpDate
                             }
 
                             // Нашли заголовок
@@ -117,10 +117,7 @@ class NewsPresenter: MvpPresenter<NewsListView>() {
                                     art = body.text().trim()
 
                                     if (art.isNotEmpty() && title.isNotEmpty()) {
-                                        if (date.isNotEmpty())
-                                            date = Calendar.getInstance().time.toString()
-
-                                        newsList.add(NewsItem(title, date, art, imgUrl, rootNewsAddress + link.replace("\'", "").replace("window.location=", "")))
+                                        newsList.add(NewsItem(title, dateTime.toUserFriendly(), art, imgUrl, rootNewsAddress + link.replace("\'", "").replace("window.location=", "")))
                                     }
                                 } catch (ex: Exception) {
                                     ex.printStackTrace()

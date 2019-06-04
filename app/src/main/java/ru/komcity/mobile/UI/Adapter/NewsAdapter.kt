@@ -10,17 +10,18 @@ import ru.komcity.mobile.R
 import ru.komcity.mobile.UI.Holder.BaseHolder
 
 class NewsAdapter(items: List<NewsItem>) : BaseListAdapter<NewsAdapter.NewsHolder, NewsItem>(items) {
+    private var itemListener: ItemClickListener<NewsItem>? = null
 
     override fun setLayoutRes(): Int = R.layout.item_news
 
     override fun returnViewHolder(view: View): NewsHolder = NewsHolder(view)
 
     override fun onItemClicked(item: NewsItem, position: Int) {
-        //
+        this.itemListener?.onItemClick(item, position)
     }
 
     override fun setClickListener(listener: ItemClickListener<NewsItem>?) {
-        //
+        this.itemListener = listener
     }
 
     inner class NewsHolder(containerView: View) : BaseHolder<NewsItem>(containerView) {
@@ -37,7 +38,10 @@ class NewsAdapter(items: List<NewsItem>) : BaseListAdapter<NewsAdapter.NewsHolde
         }
 
         override fun setItemClickListener(listener: View.OnClickListener?) {
-            //
+            tvNewsDate.setOnClickListener(listener)
+            tvNewsTitle.setOnClickListener(listener)
+            tvNewsShortText.setOnClickListener(listener)
+            ivNews.setOnClickListener(listener)
         }
     }
 }
