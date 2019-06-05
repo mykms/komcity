@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.fragment_news_list.*
+import ru.komcity.mobile.Common.Constants
 import ru.komcity.mobile.Model.NewsItem
 import ru.komcity.mobile.Presenter.NewsPresenter
 import ru.komcity.mobile.R
@@ -60,6 +61,8 @@ class NewsListFragment : BaseFragment(), NewsListView, ItemClickListener<NewsIte
     }
 
     override fun onItemClick(item: NewsItem, position: Int) {
-        //newsPresenter.getNews()
+        val args = Bundle()
+        args.putParcelable(Constants.EXTRA_NEWS_ITEM, item)
+        navigateTo(R.id.newsDetailFragment, args)
     }
 }
