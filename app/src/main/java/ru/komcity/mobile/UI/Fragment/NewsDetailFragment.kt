@@ -2,7 +2,9 @@ package ru.komcity.mobile.UI.Fragment
 
 import android.os.Bundle
 import android.view.View
+import kotlinx.android.synthetic.main.fragment_news_detail.*
 import ru.komcity.mobile.Common.Constants
+import ru.komcity.mobile.Model.ImageLoader.ImageLoader
 import ru.komcity.mobile.Model.NewsItem
 import ru.komcity.mobile.R
 
@@ -19,6 +21,9 @@ class NewsDetailFragment : BaseFragment() {
     }
 
     override fun initComponents(view: View) {
-        //
+        tvDate.text = item.date
+        tvTitle.text = item.title
+        tvDescription.text = item.shortText
+        ImageLoader(item.fullNewsUrl, mainBackdrop)
     }
 }

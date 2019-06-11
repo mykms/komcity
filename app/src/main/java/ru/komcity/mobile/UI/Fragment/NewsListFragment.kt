@@ -44,6 +44,14 @@ class NewsListFragment : BaseFragment(), NewsListView, ItemClickListener<NewsIte
         rvListNews.addItemDecoration(dividerItemDecoration)
     }
 
+    override fun onLoadingStart() {
+        progress.visibility = View.VISIBLE
+    }
+
+    override fun onLoadingStop() {
+        progress.visibility = View.GONE
+    }
+
     override fun onNewsLoaded(items: List<NewsItem>) {
         val adapter = NewsAdapter(items)
         adapter.setClickListener(this)

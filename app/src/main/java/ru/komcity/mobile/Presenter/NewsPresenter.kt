@@ -7,12 +7,9 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 import ru.komcity.mobile.Common.toCalendar
-import ru.komcity.mobile.Common.toPattern
 import ru.komcity.mobile.Common.toUserFriendly
 import ru.komcity.mobile.Model.NewsItem
 import ru.komcity.mobile.View.NewsListView
-import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.util.*
 
 @InjectViewState
@@ -37,10 +34,12 @@ class NewsPresenter: MvpPresenter<NewsListView>() {
             }.await()
 
     fun getNews() {
+        viewState.onLoadingStart()
         scope.launch {
             val docWait = getHtml(rootAddress + rootNewsAddress)
             val items = parseNews(docWait)
             withContext(Dispatchers.Main) {
+                viewState.onLoadingStop()
                 viewState.onNewsLoaded(items)
             }
         }

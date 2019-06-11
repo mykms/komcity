@@ -74,4 +74,12 @@
         <item name="android:layout_height">35dp</item>
         <item name="android:background">@drawable/spinner_background</item>
     </style>
+
+    <style name="ProgressBar" parent="android:Widget.Holo.ProgressBar">
+        <item name="colorAccent">@color/colorPrimaryDark</item>
+        <item name="android:minWidth">76dp</item>
+        <item name="android:maxWidth">76dp</item>
+        <item name="android:minHeight">76dp</item>
+        <item name="android:maxHeight">76dp</item>
+    </style>
 </resources>

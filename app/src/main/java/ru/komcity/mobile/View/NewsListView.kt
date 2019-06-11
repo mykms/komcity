@@ -5,5 +5,7 @@ import ru.komcity.mobile.Model.NewsItem
 
 interface NewsListView: MvpView {
 
+    fun onLoadingStart()
+    fun onLoadingStop()
     fun onNewsLoaded(items: List<NewsItem>)
 }
