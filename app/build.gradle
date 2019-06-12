@@ -12,11 +12,11 @@ android {
             storePassword 'StoRe_kms37'
         }
     }
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "ru.komcity.mobile"
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 5
         versionName "1.0.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -49,6 +49,7 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:$supportLibVer"
     implementation "com.google.android.material:material:1.1.0-alpha07"
     implementation "androidx.constraintlayout:constraintlayout:1.1.3"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     implementation "android.arch.navigation:navigation-ui:$navLibVer"
     implementation "android.arch.navigation:navigation-fragment:$navLibVer"
@@ -67,7 +68,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$ktCoroutinesVer"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$ktCoroutinesVer"
 
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation project(":imageslider")
+    implementation project(":sharetosocial")
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
