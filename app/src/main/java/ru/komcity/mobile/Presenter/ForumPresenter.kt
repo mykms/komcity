@@ -2,14 +2,43 @@ package ru.komcity.mobile.Presenter
 
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
+import kotlinx.coroutines.*
+import org.jsoup.Jsoup
 import ru.komcity.mobile.View.ForumView
 import org.jsoup.nodes.Document
+import ru.komcity.mobile.Common.Constants
 import ru.komcity.mobile.Model.ForumItem
 
 @InjectViewState
 class ForumPresenter: MvpPresenter<ForumView>() {
+    private val job: Job = Job()
+    private val scope = CoroutineScope(Dispatchers.Default + job)
 
-    fun getForums(mHtmlDoc: Document?) {
+    private suspend fun getHtml(url: String): Document =
+            coroutineScope {
+                async {
+                    try {
+                        Jsoup.connect(url).get()
+                    } catch (ex: Exception) {
+                        ex.printStackTrace()
+                        Document("")
+                    }
+                }
+            }.await()
+
+    fun getForums() {
+        viewState.onLoadingStart()
+        scope.launch {
+            val docWait = getHtml(Constants.Address.rootAddress + Constants.Address.rootAddressNews)
+            val items = parseForums(docWait)
+            withContext(Dispatchers.Main) {
+                viewState.onLoadingStop()
+                viewState.onForumList(items)
+            }
+        }
+    }
+
+    private fun parseForums(mHtmlDoc: Document?): List<ForumItem> {
         val forumList = arrayListOf<ForumItem>()
         if (mHtmlDoc != null) {
             val rootTABLE = mHtmlDoc.getElementsByTag("table")       // get all tags Table
@@ -78,6 +107,7 @@ class ForumPresenter: MvpPresenter<ForumView>() {
                 }
             }
         }
+        return forumList
     }
 
     fun parseSubForum(mHtmlDoc: Document?) {

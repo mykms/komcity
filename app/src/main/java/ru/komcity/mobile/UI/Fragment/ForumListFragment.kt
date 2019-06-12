@@ -26,12 +26,20 @@ class ForumListFragment : BaseFragment(), ForumView {
 
     override fun initComponents(view: View) {
         initRecyclerView()
-        forumPresenter.getForums(null)
+        forumPresenter.getForums()
     }
 
     private fun initRecyclerView() {
         rvListForum.setHasFixedSize(true)
         rvListForum.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+    }
+
+    override fun onLoadingStart() {
+        //
+    }
+
+    override fun onLoadingStop() {
+        //
     }
 
     override fun onForumList(items: List<ForumItem>) {

@@ -6,6 +6,7 @@ import kotlinx.coroutines.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
+import ru.komcity.mobile.Common.Constants
 import ru.komcity.mobile.Common.toCalendar
 import ru.komcity.mobile.Common.toUserFriendly
 import ru.komcity.mobile.Model.NewsItem
@@ -36,7 +37,7 @@ class NewsPresenter: MvpPresenter<NewsListView>() {
     fun getNews() {
         viewState.onLoadingStart()
         scope.launch {
-            val docWait = getHtml(rootAddress + rootNewsAddress)
+            val docWait = getHtml(Constants.Address.rootAddress + Constants.Address.rootAddressNews)
             val items = parseNews(docWait)
             withContext(Dispatchers.Main) {
                 viewState.onLoadingStop()
