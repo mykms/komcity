@@ -9,6 +9,7 @@
 .build/
 .gradle/
 .keystore/
+grade
 output.json 
 
 #Other
