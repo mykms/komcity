@@ -32,7 +32,6 @@ class NewsListFragment : BaseFragment(), NewsListView, ItemClickListener<NewsIte
 
     override fun initComponents(view: View) {
         initRecyclerView(view)
-        newsPresenter.getNews()
     }
 
     private fun initRecyclerView(view: View) {

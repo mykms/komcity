@@ -26,7 +26,6 @@ class ForumListFragment : BaseFragment(), ForumView {
 
     override fun initComponents(view: View) {
         initRecyclerView()
-        forumPresenter.getForums()
     }
 
     private fun initRecyclerView() {

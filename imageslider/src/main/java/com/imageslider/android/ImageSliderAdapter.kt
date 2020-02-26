@@ -36,7 +36,7 @@ class ImageSliderAdapter(private val items: List<String>, private var imageSlide
     }
 
     override fun getCount(): Int {
-        return items.count()
+        return items.size
     }
 
     private fun getTarget(imgTarget: ImageView): Target {

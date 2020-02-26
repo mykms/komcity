@@ -1,12 +1,21 @@
+#built application files
+*.apk
+*.ap_
+
+#AndroidStudio
 *.iml
 .idea
-.gradle
-.DS_Store
-/local.properties
-/.idea
+.navigation/
 build
 build/
 gradle
 gradle/
 keystore/
+output.json 
+
+#Other
 local.properties
+.DS_Store
+/captures
+Lint
+.externalNativeBuild
