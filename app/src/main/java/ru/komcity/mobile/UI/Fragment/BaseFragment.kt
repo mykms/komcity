@@ -8,12 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.NonNull
+import moxy.MvpAppCompatFragment
 import ru.komcity.mobile.Model.User
-import ru.komcity.mobile.MvpAppCompatXFragment
 import ru.komcity.mobile.View.MainActivityView
 import java.util.*
 
-abstract class BaseFragment : MvpAppCompatXFragment() {
+abstract class BaseFragment : MvpAppCompatFragment() {
     private var activityListener: MainActivityView? = null
 
     override fun onAttach(context: Context) {

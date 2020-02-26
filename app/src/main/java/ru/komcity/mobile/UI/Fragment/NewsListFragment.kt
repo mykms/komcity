@@ -7,8 +7,9 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.fragment_news_list.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.Common.Constants
 import ru.komcity.mobile.Model.NewsItem
 import ru.komcity.mobile.Presenter.NewsPresenter
@@ -21,6 +22,9 @@ class NewsListFragment : BaseFragment(), NewsListView, ItemClickListener<NewsIte
 
     @InjectPresenter
     lateinit var newsPresenter: NewsPresenter
+
+    @ProvidePresenter
+    fun providePresenter(): NewsPresenter = NewsPresenter()
 
     override fun getArgs(args: Bundle?) {
         //

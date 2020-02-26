@@ -4,8 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.fragment_forum_list.*
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.Model.ForumItem
 import ru.komcity.mobile.Presenter.ForumPresenter
 import ru.komcity.mobile.R
@@ -15,6 +16,9 @@ class ForumListFragment : BaseFragment(), ForumView {
 
     @InjectPresenter
     lateinit var forumPresenter: ForumPresenter
+
+    @ProvidePresenter
+    fun providePresenter(): ForumPresenter = ForumPresenter()
 
     override fun getArgs(args: Bundle?) {
         //

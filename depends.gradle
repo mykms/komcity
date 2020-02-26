@@ -5,7 +5,7 @@ ext {
     coroutinLib = '1.3.0'
     coreKtx = '1.1.0'
     multiDex = '2.0.1'
-    moxyLib = '1.5.0'
+    moxyLib = '2.1.1'
     retrofitLib = '2.7.2'
     testRunnerLib = '1.2.0'
     junitLib = '4.13'
@@ -37,10 +37,12 @@ ext {
     ]
 
     moxyDepends = [
-            moxy         : "com.arello-mobile:moxy:$moxyLib",
-            moxyAndroid  : "com.arello-mobile:moxy-android:$moxyLib",
-            moxyAppCompat: "com.arello-mobile:moxy-app-compat:$moxyLib",
-            moxyCompiler : "com.arello-mobile:moxy-compiler:$moxyLib"
+            moxy         : "com.github.moxy-community:moxy:$moxyLib",
+            moxyAndroid  : "com.github.moxy-community:moxy-android:$moxyLib",
+            moxyAppCompat: "com.github.moxy-community:moxy-app-compat:$moxyLib",
+            moxyAndroidX : "com.github.moxy-community:moxy-androidx:$moxyLib",
+            moxyMaterial : "com.github.moxy-community:moxy-material:$moxyLib",
+            moxyCompiler : "com.github.moxy-community:moxy-compiler:$moxyLib"
     ]
 
     retrofitDepends = [
