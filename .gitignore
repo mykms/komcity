@@ -6,11 +6,9 @@
 *.iml
 .idea
 .navigation/
-build
-build/
-gradle
-gradle/
-keystore/
+.build/
+.gradle/
+.keystore/
 output.json 
 
 #Other
