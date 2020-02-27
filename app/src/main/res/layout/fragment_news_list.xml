@@ -10,7 +10,7 @@
         android:layout_gravity="center"
         android:theme="@style/ProgressBar"
         style="?android:progressBarStyleLarge"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvListNews"

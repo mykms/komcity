@@ -38,10 +38,7 @@ ext {
 
     moxyDepends = [
             moxy         : "com.github.moxy-community:moxy:$moxyLib",
-            moxyAndroid  : "com.github.moxy-community:moxy-android:$moxyLib",
-            moxyAppCompat: "com.github.moxy-community:moxy-app-compat:$moxyLib",
             moxyAndroidX : "com.github.moxy-community:moxy-androidx:$moxyLib",
-            moxyMaterial : "com.github.moxy-community:moxy-material:$moxyLib",
             moxyCompiler : "com.github.moxy-community:moxy-compiler:$moxyLib"
     ]
 

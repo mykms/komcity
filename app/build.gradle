@@ -64,9 +64,8 @@ dependencies {
     implementation kotlinDepends.coroutinesAndroid
 
     implementation moxyDepends.moxy
-    implementation moxyDepends.moxyAndroid
-    implementation moxyDepends.moxyAppCompat
-    annotationProcessor moxyDepends.moxyCompiler
+    implementation moxyDepends.moxyAndroidX
+    kapt moxyDepends.moxyCompiler
 
     implementation retrofitDepends.retrofit
     implementation retrofitDepends.retrofitGson

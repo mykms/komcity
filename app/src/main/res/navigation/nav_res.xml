@@ -6,42 +6,42 @@
     app:startDestination="@id/newsListFragment">
     <fragment
         android:id="@+id/newsListFragment"
-        android:name="ru.komcity.mobile.UI.Fragment.NewsListFragment"
+        android:name="ru.komcity.mobile.ui.Fragment.NewsListFragment"
         android:label="fragment_news_list"
         tools:layout="@layout/fragment_news_list" />
     <fragment
         android:id="@+id/newsDetailFragment"
-        android:name="ru.komcity.mobile.UI.Fragment.NewsDetailFragment"
+        android:name="ru.komcity.mobile.ui.Fragment.NewsDetailFragment"
         android:label="fragment_news_detail"
         tools:layout="@layout/fragment_news_detail" />
     <fragment
         android:id="@+id/forumListFragment"
-        android:name="ru.komcity.mobile.UI.Fragment.ForumListFragment"
+        android:name="ru.komcity.mobile.ui.Fragment.ForumListFragment"
         android:label="fragment_forum_list"
         tools:layout="@layout/fragment_forum_list" />
     <fragment
         android:id="@+id/forumSubListDetailFragment"
-        android:name="ru.komcity.mobile.UI.Fragment.ForumSubListDetailFragment"
+        android:name="ru.komcity.mobile.ui.Fragment.ForumSubListDetailFragment"
         android:label="fragment_forum_sub_list_detail"
         tools:layout="@layout/fragment_forum_sub_list_detail" />
     <fragment
         android:id="@+id/forumDetailMessageFragment"
-        android:name="ru.komcity.mobile.UI.Fragment.ForumDetailMessageFragment"
+        android:name="ru.komcity.mobile.ui.Fragment.ForumDetailMessageFragment"
         android:label="fragment_forum_detail_message"
         tools:layout="@layout/fragment_forum_detail_message" />
     <fragment
         android:id="@+id/announcementSearchFragment"
-        android:name="ru.komcity.mobile.UI.Fragment.AnnouncementSearchFragment"
+        android:name="ru.komcity.mobile.ui.Fragment.AnnouncementSearchFragment"
         android:label="fragment_announcement_search"
         tools:layout="@layout/fragment_announcement_search" />
     <fragment
         android:id="@+id/announcementDetailFragment"
-        android:name="ru.komcity.mobile.UI.Fragment.AnnouncementDetailFragment"
+        android:name="ru.komcity.mobile.ui.Fragment.AnnouncementDetailFragment"
         android:label="fragment_announcement_detail"
         tools:layout="@layout/fragment_announcement_detail" />
     <fragment
         android:id="@+id/infoFragment"
-        android:name="ru.komcity.mobile.UI.Fragment.InfoFragment"
+        android:name="ru.komcity.mobile.ui.Fragment.InfoFragment"
         android:label="fragment_info"
         tools:layout="@layout/fragment_info" />
     <fragment
