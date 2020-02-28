@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_news_list.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
-import ru.komcity.mobile.viewModel.NewsItem
-import ru.komcity.mobile.presenter.NewsPresenter
 import ru.komcity.mobile.R
 import ru.komcity.mobile.network.ApiNetwork
+import ru.komcity.mobile.presenter.NewsPresenter
 import ru.komcity.mobile.repository.NewsRepositoryImpl
 import ru.komcity.mobile.ui.Adapter.NewsAdapter
 import ru.komcity.mobile.view.NewsListView
+import ru.komcity.mobile.viewModel.NewsItem
 
 class NewsListFragment: BaseFragment(), NewsListView {
 
@@ -55,18 +55,6 @@ class NewsListFragment: BaseFragment(), NewsListView {
     }
 
     override fun onNewsLoaded(items: List<NewsItem>) {
-        val adapter = NewsAdapter(items)
-        //adapter.setClickListener(this)
-        rvListNews.adapter = adapter
-//        val skeletonScreen = Skeleton.bind(rvListNews)
-//                .adapter(NewsAdapter(items))
-//                .load(R.layout.item_preloading_list)
-//                .shimmer(true)      // whether show shimmer animation.                      default is true
-//                .count(10)          // the recycler view item count.                        default is 10
-//                .color(R.color.colorPrimaryDark)       // the shimmer color.                                   default is #a2878787
-//                .angle(20)          // the shimmer angle.                                   default is 20;
-//                .duration(1000)     // the shimmer animation duration.                      default is 1000;
-//                .frozen(false)      // whether frozen recyclerView during skeleton showing  default is true;
-//                .show()
+        rvListNews.adapter = NewsAdapter(items)
     }
 }

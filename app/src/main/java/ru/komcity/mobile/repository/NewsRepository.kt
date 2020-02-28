@@ -6,7 +6,7 @@ import ru.komcity.mobile.repository.model.NewsDto
 /**
  * Created by Aleksei Kholoimov on 2020-02-27
  * <p>
- *
+ * Источник данных новостей
  */
 interface NewsRepository {
 

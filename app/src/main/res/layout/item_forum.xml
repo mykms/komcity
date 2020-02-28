@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parentView"
+    android:layout_width="match_parent"
+    android:layout_height="90dp">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text=""
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/tvThemeCount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/lineTopInfo"
+        tools:text="TextView" />
+
+    <TextView
+        android:id="@+id/tvThemeCount"
+        android:layout_width="40dp"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:text=""
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tvReplicCount"
+        app:layout_constraintBottom_toTopOf="@+id/lineTopInfo"
+        tools:text="Тем 400" />
+
+    <TextView
+        android:id="@+id/tvReplicCount"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:text=""
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tvDescription"
+        app:layout_constraintBottom_toTopOf="@+id/lineTopInfo"
+        tools:text="Реплик" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/lineTopInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="40dp" />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:text=""
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lineTopInfo"
+        tools:text="Description" />
+</androidx.constraintlayout.widget.ConstraintLayout>

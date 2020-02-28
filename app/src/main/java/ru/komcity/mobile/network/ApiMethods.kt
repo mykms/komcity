@@ -1,8 +1,13 @@
 package ru.komcity.mobile.network
 
 import retrofit2.Call
-import retrofit2.http.*
+import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
+import ru.komcity.mobile.repository.model.ForumDto
+import ru.komcity.mobile.repository.model.ForumMessageDto
 import ru.komcity.mobile.repository.model.NewsDto
+import ru.komcity.mobile.repository.model.SubForumDto
 
 interface ApiMethods {
 
@@ -10,14 +15,14 @@ interface ApiMethods {
     suspend fun getNews(): List<NewsDto>
 
     @GET("forum")
-    suspend fun getForums(): List<String>
+    suspend fun getForums(): List<ForumDto>
 
     @GET("forum/{name}")
-    suspend fun getSubForums(@Path("name") name: String): List<String>
+    suspend fun getSubForums(@Path("name") name: String): List<SubForumDto>
 
     @GET("forum/{name}")
     suspend fun getForumMessages(@Path("name") name: String,
-                                 @Query("id") id: Int? = null): List<String>
+                                 @Query("id") id: Int? = null): List<ForumMessageDto>
 
     @GET("announcement/categories")
     suspend fun getAnnouncementCategories(): Call<List<String>>
