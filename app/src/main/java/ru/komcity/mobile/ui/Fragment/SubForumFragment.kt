@@ -6,7 +6,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_forum_list.*
+import kotlinx.android.synthetic.main.fragment_forum_sub_list_detail.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
@@ -14,13 +14,13 @@ import ru.komcity.mobile.common.Constants
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.presenter.ForumPresenter
 import ru.komcity.mobile.repository.ForumRepositoryImpl
-import ru.komcity.mobile.ui.Adapter.ForumAdapter
+import ru.komcity.mobile.ui.Adapter.SubForumAdapter
 import ru.komcity.mobile.view.ForumView
 import ru.komcity.mobile.viewModel.ForumItem
 import ru.komcity.mobile.viewModel.ForumMessagesItem
 import ru.komcity.mobile.viewModel.SubForumItem
 
-class ForumListFragment : BaseFragment(), ForumView {
+class SubForumFragment : BaseFragment(), ForumView {
 
     private val api = ApiNetwork().api
     private val repo = ForumRepositoryImpl(api)
@@ -30,18 +30,19 @@ class ForumListFragment : BaseFragment(), ForumView {
     fun providePresenter() = ForumPresenter(repo)
 
     override fun getArgs(args: Bundle?) {
+        //
     }
 
     override fun setResourceLayout(): Int {
-        return R.layout.fragment_forum_list
+        return R.layout.fragment_forum_sub_list_detail
     }
 
     override fun initComponents(view: View) {
         initRecyclerView()
-        forumPresenter.getForums()
+        forumPresenter.getSubForum()
     }
 
-    private fun initRecyclerView() = with(rvListForum) {
+    private fun initRecyclerView() = with(rvSubForum) {
         setHasFixedSize(true)
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
     }
@@ -51,12 +52,12 @@ class ForumListFragment : BaseFragment(), ForumView {
     }
 
     override fun onForumList(items: List<ForumItem>) {
-        rvListForum.adapter = ForumAdapter(items) {
-            navigateTo(R.id.forumSubListDetailFragment, bundleOf(Constants.EXTRA_FORUM_ID to it))
-        }
     }
 
     override fun onSubForumList(items: List<SubForumItem>) {
+        rvSubForum.adapter = SubForumAdapter(items) {
+            navigateTo(R.id.forumDetailMessageFragment, bundleOf(Constants.EXTRA_SUB_FORUM_ID to it))
+        }
     }
 
     override fun onForumMessages(items: List<ForumMessagesItem>) {

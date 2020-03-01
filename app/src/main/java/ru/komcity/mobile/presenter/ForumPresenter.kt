@@ -25,6 +25,14 @@ class ForumPresenter constructor(private val forumRepository: ForumRepository): 
         }
     }
 
+    fun getSubForum() {
+        //
+    }
+
+    fun getForumMessages() {
+        //
+    }
+
     override fun onDestroy() {
         forumJob?.cancel()
         super.onDestroy()

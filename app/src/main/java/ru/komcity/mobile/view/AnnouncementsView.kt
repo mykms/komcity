@@ -1,0 +1,15 @@
+package ru.komcity.mobile.view
+
+import moxy.MvpView
+import moxy.viewstate.strategy.OneExecutionStateStrategy
+import moxy.viewstate.strategy.StateStrategyType
+
+/**
+ * Created by Aleksey on 2020.03.01
+ * <p>
+ * View for Announcements screen
+ */
+interface AnnouncementsView : MvpView {
+    @StateStrategyType(OneExecutionStateStrategy::class)
+    fun onLoading(isLoading: Boolean)
+}
