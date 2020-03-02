@@ -14,14 +14,20 @@ class NewsPresenter constructor(private val newsRepository: NewsRepository): Bas
     fun getNewsList() {
         viewState.onLoading(true)
         newsJob = CoroutineScope(Dispatchers.IO).launch {
-            val items = newsRepository.getNews().map {
-                with(it) {
-                    NewsItem(title, date, shortText, previewImg, imageUrls, newsId.toIntOrNull() ?: 0)
+            try {
+                val items = newsRepository.getNews().map {
+                    with(it) {
+                        NewsItem(title, date, shortText, previewImg, imageUrls, newsId.toIntOrNull()
+                                ?: 0)
+                    }
                 }
-            }
-            withContext(Dispatchers.Main) {
+                withContext(Dispatchers.Main) {
+                    viewState.onLoading(false)
+                    viewState.onNewsLoaded(items)
+                }
+            } catch (ex: Exception) {
                 viewState.onLoading(false)
-                viewState.onNewsLoaded(items)
+                ex.printStackTrace()
             }
         }
     }
