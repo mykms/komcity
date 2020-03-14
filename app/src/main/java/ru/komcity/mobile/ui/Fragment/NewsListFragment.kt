@@ -4,6 +4,7 @@ import android.graphics.drawable.ShapeDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +13,7 @@ import kotlinx.android.synthetic.main.fragment_news_list.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
+import ru.komcity.mobile.common.Constants
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.presenter.NewsPresenter
 import ru.komcity.mobile.repository.NewsRepositoryImpl
@@ -55,6 +57,12 @@ class NewsListFragment: BaseFragment(), NewsListView {
     }
 
     override fun onNewsLoaded(items: List<NewsItem>) {
-        rvListNews.adapter = NewsAdapter(items)
+        rvListNews.adapter = NewsAdapter(items) {
+            newsPresenter.navigateTo(R.id.newsDetailFragment, bundleOf(Constants.EXTRA_NEWS_ITEM to it))
+        }
+    }
+
+    override fun navigateToScreen(screenId: Int, args: Bundle) {
+        navigateTo(screenId, args)
     }
 }

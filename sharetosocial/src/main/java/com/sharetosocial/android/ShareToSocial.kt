@@ -18,20 +18,45 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.view.isVisible
+import kotlinx.android.synthetic.main.share_to_social_view.view.*
 import java.io.File
 
-class ShareToSocial(context: Context?, attrs: AttributeSet?) : RelativeLayout(context, attrs) {
+class ShareToSocial : RelativeLayout {
     private val shareIntent = Intent(Intent.ACTION_SEND)
     private var imgPath = ""
     private var textForShare = ""
-//    @BindView(R.id.group_messenger)    var groupMessenger: LinearLayout? = null
-//    @BindView(R.id.img_share)    var imgShare: ImageView? = null
+    private var isVisibleMessenger = false
 
+    constructor(context: Context?) : super(context)
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     init {
         LayoutInflater.from(context).inflate(R.layout.share_to_social_view, this)
-        //groupMessenger!!.visibility = View.GONE // Default - invisible
+        groupMessenger.isVisible = isVisibleMessenger
+        initButtons()
+    }
+
+    private fun initButtons() {
+        imgShare.setOnClickListener {
+            groupMessenger.isVisible = isVisibleMessenger
+            imgShare.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.vector_ic_arrow_back))
+            if (isVisibleMessenger) {
+                imgShare.rotation = 0f
+            } else {
+                imgShare.rotation = 180f
+            }
+            isVisibleMessenger = !isVisibleMessenger
+        }
+        imgTelegram.setOnClickListener { setPackageToShare("org.telegram.messenger") }
+        imgWhatsapp.setOnClickListener { setPackageToShare("com.whatsapp") }
+        imgVkontakte.setOnClickListener { setPackageToShare("com.vkontakte.android") }
+        imgTwitter.setOnClickListener { setPackageToShare("com.twitter.android") }
+        imgFacebook.setOnClickListener { setPackageToShare("com.facebook.katana") }
+        imgInstagram.setOnClickListener { setPackageToShare("com.instagram.android") }
     }
 
     /**
@@ -83,15 +108,11 @@ class ShareToSocial(context: Context?, attrs: AttributeSet?) : RelativeLayout(co
      * @param appName Имя пакета для поиска
      * @return Результат поиска. true - если такой пакет есть, иначе false
      */
-    private fun isAppAvailable(context: Context, appName: String): Boolean {
-        val pm = context.packageManager
-        try {
-            pm.getPackageInfo(appName, PackageManager.GET_ACTIVITIES)
-            return true
-        } catch (e: PackageManager.NameNotFoundException) {
-            return false
-        }
-
+    private fun isAppAvailable(context: Context, appName: String): Boolean = try {
+        context.packageManager.getPackageInfo(appName, PackageManager.GET_ACTIVITIES)
+        true
+    } catch (e: PackageManager.NameNotFoundException) {
+        false
     }
 
     /**
@@ -165,47 +186,4 @@ class ShareToSocial(context: Context?, attrs: AttributeSet?) : RelativeLayout(co
                     Toast.LENGTH_SHORT).show()
         }
     }
-
-//    @OnClick(R.id.img_share)
-//    fun OnShareClick() {
-//        var resId = R.drawable.vector_ic_arrow_back
-//        if (groupMessenger!!.visibility == View.GONE) {
-//            resId = R.drawable.vector_ic_arrow_next
-//            groupMessenger!!.visibility = View.VISIBLE
-//        } else {
-//            resId = R.drawable.vector_ic_arrow_back
-//            groupMessenger!!.visibility = View.GONE
-//        }
-//        imgShare!!.setImageDrawable(resources.getDrawable(resId))
-//    }
-//
-//    @OnClick(R.id.img_instagram)
-//    fun OnClick_instagram() {
-//        setPackageToShare("com.instagram.android")
-//    }
-//
-//    @OnClick(R.id.img_facebook)
-//    fun OnClick_facebook() {
-//        setPackageToShare("com.facebook.katana")
-//    }
-//
-//    @OnClick(R.id.img_twitter)
-//    fun OnClick_twitter() {
-//        setPackageToShare("com.twitter.android")
-//    }
-//
-//    @OnClick(R.id.img_vkontakte)
-//    fun OnClick_vkontakte() {
-//        setPackageToShare("com.vkontakte.android")
-//    }
-//
-//    @OnClick(R.id.img_whatsapp)
-//    fun OnClick_whatsapp() {
-//        setPackageToShare("com.whatsapp")
-//    }
-//
-//    @OnClick(R.id.img_telegram)
-//    fun OnClick_telegram() {
-//        setPackageToShare("org.telegram.messenger")
-//    }
 }

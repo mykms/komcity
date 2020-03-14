@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.IdRes
 import androidx.annotation.NonNull
 import moxy.MvpAppCompatFragment
 import moxy.MvpView
@@ -39,8 +40,12 @@ abstract class BaseFragment : MvpAppCompatFragment(), MvpView {
         initComponents(view)
     }
 
-    protected fun navigateTo(resourceFragment: Int, args: Bundle?) {
+    protected fun navigateTo(@IdRes resourceFragment: Int, args: Bundle?) {
         activityListener?.navigateTo(resourceFragment, args)
+    }
+
+    protected fun navigateToBack() {
+        activityListener?.navigateToBack()
     }
 
     protected fun hideKeyboard() {

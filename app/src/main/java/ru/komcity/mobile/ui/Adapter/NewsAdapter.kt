@@ -9,22 +9,20 @@ import ru.komcity.mobile.viewModel.NewsItem
 import ru.komcity.mobile.R
 import ru.komcity.mobile.ui.Holder.BaseHolder
 
-class NewsAdapter(items: List<NewsItem>) : BaseListAdapter<NewsAdapter.NewsHolder, NewsItem>(items) {
-    private var itemListener: ItemClickListener<NewsItem>? = null
+class NewsAdapter(items: List<NewsItem>, private val onItemClick: (item: NewsItem) -> Unit)
+    : BaseListAdapter<NewsAdapter.NewsHolder, NewsItem>(items) {
 
     override fun setLayoutRes(): Int = R.layout.item_news
 
     override fun returnViewHolder(view: View): NewsHolder = NewsHolder(view)
 
     override fun onItemClicked(item: NewsItem, position: Int) {
-        this.itemListener?.onItemClick(item, position)
     }
 
     override fun setClickListener(listener: ItemClickListener<NewsItem>?) {
-        this.itemListener = listener
     }
 
-    inner class NewsHolder(containerView: View) : BaseHolder<NewsItem>(containerView) {
+    inner class NewsHolder(private val containerView: View) : BaseHolder<NewsItem>(containerView) {
         private val tvNewsDate = containerView.findViewById<TextView>(R.id.tvNewsDate)
         private val tvNewsTitle = containerView.findViewById<TextView>(R.id.tvNewsTitle)
         private val tvNewsShortText = containerView.findViewById<TextView>(R.id.tvNewsShortText)
@@ -35,13 +33,18 @@ class NewsAdapter(items: List<NewsItem>) : BaseListAdapter<NewsAdapter.NewsHolde
             tvNewsTitle.text = item.title
             tvNewsShortText.text = item.shortText
             ImageLoader(item.previewImg, ivNews, ImageCropType.CROP_NO)
+            initListeners(item)
+        }
+
+        private fun initListeners(item: NewsItem) {
+            containerView.setOnClickListener { onItemClick(item) }
+            tvNewsDate.setOnClickListener { onItemClick(item) }
+            tvNewsTitle.setOnClickListener { onItemClick(item) }
+            tvNewsShortText.setOnClickListener { onItemClick(item) }
+            ivNews.setOnClickListener { onItemClick(item) }
         }
 
         override fun setItemClickListener(listener: View.OnClickListener?) {
-            tvNewsDate.setOnClickListener(listener)
-            tvNewsTitle.setOnClickListener(listener)
-            tvNewsShortText.setOnClickListener(listener)
-            ivNews.setOnClickListener(listener)
         }
     }
 }

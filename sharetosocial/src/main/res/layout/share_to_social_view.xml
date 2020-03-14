@@ -12,7 +12,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/img_instagram"
+            android:id="@+id/imgInstagram"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_margin="5dp"
@@ -20,7 +20,7 @@
             android:src="@drawable/vector_ic_instagram" />
 
         <ImageView
-            android:id="@+id/img_facebook"
+            android:id="@+id/imgFacebook"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_margin="5dp"
@@ -28,7 +28,7 @@
             android:src="@drawable/vector_ic_facebook" />
 
         <ImageView
-            android:id="@+id/img_twitter"
+            android:id="@+id/imgTwitter"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_margin="5dp"
@@ -36,7 +36,7 @@
             android:src="@drawable/vector_ic_twitter" />
 
         <ImageView
-            android:id="@+id/img_vkontakte"
+            android:id="@+id/imgVkontakte"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_margin="5dp"
@@ -44,13 +44,13 @@
             android:src="@drawable/vector_ic_vk" />
 
         <LinearLayout
-            android:id="@+id/group_messenger"
+            android:id="@+id/groupMessenger"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/img_whatsapp"
+                android:id="@+id/imgWhatsapp"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_margin="5dp"
@@ -58,7 +58,7 @@
                 android:src="@drawable/vector_ic_whatsapp" />
 
             <ImageView
-                android:id="@+id/img_telegram"
+                android:id="@+id/imgTelegram"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_margin="5dp"
@@ -68,7 +68,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/img_share"
+        android:id="@+id/imgShare"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_centerVertical="true"

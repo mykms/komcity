@@ -48,6 +48,10 @@ class MainActivity: AppCompatActivity(), MainActivityView {
         navigateApp(navController, resourceFragment, args ?: Bundle())
     }
 
+    override fun navigateToBack() {
+        this.onBackPressed()
+    }
+
     override fun onMessage(message: String) {
         //
     }

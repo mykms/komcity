@@ -11,11 +11,17 @@ import ru.komcity.mobile.repository.model.NewsDto
 interface NewsRepository {
 
     suspend fun getNews(): List<NewsDto>
+    suspend fun getNewsDetail(newsId: Int): NewsDto
 }
 
 class NewsRepositoryImpl constructor(private val apiMethods: ApiMethods): NewsRepository {
 
     override suspend fun getNews(): List<NewsDto> {
         return apiMethods.getNews()
+    }
+
+    override suspend fun getNewsDetail(newsId: Int): NewsDto {
+        //todo add server method
+        return NewsDto("", "", "", "", emptyList(), "")
     }
 }

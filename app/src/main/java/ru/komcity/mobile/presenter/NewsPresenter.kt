@@ -1,5 +1,6 @@
 package ru.komcity.mobile.presenter
 
+import android.os.Bundle
 import kotlinx.coroutines.*
 import moxy.InjectViewState
 import ru.komcity.mobile.repository.NewsRepository
@@ -30,6 +31,11 @@ class NewsPresenter constructor(private val newsRepository: NewsRepository): Bas
                 ex.printStackTrace()
             }
         }
+    }
+
+
+    fun navigateTo(screenId: Int, args: Bundle) {
+        viewState.navigateToScreen(screenId, args)
     }
 
     override fun onDestroy() {
