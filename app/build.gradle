@@ -77,6 +77,7 @@ dependencies {
 
     implementation project(":imageslider")
     implementation project(":sharetosocial")
+    implementation project(":uicomponent")
 
     testImplementation testDepends.junit
     androidTestImplementation testDepends.runner

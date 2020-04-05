@@ -1,1 +1,4 @@
-include ':app', ':imageslider', ':sharetosocial'
+include ':app',
+        ':imageslider',
+        ':sharetosocial',
+        ':uicomponent'
