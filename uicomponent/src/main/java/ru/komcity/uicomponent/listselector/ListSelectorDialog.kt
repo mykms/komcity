@@ -24,7 +24,6 @@ import ru.komcity.uicomponent.R
  * Выбор из списка в Диалоге (Fragment)
  */
 interface ListSelectorDialogListener {
-    fun onDismiss()
     fun onCloseClick()
     fun onSelectItem(item: String, position: Int)
 }
@@ -56,11 +55,6 @@ class ListSelectorDialog(private val items: List<String>,
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         (view?.parent as View).background = ColorDrawable(Color.TRANSPARENT)
-    }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-        listener.onDismiss()
     }
 
     private fun initComponents() {

@@ -2,6 +2,7 @@ package ru.komcity.mobile.ui.Fragment
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.fragment_announcement_search.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
@@ -24,6 +25,8 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
     fun providePresenter() = AnnouncementsFilterPresenter(repo)
     private val categoryListSelectorTag = "categoryListSelectorTag"
     private val subCategoryListSelectorTag = "subCategoryListSelectorTag"
+    private val detailCategoryListSelectorTag = "detailCategoryListSelectorTag"
+    private val detailSubCategoryListSelectorTag = "detailSubCategoryListSelectorTag"
 
     override fun getArgs(args: Bundle?) {
         presenter.init()
@@ -36,13 +39,18 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
     override fun initComponents(view: View) {
         initCategory()
         initSubCategory()
-        btShow.setOnClickListener {  }
+        initDetailCategory()
+        initDetailSubCategory()
+        btShow.setOnClickListener {
+            presenter.navigateToAnnouncements()
+        }
         presenter.getFilters()
     }
 
     private fun initCategory() = with(viewCategory) {
         title = ""
         isCloseButtonVisible = false
+        isVisible = false
         setOnCloseListener {
             presenter.onCategoryCloseClick()
         }
@@ -53,12 +61,37 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
 
     private fun initSubCategory() = with(viewSubCategory) {
         title = ""
-        isCloseButtonVisible = true
+        isCloseButtonVisible = false
+        isVisible = false
         setOnCloseListener {
             presenter.onSubCategoryCloseClick()
         }
         setOnClickListener {
             presenter.onSubCategoryClick()
+        }
+    }
+
+    private fun initDetailCategory() = with(viewDetailCategory) {
+        title = ""
+        isCloseButtonVisible = false
+        isVisible = false
+        setOnCloseListener {
+            presenter.onDetailCategoryCloseClick()
+        }
+        setOnClickListener {
+            presenter.onDetailCategoryClick()
+        }
+    }
+
+    private fun initDetailSubCategory() = with(viewDetailSubCategory) {
+        title = ""
+        isCloseButtonVisible = false
+        isVisible = false
+        setOnCloseListener {
+            presenter.onDetailSubCategoryCloseClick()
+        }
+        setOnClickListener {
+            presenter.onDetailSubCategoryClick()
         }
     }
 
@@ -79,16 +112,40 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
         viewCategory.isCloseButtonVisible = isCloseVisible
     }
 
+    override fun setCategoryVisibility(isVisible: Boolean) {
+        viewCategory.isVisible = isVisible
+    }
+
     override fun setSubCategoryCategoryTitle(text: String, isCloseVisible: Boolean) {
         viewSubCategory.title = text
         viewSubCategory.isCloseButtonVisible = isCloseVisible
     }
 
+    override fun setSubCategoryVisibility(isVisible: Boolean) {
+        viewSubCategory.isVisible = isVisible
+    }
+
+    override fun setDetailCategoryTitle(text: String, isCloseVisible: Boolean) {
+        viewDetailCategory.title = text
+        viewDetailCategory.isCloseButtonVisible = isCloseVisible
+    }
+
+    override fun setDetailCategoryVisibility(isVisible: Boolean) {
+        viewDetailCategory.isVisible = isVisible
+    }
+
+    override fun setDetailSubCategoryCategoryTitle(text: String, isCloseVisible: Boolean) {
+        viewDetailSubCategory.title = text
+        viewDetailSubCategory.isCloseButtonVisible = isCloseVisible
+    }
+
+    override fun setDetailSubCategoryVisibility(isVisible: Boolean) {
+        viewDetailSubCategory.isVisible = isVisible
+    }
+
     override fun showCategoryDialog(items: List<String>) {
         fragmentManager?.let {
             val dialogListener = object : ListSelectorDialogListener {
-                override fun onDismiss() {
-                }
 
                 override fun onCloseClick() {
                     closeDialog(categoryListSelectorTag)
@@ -108,8 +165,6 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
     override fun showSubCategoryDialog(items: List<String>) {
         fragmentManager?.let {
             val dialogListener = object : ListSelectorDialogListener {
-                override fun onDismiss() {
-                }
 
                 override fun onCloseClick() {
                     closeDialog(subCategoryListSelectorTag)
@@ -123,6 +178,44 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
             ListSelectorDialog(items, dialogListener).apply {
                 setTitle("Подкатегория")
             }.show(it, subCategoryListSelectorTag)
+        }
+    }
+
+    override fun showDetailCategoryDialog(items: List<String>) {
+        fragmentManager?.let {
+            val dialogListener = object : ListSelectorDialogListener {
+
+                override fun onCloseClick() {
+                    closeDialog(detailCategoryListSelectorTag)
+                }
+
+                override fun onSelectItem(item: String, position: Int) {
+                    closeDialog(detailCategoryListSelectorTag)
+                    presenter.onDetailCategorySelected(item, position)
+                }
+            }
+            ListSelectorDialog(items, dialogListener).apply {
+                setTitle("Детали подкатегории")
+            }.show(it, detailCategoryListSelectorTag)
+        }
+    }
+
+    override fun showDetailSubCategoryDialog(items: List<String>) {
+        fragmentManager?.let {
+            val dialogListener = object : ListSelectorDialogListener {
+
+                override fun onCloseClick() {
+                    closeDialog(detailSubCategoryListSelectorTag)
+                }
+
+                override fun onSelectItem(item: String, position: Int) {
+                    closeDialog( detailSubCategoryListSelectorTag)
+                    presenter.onDetailSubCategorySelected(item, position)
+                }
+            }
+            ListSelectorDialog(items, dialogListener).apply {
+                setTitle("Выберите значение")
+            }.show(it, detailSubCategoryListSelectorTag)
         }
     }
 

@@ -12,7 +12,7 @@
         android:icon="@drawable/vector_ic_forum"
         app:showAsAction="ifRoom|withText"/>
 
-    <item android:id="@+id/announcementSearchFragment"
+    <item android:id="@+id/announcementFilterFragment"
         android:title="@string/menu_name_announcement"
         android:icon="@drawable/vector_ic_announcement"
         app:showAsAction="ifRoom|withText"/>

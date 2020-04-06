@@ -22,3 +22,9 @@ class ApiResponse<T>: Callback<T> {
         onResponse?.invoke(response)
     }
 }
+
+fun <T> Call<T>.enqueue(callback: ApiResponse<T>.() -> Unit) {
+    val respCallback = ApiResponse<T>()
+    callback.invoke(respCallback)
+    this.enqueue(respCallback)
+}

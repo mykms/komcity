@@ -26,7 +26,6 @@ class AnnouncementsFilterRepositoryImpl constructor(private val apiMethods: ApiM
         return apiMethods.getAnnouncementCategories()
                 .map { item -> converter.convert(item) }
                 .asFlow()
-                .flowOn(Dispatchers.IO)
     }
 
     override suspend fun getAnnouncementSubCategories(ref1: Int, ref2: Int): Flow<AnnouncementSubCategory> {

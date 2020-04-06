@@ -20,3 +20,6 @@ data class AnnouncementSubCategoryDto(@SerializedName("title") val title: String
 
 data class AnnouncementSubCategoryDetailDto(@SerializedName("id") val id: String,
                                             @SerializedName("name") val name: String)
+
+class AnnouncementDto(@SerializedName("id") val id: Int,
+                      @SerializedName("description") val description: String)

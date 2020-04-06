@@ -30,14 +30,14 @@
         android:label="fragment_forum_detail_message"
         tools:layout="@layout/fragment_forum_detail_message" />
     <fragment
-        android:id="@+id/announcementSearchFragment"
+        android:id="@+id/announcementFilterFragment"
         android:name="ru.komcity.mobile.ui.Fragment.AnnouncementsFilterFragment"
         android:label="fragment_announcement_search"
         tools:layout="@layout/fragment_announcement_search" />
     <fragment
-        android:id="@+id/announcementDetailFragment"
+        android:id="@+id/announcementsFragment"
         android:name="ru.komcity.mobile.ui.Fragment.AnnouncementsFragment"
-        android:label="fragment_announcement_detail"
+        android:label="fragment_announcements"
         tools:layout="@layout/fragment_announcements" />
     <fragment
         android:id="@+id/infoFragment"

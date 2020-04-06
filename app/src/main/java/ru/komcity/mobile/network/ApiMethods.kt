@@ -28,5 +28,5 @@ interface ApiMethods {
                                              @Query("ref2") ref2: Int): List<AnnouncementSubCategoryDto>
 
     @GET("announcement/{id}")
-    suspend fun getAnnouncements(@Path("id") id: Int): List<String>
+    suspend fun getAnnouncements(@Path("id") id: Int): List<AnnouncementDto>
 }

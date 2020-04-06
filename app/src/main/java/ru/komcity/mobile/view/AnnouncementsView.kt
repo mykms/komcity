@@ -10,6 +10,7 @@ import moxy.viewstate.strategy.StateStrategyType
  * View for Announcements screen
  */
 interface AnnouncementsView : MvpView {
-    @StateStrategyType(OneExecutionStateStrategy::class)
-    fun onLoading(isLoading: Boolean)
+    @StateStrategyType(OneExecutionStateStrategy::class) fun onLoading(isLoading: Boolean)
+    @StateStrategyType(OneExecutionStateStrategy::class) fun navigateToBackScreen()
+    @StateStrategyType(OneExecutionStateStrategy::class) fun showAnnouncements(items: List<String>)
 }

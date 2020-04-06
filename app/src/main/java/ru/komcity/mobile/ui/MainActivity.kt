@@ -37,7 +37,8 @@ class MainActivity: AppCompatActivity(), MainActivityView {
             R.id.forumListFragment -> navController.navigate(resourceIdNav, args)
             R.id.forumSubListDetailFragment -> navController.navigate(resourceIdNav, args)
             R.id.forumDetailMessageFragment -> navController.navigate(resourceIdNav, args)
-            R.id.announcementSearchFragment -> navController.navigate(resourceIdNav, args)
+            R.id.announcementFilterFragment -> navController.navigate(resourceIdNav, args)
+            R.id.announcementsFragment -> navController.navigate(resourceIdNav, args)
             android.R.id.home -> navController.popBackStack()
             else -> navController.navigate(R.id.noContentErrorFragment)
         }
