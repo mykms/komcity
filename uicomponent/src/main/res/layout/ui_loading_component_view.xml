@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/rootLayout"
-    android:background="#a0000000"
+    android:background="#3B685454"
     android:gravity="center"
     android:clickable="true"
     android:focusable="true"

@@ -142,6 +142,7 @@ class AnnouncementsFilterPresenter constructor(private val repository: Announcem
         viewState.setSubCategoryVisibility(false)
         viewState.setDetailCategoryVisibility(false)
         viewState.setDetailSubCategoryVisibility(false)
+        subCategories.clear()
     }
 
     fun onSubCategoryClick() {
@@ -155,6 +156,7 @@ class AnnouncementsFilterPresenter constructor(private val repository: Announcem
         viewState.setSubCategoryCategoryTitle("", false)
         viewState.setDetailCategoryVisibility(false)
         viewState.setDetailSubCategoryVisibility(false)
+        subCategories.clear()
     }
 
     fun onDetailCategoryClick() {
@@ -247,6 +249,8 @@ class AnnouncementsFilterPresenter constructor(private val repository: Announcem
                 val id = items[selectedDetailSubCategoryPosition].id
                 viewState.navigateToScreen(R.id.announcementsFragment, bundleOf(Constants.EXTRA_ANNOUNCEMENTS_ID to id))
             }
+        } else {
+            viewState.showMessage("Требуется дополнительный выбор из списка")
         }
     }
 

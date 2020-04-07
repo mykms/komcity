@@ -1,11 +1,13 @@
 package ru.komcity.mobile.ui
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.komcity.mobile.R
 import ru.komcity.mobile.view.MainActivityView
@@ -55,6 +57,7 @@ class MainActivity: AppCompatActivity(), MainActivityView {
     }
 
     override fun onMessage(message: String) {
-        //
+        Snackbar.make(bottomNavigation, message, Snackbar.LENGTH_SHORT)
+                .show()
     }
 }

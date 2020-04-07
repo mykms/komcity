@@ -103,6 +103,10 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
         navigateTo(screenId, args)
     }
 
+    override fun showMessage(message: String) {
+        onMessage(message)
+    }
+
     override fun navigateToBackScreen() {
         navigateToBack()
     }

@@ -2,8 +2,7 @@ package ru.komcity.mobile.view
 
 import android.os.Bundle
 import moxy.MvpView
-import moxy.viewstate.strategy.OneExecutionStateStrategy
-import moxy.viewstate.strategy.StateStrategyType
+import moxy.viewstate.strategy.*
 
 /**
  * Created by Aleksey on 2020.03.01
@@ -12,7 +11,8 @@ import moxy.viewstate.strategy.StateStrategyType
  */
 interface AnnouncementsFilterView : MvpView {
     @StateStrategyType(OneExecutionStateStrategy::class) fun onLoading(isLoading: Boolean)
-    @StateStrategyType(OneExecutionStateStrategy::class) fun navigateToScreen(screenId: Int, args: Bundle)
+    @StateStrategyType(SkipStrategy::class) fun navigateToScreen(screenId: Int, args: Bundle)
+    @StateStrategyType(OneExecutionStateStrategy::class) fun showMessage(message: String)
     @StateStrategyType(OneExecutionStateStrategy::class) fun navigateToBackScreen()
     @StateStrategyType(OneExecutionStateStrategy::class) fun setCategoryTitle(text: String, isCloseVisible: Boolean)
     @StateStrategyType(OneExecutionStateStrategy::class) fun setCategoryVisibility(isVisible: Boolean)

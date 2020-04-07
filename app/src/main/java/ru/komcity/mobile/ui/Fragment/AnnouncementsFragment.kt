@@ -69,7 +69,7 @@ class AnnouncementsFragment : BaseFragment(), AnnouncementsView {
 
     override fun showAnnouncements(items: List<String>) {
         rvAnnouncements.adapter = AnnouncementAdapter(items) {
-            //
+            onMessage("Нет возможности просмотреть детальную информацию")
         }
     }
 }
