@@ -1,148 +1,90 @@
 package com.imageslider.android
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.util.AttributeSet
-import androidx.constraintlayout.widget.ConstraintLayout
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import androidx.viewpager.widget.ViewPager
+import android.widget.FrameLayout
+import androidx.core.view.ViewCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import kotlinx.android.synthetic.main.layout_silder.view.*
 
-class ImageSliderView : ConstraintLayout {
+/**
+ * Created by Aleksei Kholoimov on 19.04.2020
+ * <p>
+ * View-компонент для пролистывания рисунков
+ */
+class ImageSliderView(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
 
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
-        init(attrs)
-    }
+    private var isVisiblePanel = true
+    private var onImageClickListener: ((imageUrl: String) -> Unit)? = null
 
-    private fun init(attrs: AttributeSet?) {
+    init {
         LayoutInflater.from(context).inflate(R.layout.layout_silder, this)
-
-        setVisibilityPointSwitcherPanel(false)
-        groupPointSwitcher.removeAllViews()
-        setSlidePageListener()
+        initAttributes(attrs)
+        initComponents()
     }
 
-    /**
-     * Показывает или скрывает панель с кнопками перелистывания картинок
-     * @param isVisible Если true - то покажем панель, иначе спрячем
-     */
-    private fun setVisibilityPointSwitcherPanel(isVisible: Boolean) {
-        if (isVisible) {
-            groupPointSwitcher.visibility = View.VISIBLE
-        } else {
-            groupPointSwitcher.visibility = View.GONE
+    private fun initAttributes(attrs: AttributeSet?) {
+        val attributes = context.obtainStyledAttributes(attrs, R.styleable.ImageSliderView, 0, 0)
+        try {
+            isVisiblePanel = attributes.getBoolean(R.styleable.ImageSliderView_isVisiblePanel, true)
+        } finally {
+            attributes.recycle()
         }
     }
 
+    private fun initComponents() {
+        initImageSlider()
+        initDotsSlider()
+    }
 
-    private fun setSlidePageListener() {
-        imageViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                // nothing
-            }
-
-            override fun onPageSelected(position: Int) {
-                try {
-                    (groupPointSwitcher.getChildAt(position) as RadioButton).isChecked = true
-                } catch (ex: Exception) {
-                    //utils.getException(ex)
+    private fun initImageSlider() = with(imageViewPager) {
+        orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        offscreenPageLimit = 4
+        setPageTransformer { page, position ->
+            val myOffset = position * -(2 * 40.toPx + 40.toPx)
+            if (this.orientation == ViewPager2.ORIENTATION_HORIZONTAL) {
+                if (ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL) {
+                    page.translationX = -myOffset
+                } else {
+                    page.translationX = myOffset
                 }
-
+            } else {
+                page.translationY = myOffset
             }
+        }
+        adapter = null
+    }
 
-            override fun onPageScrollStateChanged(state: Int) {
-                // nothing
-            }
-        })
+    private fun initDotsSlider() = with(dotList) {
+        layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        adapter = null
+    }
+
+    fun setOnImageClickListener(onImageClickListener: (imageUrl: String) -> Unit) {
+        this.onImageClickListener = onImageClickListener
     }
 
     /**
      * Устанавливает картинки, которые будут отображаться
-     * @param mItems список картинок, содержащий http-ссылки на картинки
+     * @param items список картинок, содержащий http-ссылки на картинки
      */
-    fun setItems(mItems: List<String>) {
-        val itemsCount = mItems.size
-        // панель и кнопки покажем только если больше одного рисунка
-        if (mItems.size > 1) {
-            setVisibilityPointSwitcherPanel(true)
-            addRadioButtonsToPanel(itemsCount)
-        } else {
-            setVisibilityPointSwitcherPanel(false)
-        }
-        val adapter = ImageSliderAdapter(mItems, null)
-//        adapter.setViewPager(imageSlider)
-//        adapter.setCompleteLoadImageListener(object : CompleteLoadImageListener() {
-//            fun onCompleteLoadBMP(loadedBmp: Bitmap) {
-//                loadImageListener.onCompleteLoadBMP(loadedBmp)
-//            }
-//        })
-        imageViewPager.adapter = adapter
+    fun setItems(items: List<String>) {
+        setImageAdapter(items)
+        setDotsAdapter(items)
     }
 
-    /**
-     * генерирует и добавляет кнопки перелистывания к панели
-     * @param mCount количество кнопок
-     */
-    private fun addRadioButtonsToPanel(mCount: Int) {
-        if (mCount < 0) {
-            try {
-                throw NegativeArraySizeException("Количество элементов должно быть больше или равно нулю")
-            } catch (ex: NegativeArraySizeException) {
-                //utils.getException(ex)
-            }
-        } else {
-            val radioButton = emptyArray<RadioButton>()
-            for (i in 0 until mCount) {
-                try {
-                    radioButton[i] = RadioButton(context)
-                    radioButton[i].id = i
-                    if (i == 0) radioButton[i].isChecked = true    // Установим, что первый элемент выбран
-                    groupPointSwitcher?.addView(radioButton[i])
-                } catch (ex: Exception) {
-                    //utils.getException(ex)
-                }
-
-            }
-            setRadioButtonClickListener()
+    private fun setImageAdapter(items: List<String>) {
+        imageViewPager.adapter = ImageSliderAdapter(items) { imageUrl ->
+            onImageClickListener?.let { it(imageUrl) }
         }
     }
 
-    /**
-     * По щелчку на кнопку-выбора загружает и отображает необходимый элемент
-     */
-    private fun setRadioButtonClickListener() {
-        groupPointSwitcher?.setOnCheckedChangeListener(RadioGroup.OnCheckedChangeListener { radioGroup, i ->
-            imageViewPager?.currentItem = i
-        })
-    }
-
-//
-//    /**
-//     * Задачет расположение панели с переключателями рисунков
-//     * @param gravity Тип расположения (Top-вверху, Bottom-внизу)
-//     */
-//    fun setRadioPanelGravity(gravity: Gravity?) {
-//        if (gravity != null) {
-//            val params = radioPanelLayout.getLayoutParams() as ConstraintLayout.LayoutParams
-//            if (gravity == Gravity.Top) {
-//                params.addRule(RelativeLayout.ALIGN_PARENT_TOP)
-//                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0)
-//            } else if (gravity == Gravity.Bottom) {
-//                params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
-//                params.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0)
-//            }
-//            radioPanelLayout.setLayoutParams(params)
-//        }
-//    }
-
-    /**
-     * Расположение панели с кнопками пролистывания
-     */
-    enum class Gravity {
-        Top,
-        Bottom
+    private fun setDotsAdapter(items: List<String>) {
+        dotList.adapter = DotsSliderAdapter(items) {
+            //
+        }
     }
 }

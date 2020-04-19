@@ -12,8 +12,8 @@ import kotlinx.android.synthetic.main.layout_silder_image.view.*
  * <p>
  * Adapter for sliding-view
  */
-class ImageSliderAdapter(private val items: List<String>, private var onImageClick: (imageUrl: String) -> Unit)
-    : RecyclerView.Adapter<ImageSliderAdapter.ViewHolder>() {
+class DotsSliderAdapter(private val items: List<String>, private var onImageClick: (imageUrl: String) -> Unit)
+    : RecyclerView.Adapter<DotsSliderAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_silder_image, parent)

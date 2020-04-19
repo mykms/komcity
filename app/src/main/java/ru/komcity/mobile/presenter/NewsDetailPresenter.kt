@@ -34,10 +34,10 @@ class NewsDetailPresenter constructor(private val newsRepository: NewsRepository
         viewState.onLoading(true)
         newsJob = CoroutineScope(Dispatchers.IO).launch {
             try {
-                val item = newsRepository.getNewsDetail(newsId)
-                val newsDetail = with(item) {
-                    NewsItem(title, date, shortText, previewImg, imageUrls, this.newsId.toIntOrNull() ?: 0)
-                }
+//                val item = newsRepository.getNewsDetail(newsId)
+//                val newsDetail = with(item) {
+//                    NewsItem(title, date, shortText, previewImg, imageUrls, this.newsId.toIntOrNull() ?: 0)
+//                }
                 withContext(Dispatchers.Main) {
                     viewState.onLoading(false)
                     viewState.onNewsDetailLoaded(news)

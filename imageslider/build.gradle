@@ -30,6 +30,7 @@ dependencies {
 
     implementation supportDepends.appCompat
     implementation supportDepends.constraintLayout
+    implementation supportDepends.viewPager2
 
     implementation kotlinDepends.stdlib
     implementation kotlinDepends.core
