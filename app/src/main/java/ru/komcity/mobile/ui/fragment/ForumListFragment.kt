@@ -1,9 +1,8 @@
-package ru.komcity.mobile.ui.Fragment
+package ru.komcity.mobile.ui.fragment
 
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_forum_list.*
@@ -14,7 +13,7 @@ import ru.komcity.mobile.common.Constants
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.presenter.ForumPresenter
 import ru.komcity.mobile.repository.ForumRepositoryImpl
-import ru.komcity.mobile.ui.Adapter.ForumAdapter
+import ru.komcity.mobile.ui.adapter.ForumAdapter
 import ru.komcity.mobile.view.ForumView
 import ru.komcity.mobile.viewModel.ForumItem
 import ru.komcity.mobile.viewModel.ForumMessagesItem

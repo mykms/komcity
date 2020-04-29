@@ -1,11 +1,10 @@
-package ru.komcity.mobile.ui.Fragment
+package ru.komcity.mobile.ui.fragment
 
 import android.graphics.drawable.ShapeDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +16,7 @@ import ru.komcity.mobile.common.Constants
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.presenter.NewsPresenter
 import ru.komcity.mobile.repository.NewsRepositoryImpl
-import ru.komcity.mobile.ui.Adapter.NewsAdapter
+import ru.komcity.mobile.ui.adapter.NewsAdapter
 import ru.komcity.mobile.view.NewsListView
 import ru.komcity.mobile.viewModel.NewsItem
 

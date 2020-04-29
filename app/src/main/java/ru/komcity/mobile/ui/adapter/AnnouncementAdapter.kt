@@ -1,4 +1,4 @@
-package ru.komcity.mobile.ui.Adapter
+package ru.komcity.mobile.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View

@@ -1,4 +1,4 @@
-package ru.komcity.mobile.ui.Fragment
+package ru.komcity.mobile.ui.fragment
 
 import android.graphics.drawable.ShapeDrawable
 import android.os.Bundle
@@ -16,7 +16,7 @@ import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.presenter.AnnouncementsPresenter
 import ru.komcity.mobile.repository.AnnouncementsRepositoryImpl
 import ru.komcity.mobile.repository.mapping.AnnouncementsMapper
-import ru.komcity.mobile.ui.Adapter.AnnouncementAdapter
+import ru.komcity.mobile.ui.adapter.AnnouncementAdapter
 import ru.komcity.mobile.view.AnnouncementsView
 
 class AnnouncementsFragment : BaseFragment(), AnnouncementsView {

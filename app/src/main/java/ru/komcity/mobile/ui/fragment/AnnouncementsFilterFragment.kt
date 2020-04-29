@@ -1,4 +1,4 @@
-package ru.komcity.mobile.ui.Fragment
+package ru.komcity.mobile.ui.fragment
 
 import android.os.Bundle
 import android.view.View

@@ -1,4 +1,4 @@
-package ru.komcity.mobile.ui.Holder
+package ru.komcity.mobile.ui.holders
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView

@@ -1,23 +1,23 @@
-package ru.komcity.mobile.ui.Adapter
+package ru.komcity.mobile.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_forum.view.*
+import kotlinx.android.synthetic.main.item_sub_forum.view.*
 import ru.komcity.mobile.R
-import ru.komcity.mobile.viewModel.ForumItem
+import ru.komcity.mobile.viewModel.SubForumItem
 
 /**
- * Created by Aleksey on 2020.02.28
+ * Created by Aleksey on 2020.03.01
  * <p>
- * Адаптер для списка форумов
+ * Адаптер для списка подфорумов
  */
-class ForumAdapter(private val items: List<ForumItem>,
-                   private val listener: (item: String) -> Unit) : RecyclerView.Adapter<ForumAdapter.ViewHolder>() {
+class SubForumAdapter(private val items: List<SubForumItem>,
+                      private val listener: (item: String) -> Unit) : RecyclerView.Adapter<SubForumAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_forum, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_sub_forum, parent, false)
         return ViewHolder(view)
     }
 
@@ -30,7 +30,7 @@ class ForumAdapter(private val items: List<ForumItem>,
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: ForumItem) {
+        fun bind(item: SubForumItem) {
             with(itemView) {
                 tvTitle.text = item.forumName
                 tvThemeCount.text = item.countTheme
@@ -40,7 +40,7 @@ class ForumAdapter(private val items: List<ForumItem>,
             }
         }
 
-        private fun initClickListener(itemView: View, item: ForumItem) {
+        private fun initClickListener(itemView: View, item: SubForumItem) {
             with(itemView) {
                 tvTitle.setOnClickListener {listener(item.linkForum)  }
                 tvThemeCount.setOnClickListener {listener(item.linkForum)  }

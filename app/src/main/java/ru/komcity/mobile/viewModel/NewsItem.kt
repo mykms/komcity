@@ -8,7 +8,7 @@ data class NewsItem(var title: String,
                     var shortText: String,
                     var previewImg: String,
                     var imageUrls: List<String>,
-                    val newsId: Int): Parcelable {
+                    val newsId: Int): Parcelable, BaseHolderItem {
     constructor(parcel: Parcel) : this(
             parcel.readString() ?: "",
             parcel.readString() ?: "",
