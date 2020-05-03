@@ -36,8 +36,8 @@ class NewsAdapter(private val items: List<BaseHolderItem>, private val onItemCli
 
     override fun getItemViewType(position: Int): Int {
         return when (items[position]) {
-            is AddNewsItem -> 0
-            is SearchNewsItem -> 1
+            is SearchNewsItem -> 0
+            is AddNewsItem -> 1
             else -> 2
         }
     }
@@ -72,7 +72,7 @@ class NewsAdapter(private val items: List<BaseHolderItem>, private val onItemCli
             item as NewsItem
             tvNewsDate.text = item.date
             tvNewsTitle.text = item.title
-            tvNewsShortText.text = item.shortText
+            tvNewsShortText.text = item.text
             ImageLoader(item.previewImg, ivNews, ImageCropType.CROP_NO)
             initListeners(item)
         }

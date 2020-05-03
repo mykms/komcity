@@ -7,10 +7,8 @@ import moxy.viewstate.strategy.StateStrategyType
 import ru.komcity.mobile.viewModel.NewsItem
 
 interface NewsListView: MvpView {
-    @StateStrategyType(OneExecutionStateStrategy::class)
-    fun onLoading(isLoading: Boolean)
-    @StateStrategyType(OneExecutionStateStrategy::class)
-    fun onNewsLoaded(items: List<NewsItem>)
-    @StateStrategyType(OneExecutionStateStrategy::class)
-    fun navigateToScreen(screenId: Int, args: Bundle)
+    @StateStrategyType(OneExecutionStateStrategy::class) fun onLoading(isLoading: Boolean)
+    @StateStrategyType(OneExecutionStateStrategy::class) fun onError(message: String)
+    @StateStrategyType(OneExecutionStateStrategy::class) fun onNewsLoaded(items: List<NewsItem>)
+    @StateStrategyType(OneExecutionStateStrategy::class) fun navigateToScreen(screenId: Int, args: Bundle)
 }

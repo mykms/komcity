@@ -33,11 +33,12 @@ class NewsDetailFragment : BaseFragment(), NewsDetailView {
     @ProvidePresenter
     fun providePresenter() = NewsDetailPresenter(repo)
 
-    var item = NewsItem("", "", "", "", emptyList(), 0)
+    var item = NewsItem("", "", "", "", emptyList(), 0, 0)
 
     override fun getArgs(args: Bundle?) {
-        item = args?.getParcelable(Constants.EXTRA_NEWS_ITEM) ?: item
-        newsPresenter.init(item)
+        newsPresenter.init(
+                args?.getInt(Constants.EXTRA_NEWS_ID, 0) ?: 0,
+                args?.getString(Constants.EXTRA_NEWS_TITLE, "") ?: "")
     }
 
     override fun setResourceLayout(): Int {
@@ -87,8 +88,8 @@ class NewsDetailFragment : BaseFragment(), NewsDetailView {
     override fun onNewsDetailLoaded(item: NewsItem) {
         tvDate.text = item.date
         tvTitle.text = item.title
-        tvDescription.text = item.shortText
-        //imageSliderView.setItems(arrayListOf(item.imageUrls, item.imageUrls, item.imageUrls))
+        tvDescription.text = item.text
+        imageSliderView.setItems(item.imageUrls)
         //ImageLoader(item.fullNewsUrl, mainBackdrop)
     }
 

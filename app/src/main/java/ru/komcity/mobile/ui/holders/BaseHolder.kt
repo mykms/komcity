@@ -1,9 +1,0 @@
-package ru.komcity.mobile.ui.holders
-
-import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-
-abstract class BaseHolder<IL>(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    abstract fun setData(item: IL)
-    abstract fun setItemClickListener(listener: View.OnClickListener?)
-}

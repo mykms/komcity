@@ -12,4 +12,5 @@ class NewsDto(@SerializedName("title") val title: String,
               @SerializedName("shortText") val shortText: String,
               @SerializedName("previewImg") val previewImg: String,
               @SerializedName("imagesUrl") val imageUrls: List<String>,
-              @SerializedName("newsId") val newsId: String)
+              @SerializedName("newsId") val newsId: String,
+              @SerializedName("forumId") val forumId: String)

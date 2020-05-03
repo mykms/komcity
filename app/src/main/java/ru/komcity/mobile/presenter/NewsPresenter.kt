@@ -5,7 +5,8 @@ import kotlinx.coroutines.*
 import moxy.InjectViewState
 import ru.komcity.mobile.repository.NewsRepository
 import ru.komcity.mobile.view.NewsListView
-import ru.komcity.mobile.viewModel.NewsItem
+import java.net.ConnectException
+import java.net.UnknownHostException
 
 @InjectViewState
 class NewsPresenter constructor(private val newsRepository: NewsRepository): BasePresenter<NewsListView>() {
@@ -13,26 +14,33 @@ class NewsPresenter constructor(private val newsRepository: NewsRepository): Bas
     private var newsJob: Job? = null
 
     fun getNewsList() {
-        viewState.onLoading(true)
-        newsJob = CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val items = newsRepository.getNews().map {
-                    with(it) {
-                        NewsItem(title, date, shortText, previewImg, imageUrls, newsId.toIntOrNull()
-                                ?: 0)
-                    }
-                }
+        newsJob = CoroutineScope(getExceptionHandler { doOnError(it) }).launch {
+            viewState.onLoading(true)
+            withContext(Dispatchers.IO) {
+                val items = newsRepository.getNews()
                 withContext(Dispatchers.Main) {
-                    viewState.onLoading(false)
                     viewState.onNewsLoaded(items)
+                    viewState.onLoading(false)
                 }
-            } catch (ex: Exception) {
-                viewState.onLoading(false)
-                ex.printStackTrace()
             }
         }
     }
 
+    private fun doOnError(throwable: Throwable) {
+        viewState.onLoading(false)
+        when (throwable) {
+            is ConnectException -> {
+                viewState.onError("Не удается соединиться с сервером")
+            }
+            is UnknownHostException -> {
+                viewState.onError("Проверьте связь с интернетом или адрес сервера")
+            }
+            is IllegalArgumentException -> {
+                viewState.onError("Произошла ошибка, попробуйте позже")
+            }
+            else -> {}
+        }
+    }
 
     fun navigateTo(screenId: Int, args: Bundle) {
         viewState.navigateToScreen(screenId, args)

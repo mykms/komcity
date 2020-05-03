@@ -5,7 +5,7 @@ import kotlinx.coroutines.*
 import moxy.InjectViewState
 import ru.komcity.mobile.repository.NewsRepository
 import ru.komcity.mobile.view.NewsDetailView
-import ru.komcity.mobile.viewModel.NewsItem
+import java.net.UnknownHostException
 
 /**
  * Created by Aleksei Kholoimov on 14.03.2020
@@ -18,34 +18,41 @@ class NewsDetailPresenter constructor(private val newsRepository: NewsRepository
     private var newsJob: Job? = null
     private var newsId = 0
     private var isVisibleSharePanel = false
-    private lateinit var news: NewsItem
+    private var title: String = ""
 
-    fun init(news: NewsItem) {
-        this.newsId = news.newsId
-        this.news = news
+    fun init(newsId: Int, title: String) {
+        this.newsId = newsId
+        this.title = title
     }
 
     fun iniState() {
-        viewState.setToolbarTitle(news.title)
+        viewState.setToolbarTitle(title)
         viewState.setVisibilitySharePanel(isVisibleSharePanel)
     }
 
     fun getNewsDetail() {
         viewState.onLoading(true)
-        newsJob = CoroutineScope(Dispatchers.IO).launch {
-            try {
-//                val item = newsRepository.getNewsDetail(newsId)
-//                val newsDetail = with(item) {
-//                    NewsItem(title, date, shortText, previewImg, imageUrls, this.newsId.toIntOrNull() ?: 0)
-//                }
+        newsJob = CoroutineScope(getExceptionHandler { doOnError(it) }).launch {
+            withContext(Dispatchers.IO) {
+                val item = newsRepository.getNewsDetail(newsId)
                 withContext(Dispatchers.Main) {
+                    viewState.onNewsDetailLoaded(item)
                     viewState.onLoading(false)
-                    viewState.onNewsDetailLoaded(news)
                 }
-            } catch (ex: Exception) {
-                viewState.onLoading(false)
-                ex.printStackTrace()
             }
+        }
+    }
+
+    private fun doOnError(throwable: Throwable) {
+        viewState.onLoading(false)
+        when (throwable) {
+            is UnknownHostException -> {
+                //viewState.onError("Проверьте связь с интернетом или адрес сервера")
+            }
+            is IllegalArgumentException -> {
+                //viewState.onError("Произошла ошибка, попробуйте позже")
+            }
+            else -> {}
         }
     }
 

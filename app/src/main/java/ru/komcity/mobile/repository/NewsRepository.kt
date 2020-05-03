@@ -1,7 +1,7 @@
 package ru.komcity.mobile.repository
 
 import ru.komcity.mobile.network.ApiMethods
-import ru.komcity.mobile.repository.model.NewsDto
+import ru.komcity.mobile.viewModel.NewsItem
 
 /**
  * Created by Aleksei Kholoimov on 2020-02-27
@@ -10,18 +10,23 @@ import ru.komcity.mobile.repository.model.NewsDto
  */
 interface NewsRepository {
 
-    suspend fun getNews(): List<NewsDto>
-    suspend fun getNewsDetail(newsId: Int): NewsDto
+    suspend fun getNews(): List<NewsItem>
+    suspend fun getNewsDetail(id: Int): NewsItem
 }
 
 class NewsRepositoryImpl constructor(private val apiMethods: ApiMethods): NewsRepository {
 
-    override suspend fun getNews(): List<NewsDto> {
-        return apiMethods.getNews()
+    override suspend fun getNews(): List<NewsItem> {
+        return apiMethods.getNews().map {
+            with(it) {
+                NewsItem(title, date, shortText, previewImg, imageUrls, newsId.toIntOrNull() ?: 0, forumId.toIntOrNull() ?: 0)
+            }
+        }
     }
 
-    override suspend fun getNewsDetail(newsId: Int): NewsDto {
-        //todo add server method
-        return NewsDto("", "", "", "", emptyList(), "")
+    override suspend fun getNewsDetail(id: Int): NewsItem {
+        return with(apiMethods.getNewsDetail(id)) {
+            NewsItem(title, date, shortText, previewImg, imageUrls, newsId.toIntOrNull() ?: 0, forumId.toIntOrNull() ?: 0)
+        }
     }
 }

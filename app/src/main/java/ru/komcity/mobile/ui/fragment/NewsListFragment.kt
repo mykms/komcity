@@ -18,7 +18,10 @@ import ru.komcity.mobile.presenter.NewsPresenter
 import ru.komcity.mobile.repository.NewsRepositoryImpl
 import ru.komcity.mobile.ui.adapter.NewsAdapter
 import ru.komcity.mobile.view.NewsListView
+import ru.komcity.mobile.viewModel.AddNewsItem
+import ru.komcity.mobile.viewModel.BaseHolderItem
 import ru.komcity.mobile.viewModel.NewsItem
+import ru.komcity.mobile.viewModel.SearchNewsItem
 
 class NewsListFragment: BaseFragment(), NewsListView {
 
@@ -28,6 +31,7 @@ class NewsListFragment: BaseFragment(), NewsListView {
     lateinit var newsPresenter: NewsPresenter
     @ProvidePresenter
     fun providePresenter() = NewsPresenter(repo)
+    private val searchAndAddNewsItems = listOf(SearchNewsItem(), AddNewsItem())
 
     override fun getArgs(args: Bundle?) {
         //newsPresenter.attachView(this)
@@ -55,9 +59,19 @@ class NewsListFragment: BaseFragment(), NewsListView {
         progress.isVisible = isLoading
     }
 
+    override fun onError(message: String) {
+        onMessage(message)
+    }
+
     override fun onNewsLoaded(items: List<NewsItem>) {
-        rvListNews.adapter = NewsAdapter(items) {
-            newsPresenter.navigateTo(R.id.newsDetailFragment, bundleOf(Constants.EXTRA_NEWS_ITEM to it))
+        val totalItems = arrayListOf<BaseHolderItem>().apply {
+            addAll(searchAndAddNewsItems)
+            addAll(items)
+        }
+        rvListNews.adapter = NewsAdapter(totalItems) {
+            newsPresenter.navigateTo(R.id.newsDetailFragment, bundleOf(
+                    Constants.EXTRA_NEWS_ID to it.newsId,
+                    Constants.EXTRA_NEWS_TITLE to it.title))
         }
     }
 

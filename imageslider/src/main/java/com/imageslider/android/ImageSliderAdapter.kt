@@ -16,7 +16,7 @@ class ImageSliderAdapter(private val items: List<String>, private var onImageCli
     : RecyclerView.Adapter<ImageSliderAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_silder_image, parent)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_silder_image, parent, false)
         return ViewHolder(view)
     }
 

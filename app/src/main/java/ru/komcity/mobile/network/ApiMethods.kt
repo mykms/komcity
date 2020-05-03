@@ -8,7 +8,10 @@ import ru.komcity.mobile.repository.model.*
 interface ApiMethods {
 
     @GET("news")
-    suspend fun getNews(): List<NewsDto>
+    suspend fun getNews(@Query("page") page: Int = 1): List<NewsDto>
+
+    @GET("news")
+    suspend fun getNewsDetail(@Query("id") id: Int): NewsDto
 
     @GET("forum")
     suspend fun getForums(): List<ForumDto>
