@@ -2,5 +2,9 @@
 <resources>
     <declare-styleable name="ImageSliderView">
         <attr name="isVisiblePanel" format="boolean" />
+        <attr name="activeItem" format="reference" />
+        <attr name="inActiveItem" format="reference" />
+        <attr name="activeItemSize" format="integer" />
+        <attr name="inActiveItemSize" format="integer" />
     </declare-styleable>
 </resources>

@@ -1,11 +1,8 @@
 package ru.komcity.mobile.ui.fragment
 
-import android.graphics.drawable.ShapeDrawable
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_news_list.*
@@ -22,6 +19,7 @@ import ru.komcity.mobile.viewModel.AddNewsItem
 import ru.komcity.mobile.viewModel.BaseHolderItem
 import ru.komcity.mobile.viewModel.NewsItem
 import ru.komcity.mobile.viewModel.SearchNewsItem
+import ru.komcity.uicomponent.DividerWithRemoveDecorator
 
 class NewsListFragment: BaseFragment(), NewsListView {
 
@@ -49,10 +47,7 @@ class NewsListFragment: BaseFragment(), NewsListView {
     private fun initRecyclerView(view: View) = with(rvListNews) {
         setHasFixedSize(true)
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL).apply {
-            setDrawable(ContextCompat.getDrawable(view.context, R.drawable.recycler_divider)
-                    ?: ShapeDrawable())
-        })
+        addItemDecoration(DividerWithRemoveDecorator(context, R.drawable.recycler_divider, 2, 0))
     }
 
     override fun onLoading(isLoading: Boolean) {

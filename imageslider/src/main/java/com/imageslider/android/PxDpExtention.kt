@@ -9,13 +9,13 @@ import kotlin.math.roundToInt
  * <p>
  * Расширение для конвертации единиц измерения под Android
  */
-val Int.toDp: Int
+internal val Int.toDp: Int
     get() {
         val metrics = Resources.getSystem().displayMetrics
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics).roundToInt()
     }
 
-val Int.toPx: Int
+internal val Int.toPx: Int
     get() {
         val metrics = Resources.getSystem().displayMetrics
         return (this / (metrics.densityDpi / 160f)).roundToInt()

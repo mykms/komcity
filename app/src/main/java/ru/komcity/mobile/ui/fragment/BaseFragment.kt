@@ -11,8 +11,8 @@ import androidx.annotation.IdRes
 import androidx.annotation.NonNull
 import moxy.MvpAppCompatFragment
 import moxy.MvpView
-import ru.komcity.mobile.viewModel.User
 import ru.komcity.mobile.view.MainActivityView
+import ru.komcity.mobile.viewModel.User
 import java.util.*
 
 abstract class BaseFragment : MvpAppCompatFragment(), MvpView {
@@ -60,10 +60,6 @@ abstract class BaseFragment : MvpAppCompatFragment(), MvpView {
 
     fun onMessage(message: String) {
         activityListener?.onMessage(message)
-    }
-
-    fun setToolbarTitle(title: String) {
-        //TODO:
     }
 
     /**

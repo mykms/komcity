@@ -6,6 +6,7 @@ import moxy.InjectViewState
 import ru.komcity.mobile.repository.NewsRepository
 import ru.komcity.mobile.view.NewsListView
 import java.net.ConnectException
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 @InjectViewState
@@ -37,6 +38,9 @@ class NewsPresenter constructor(private val newsRepository: NewsRepository): Bas
             }
             is IllegalArgumentException -> {
                 viewState.onError("Произошла ошибка, попробуйте позже")
+            }
+            is SocketTimeoutException -> {
+                viewState.onError("Проверьте связь с интернетом и попробуйте позже")
             }
             else -> {}
         }

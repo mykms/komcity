@@ -1,10 +1,11 @@
 package com.imageslider.android
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import androidx.core.view.ViewCompat
+import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -17,8 +18,15 @@ import kotlinx.android.synthetic.main.layout_silder.view.*
  */
 class ImageSliderView(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
 
+    private var selectedPosition = 0
     private var isVisiblePanel = true
-    private var onImageClickListener: ((imageUrl: String) -> Unit)? = null
+    private var onImageListener: ImageSliderCallback? = null
+    @DrawableRes
+    private var activeItem = R.drawable.bg_point_switcher
+    @DrawableRes
+    private var inActiveItem = R.drawable.bg_point_switcher
+    private var activeItemSize = 12
+    private var inActiveItemSize = 8
 
     init {
         LayoutInflater.from(context).inflate(R.layout.layout_silder, this)
@@ -30,6 +38,10 @@ class ImageSliderView(context: Context, attrs: AttributeSet?) : FrameLayout(cont
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.ImageSliderView, 0, 0)
         try {
             isVisiblePanel = attributes.getBoolean(R.styleable.ImageSliderView_isVisiblePanel, true)
+            activeItem = attributes.getResourceId(R.styleable.ImageSliderView_activeItem, R.drawable.bg_point_switcher)
+            inActiveItem = attributes.getResourceId(R.styleable.ImageSliderView_inActiveItem, R.drawable.bg_point_switcher)
+            activeItemSize = attributes.getInteger(R.styleable.ImageSliderView_activeItemSize, 12)
+            inActiveItemSize = attributes.getResourceId(R.styleable.ImageSliderView_inActiveItemSize, 8)
         } finally {
             attributes.recycle()
         }
@@ -43,18 +55,6 @@ class ImageSliderView(context: Context, attrs: AttributeSet?) : FrameLayout(cont
     private fun initImageSlider() = with(imageViewPager) {
         orientation = ViewPager2.ORIENTATION_HORIZONTAL
         offscreenPageLimit = 4
-        setPageTransformer { page, position ->
-            val myOffset = position * -(2 * 40.toPx + 40.toPx)
-            if (this.orientation == ViewPager2.ORIENTATION_HORIZONTAL) {
-                if (ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL) {
-                    page.translationX = -myOffset
-                } else {
-                    page.translationX = myOffset
-                }
-            } else {
-                page.translationY = myOffset
-            }
-        }
         adapter = null
     }
 
@@ -63,8 +63,21 @@ class ImageSliderView(context: Context, attrs: AttributeSet?) : FrameLayout(cont
         adapter = null
     }
 
-    fun setOnImageClickListener(onImageClickListener: (imageUrl: String) -> Unit) {
-        this.onImageClickListener = onImageClickListener
+    fun setOnImageClickListener(onImageListener: ImageSliderCallback) {
+        this.onImageListener = onImageListener
+    }
+
+    /**
+     * Получает картинку по позиции
+     * @param position - позиция для получени рисунка
+     * @return - Возвращает рисунок в формате Bitmap (без гарантий)
+     */
+    fun getImageByPosition(position: Int): Bitmap? {
+        return getBitmapFromAdapterByPosition(position)
+    }
+
+    private fun getBitmapFromAdapterByPosition(position: Int): Bitmap? {
+        return (imageViewPager.adapter as? ImageSliderAdapter)?.getBitmapByPosition(position)
     }
 
     /**
@@ -73,18 +86,28 @@ class ImageSliderView(context: Context, attrs: AttributeSet?) : FrameLayout(cont
      */
     fun setItems(items: List<String>) {
         setImageAdapter(items)
-        setDotsAdapter(items)
+        setDotsAdapter(items.map { false })
     }
 
     private fun setImageAdapter(items: List<String>) {
-        imageViewPager.adapter = ImageSliderAdapter(items) { imageUrl ->
-            onImageClickListener?.let { it(imageUrl) }
-        }
+        imageViewPager.adapter = ImageSliderAdapter(items, onImageListener)
     }
 
-    private fun setDotsAdapter(items: List<String>) {
-        dotList.adapter = DotsSliderAdapter(items) {
-            //
+    private fun setDotsAdapter(items: List<Boolean>) {
+        dotList.adapter = DotsSliderAdapter(arrayListOf<Boolean>().apply { addAll(items) },
+                activeItem, inActiveItem, activeItemSize, inActiveItemSize) {
+            imageViewPager.currentItem = it
         }
+        imageViewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                (dotList?.adapter as? DotsSliderAdapter)?.apply {
+                    changeItemAndUpdate(selectedPosition, false)
+                    changeItemAndUpdate(position, true)
+                }
+                onImageListener?.onImageSwipe(getBitmapFromAdapterByPosition(position), position)
+                selectedPosition = position
+            }
+        })
     }
 }
