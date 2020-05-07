@@ -6,15 +6,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import ru.komcity.mobile.viewModel.ImageLoader.ImageCropType
-import ru.komcity.mobile.viewModel.ImageLoader.ImageLoader
-import ru.komcity.mobile.viewModel.NewsItem
 import ru.komcity.mobile.R
 import ru.komcity.mobile.viewModel.AddNewsItem
 import ru.komcity.mobile.viewModel.BaseHolderItem
+import ru.komcity.mobile.viewModel.ImageLoader.ImageCropType
+import ru.komcity.mobile.viewModel.ImageLoader.ImageLoader
+import ru.komcity.mobile.viewModel.NewsItem
 import ru.komcity.mobile.viewModel.SearchNewsItem
 
-class NewsAdapter(private val items: List<BaseHolderItem>, private val onItemClick: (item: NewsItem) -> Unit)
+class NewsAdapter(private val items: List<BaseHolderItem>, private val onItemClick: (item: BaseHolderItem) -> Unit)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -54,11 +54,13 @@ class NewsAdapter(private val items: List<BaseHolderItem>, private val onItemCli
 
     inner class ViewHolderSearch(itemView: View): RecyclerView.ViewHolder(itemView) {
         fun bind(item: SearchNewsItem) {
+            itemView.setOnClickListener { onItemClick(item) }
         }
     }
 
     inner class ViewHolderAddNews(itemView: View): RecyclerView.ViewHolder(itemView) {
         fun bind(item: AddNewsItem) {
+            itemView.setOnClickListener { onItemClick(item) }
         }
     }
 

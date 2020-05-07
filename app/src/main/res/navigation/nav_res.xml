@@ -15,6 +15,11 @@
         android:label="fragment_news_detail"
         tools:layout="@layout/fragment_news_detail" />
     <fragment
+        android:id="@+id/newsAdd"
+        android:name="ru.komcity.mobile.ui.fragment.NewsAddFragment"
+        android:label="fragment_news_add"
+        tools:layout="@layout/fragment_news_add" />
+    <fragment
         android:id="@+id/forumListFragment"
         android:name="ru.komcity.mobile.ui.fragment.ForumListFragment"
         android:label="fragment_forum_list"

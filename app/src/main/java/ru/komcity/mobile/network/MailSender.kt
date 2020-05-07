@@ -20,12 +20,8 @@ import javax.mail.internet.MimeMultipart
 class MailSender(private val params: MailSenderData) {
 
     private val emailTo = "admin@komcity.ru"
-    private lateinit var session: Session
-
-    init {
-        val props = initProperties(params)
-        session = initSession(params, props)
-    }
+    private val props = initProperties(params)
+    private val session: Session = initSession(params, props)
 
     private fun initProperties(params: MailSenderData) = Properties().apply {
         put("mail.smtp.host", params.serverHost)
@@ -93,6 +89,7 @@ class MailSender(private val params: MailSenderData) {
     private fun sendMessageByTransport(message: Message, onMailResult: (isSuccess: Boolean, message: String) -> Unit) {
         val transport: Transport = session.getTransport("smtp")
         try {
+            //NetworkOnMainThreadException
             transport.connect()
             transport.sendMessage(message, message.allRecipients)
         } catch (e: MessagingException) {

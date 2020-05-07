@@ -66,7 +66,7 @@ abstract class BaseFragment : MvpAppCompatFragment(), MvpView {
      * Устанавливает видимость панели внизу
      */
     protected fun setBottomPanelVisibility(isVisible: Boolean) {
-        //activityListener?.showBottomPanel(isVisible)
+        activityListener?.isBottomPanelVisible(isVisible)
     }
 
     protected fun setUser(user: User) {

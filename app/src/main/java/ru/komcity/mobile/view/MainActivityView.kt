@@ -6,4 +6,5 @@ interface MainActivityView {
     fun navigateTo(resourceFragment: Int, args: Bundle?)
     fun navigateToBack()
     fun onMessage(message: String)
+    fun isBottomPanelVisible(isVisible: Boolean)
 }

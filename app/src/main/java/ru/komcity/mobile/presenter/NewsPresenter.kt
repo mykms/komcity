@@ -1,10 +1,16 @@
 package ru.komcity.mobile.presenter
 
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import kotlinx.coroutines.*
 import moxy.InjectViewState
+import ru.komcity.mobile.R
+import ru.komcity.mobile.common.Constants
 import ru.komcity.mobile.repository.NewsRepository
 import ru.komcity.mobile.view.NewsListView
+import ru.komcity.mobile.viewModel.AddNewsItem
+import ru.komcity.mobile.viewModel.BaseHolderItem
+import ru.komcity.mobile.viewModel.NewsItem
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -42,6 +48,16 @@ class NewsPresenter constructor(private val newsRepository: NewsRepository): Bas
             is SocketTimeoutException -> {
                 viewState.onError("Проверьте связь с интернетом и попробуйте позже")
             }
+            else -> {}
+        }
+    }
+
+    fun navigateByItemType(item: BaseHolderItem) {
+        when (item) {
+            is AddNewsItem -> navigateTo(R.id.newsAdd, bundleOf())
+            is NewsItem -> navigateTo(R.id.newsDetailFragment, bundleOf(
+                    Constants.EXTRA_NEWS_ID to item.newsId,
+                    Constants.EXTRA_NEWS_TITLE to item.title))
             else -> {}
         }
     }

@@ -2,14 +2,12 @@ package ru.komcity.mobile.ui.fragment
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_news_list.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
-import ru.komcity.mobile.common.Constants
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.presenter.NewsPresenter
 import ru.komcity.mobile.repository.NewsRepositoryImpl
@@ -64,9 +62,7 @@ class NewsListFragment: BaseFragment(), NewsListView {
             addAll(items)
         }
         rvListNews.adapter = NewsAdapter(totalItems) {
-            newsPresenter.navigateTo(R.id.newsDetailFragment, bundleOf(
-                    Constants.EXTRA_NEWS_ID to it.newsId,
-                    Constants.EXTRA_NEWS_TITLE to it.title))
+            newsPresenter.navigateByItemType(it)
         }
     }
 

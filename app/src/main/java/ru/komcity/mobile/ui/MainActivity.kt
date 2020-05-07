@@ -1,9 +1,9 @@
 package ru.komcity.mobile.ui
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
@@ -41,6 +41,7 @@ class MainActivity: AppCompatActivity(), MainActivityView {
             R.id.forumDetailMessageFragment -> navController.navigate(resourceIdNav, args)
             R.id.announcementFilterFragment -> navController.navigate(resourceIdNav, args)
             R.id.announcementsFragment -> navController.navigate(resourceIdNav, args)
+            R.id.newsAdd -> navController.navigate(resourceIdNav, args)
             android.R.id.home -> navController.popBackStack()
             else -> navController.navigate(R.id.noContentErrorFragment)
         }
@@ -59,5 +60,9 @@ class MainActivity: AppCompatActivity(), MainActivityView {
     override fun onMessage(message: String) {
         Snackbar.make(bottomNavigation, message, Snackbar.LENGTH_SHORT)
                 .show()
+    }
+
+    override fun isBottomPanelVisible(isVisible: Boolean) {
+        bottomNavigation.isVisible = isVisible
     }
 }
