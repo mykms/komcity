@@ -1,11 +1,17 @@
 package ru.komcity.mobile.network
 
+import com.sun.mail.util.MailConnectException
+import kotlinx.coroutines.*
 import java.io.File
 import java.util.*
 import javax.activation.DataHandler
 import javax.activation.DataSource
 import javax.activation.FileDataSource
 import javax.mail.*
+import javax.mail.event.ConnectionEvent
+import javax.mail.event.ConnectionListener
+import javax.mail.event.TransportEvent
+import javax.mail.event.TransportListener
 import javax.mail.internet.InternetAddress
 import javax.mail.internet.MimeBodyPart
 import javax.mail.internet.MimeMessage
@@ -19,9 +25,17 @@ import javax.mail.internet.MimeMultipart
  */
 class MailSender(private val params: MailSenderData) {
 
-    private val emailTo = "admin@komcity.ru"
+    private val emailTo = "test201701@yandex.ru" //"admin@komcity.ru"
     private val props = initProperties(params)
     private val session: Session = initSession(params, props)
+    private var job: Job? = null
+    private fun getExceptionHandler(onErrorExecuteJob: (throwable: Throwable) -> Unit) = CoroutineExceptionHandler { scope, throwable ->
+        job = CoroutineScope(Dispatchers.Main).launch {
+            withContext(this.coroutineContext) {
+                onErrorExecuteJob.invoke(throwable)
+            }
+        }
+    }
 
     private fun initProperties(params: MailSenderData) = Properties().apply {
         put("mail.smtp.host", params.serverHost)
@@ -69,7 +83,7 @@ class MailSender(private val params: MailSenderData) {
             setSubject(subject)
             sentDate = Date()
             setText(text)
-            setContent(getAttaches(attachFiles))
+            //setContent(getAttaches(attachFiles))
         }
     }
 
@@ -87,16 +101,60 @@ class MailSender(private val params: MailSenderData) {
     }
 
     private fun sendMessageByTransport(message: Message, onMailResult: (isSuccess: Boolean, message: String) -> Unit) {
-        val transport: Transport = session.getTransport("smtp")
-        try {
-            //NetworkOnMainThreadException
-            transport.connect()
-            transport.sendMessage(message, message.allRecipients)
-        } catch (e: MessagingException) {
-            onMailResult(false, e.message ?: "")
-        } finally {
-            transport.close()
-            onMailResult(true, "")
+        val transport: Transport = session.getTransport("smtp").apply {
+            addConnectionListener(object: ConnectionListener{
+                override fun opened(e: ConnectionEvent?) {
+                    onMailResult(false, "")
+                }
+
+                override fun closed(e: ConnectionEvent?) {
+                    onMailResult(false, "")
+                }
+
+                override fun disconnected(e: ConnectionEvent?) {
+                    onMailResult(false, "")
+                }
+            })
+            addTransportListener(object: TransportListener {
+                override fun messageNotDelivered(e: TransportEvent?) {
+                    onMailResult(false, "")
+                }
+
+                override fun messageDelivered(e: TransportEvent?) {
+                    onMailResult(true, "")
+                }
+
+                override fun messagePartiallyDelivered(e: TransportEvent?) {
+                    onMailResult(false, "")
+                }
+            })
         }
+        job = CoroutineScope(getExceptionHandler { doOnError(it, onMailResult) }).launch {
+            withContext(Dispatchers.IO) {
+                try {
+                    transport.connect()
+                    transport.sendMessage(message, message.allRecipients)
+                    withContext(Dispatchers.Main) {
+                        onMailResult(true, "")
+                    }
+                } catch (e: MessagingException) {
+                    withContext(Dispatchers.Main) {
+                        val errorMessage = when(e) {
+                            is MailConnectException -> "Не удается соединиться с сервером, попробуйте еще раз"
+                            else -> e.message ?: ""
+                        }
+                        onMailResult(false, errorMessage)
+                    }
+                } finally {
+                    transport.close()
+                }
+            }
+        }
+
+
+    }
+
+    private fun doOnError(error: Throwable, onMailResult: (isSuccess: Boolean, message: String) -> Unit) {
+        onMailResult(false, error.message ?: "")
     }
 }

@@ -14,7 +14,7 @@ class ForumDto(@SerializedName("forumName") val forumName: String,
                @SerializedName("linkForum") val linkForum: String)
 
 class SubForumDto(@SerializedName("forumName") val forumName: String,
-                  @SerializedName("description") val description: String,
+                  @SerializedName("description") val dateTime: String,
                   @SerializedName("countReplic") val countReplic: String,
                   @SerializedName("countTheme") val countTheme: String,
                   @SerializedName("linkForum") val linkForum: String)

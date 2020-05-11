@@ -50,8 +50,8 @@
         android:label="fragment_info"
         tools:layout="@layout/fragment_info" />
     <fragment
-        android:id="@+id/noContentErrorFragment"
-        android:name="ru.komcity.mobile.NoContentErrorFragment"
-        android:label="fragment_no_content_error"
-        tools:layout="@layout/fragment_no_content_error" />
+        android:id="@+id/connectionErrorFragment"
+        android:name="ru.komcity.mobile.ConnectionErrorFragment"
+        android:label="fragment_connection_error"
+        tools:layout="@layout/fragment_connection_error" />
 </navigation>

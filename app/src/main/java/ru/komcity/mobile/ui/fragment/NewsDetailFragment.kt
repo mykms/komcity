@@ -45,7 +45,7 @@ class NewsDetailFragment : BaseFragment(), NewsDetailView {
     override fun getArgs(args: Bundle?) {
         newsPresenter.init(
                 args?.getInt(Constants.EXTRA_NEWS_ID, 0) ?: 0,
-                args?.getString(Constants.EXTRA_NEWS_TITLE, "") ?: "")
+                args?.getString(Constants.EXTRA_TITLE, "") ?: "")
     }
 
     override fun setResourceLayout(): Int {

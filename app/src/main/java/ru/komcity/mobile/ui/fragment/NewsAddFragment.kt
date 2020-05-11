@@ -12,7 +12,9 @@ import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.network.MailSenderData
 import ru.komcity.mobile.presenter.NewsAddPresenter
 import ru.komcity.mobile.repository.SendRepositoryImpl
+import ru.komcity.mobile.ui.adapter.NewsAddFileAdapter
 import ru.komcity.mobile.view.NewsAddView
+import ru.komcity.mobile.viewModel.addnews.AddNewsBaseItem
 
 /**
  * Created by Aleksei Kholoimov on 07.05.2020
@@ -39,6 +41,7 @@ class NewsAddFragment: BaseFragment(), NewsAddView {
         initToolbar()
         initRecyclerView()
         btSend.setOnClickListener {
+            hideKeyboard()
             newsPresenter.checkAndSendNews(etSubject.text.toString(), etDescription.text.toString())
         }
         newsPresenter.getSendParams()
@@ -69,7 +72,14 @@ class NewsAddFragment: BaseFragment(), NewsAddView {
     }
 
     override fun navigateToBackScreen() {
+        hideKeyboard()
         navigateToBack()
+    }
+
+    override fun onFileLoadComplete(items: List<AddNewsBaseItem>) {
+        rvAttaches.adapter = NewsAddFileAdapter(items) {
+            newsPresenter.onAttachFileClick(it)
+        }
     }
 
     override fun onDestroyView() {

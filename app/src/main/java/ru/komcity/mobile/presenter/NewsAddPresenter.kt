@@ -5,6 +5,7 @@ import ru.komcity.mobile.network.MailSender
 import ru.komcity.mobile.network.MailSenderData
 import ru.komcity.mobile.repository.SendRepository
 import ru.komcity.mobile.view.NewsAddView
+import ru.komcity.mobile.viewModel.addnews.AddNewsItemEmpty
 
 /**
  * Created by Aleksei Kholoimov on 07.05.2020
@@ -22,10 +23,11 @@ class NewsAddPresenter constructor(private val sendRepository: SendRepository) :
                 emailFrom = "test201701@yandex.ru",
                 userLogin = "test201701",
                 userPwd = "123456789q",
-                serverHost = "smtp.yandex.com",
+                serverHost = "smtp.yandex.ru",
                 serverPort = "456")
-        viewState.onParamsLoaded(mailData)
         mailSender = MailSender(mailData)
+        viewState.onParamsLoaded(mailData)
+        viewState.onFileLoadComplete(listOf(AddNewsItemEmpty()))
     }
 
     fun checkAndSendNews(subject: String, description: String) {
@@ -44,6 +46,14 @@ class NewsAddPresenter constructor(private val sendRepository: SendRepository) :
                     viewState.navigateToBackScreen()
                 }
             }
+        }
+    }
+
+    fun onAttachFileClick(isEditFile: Boolean) {
+        if (isEditFile) {
+            // delete file dialog
+        } else {
+            // shod add dialog
         }
     }
 

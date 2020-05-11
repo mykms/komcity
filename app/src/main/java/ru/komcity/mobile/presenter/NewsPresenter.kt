@@ -37,16 +37,19 @@ class NewsPresenter constructor(private val newsRepository: NewsRepository): Bas
         viewState.onLoading(false)
         when (throwable) {
             is ConnectException -> {
-                viewState.onError("Не удается соединиться с сервером")
+                //viewState.onError("Не удается соединиться с сервером")
+                navigateTo(R.id.connectionErrorFragment, bundleOf())
             }
             is UnknownHostException -> {
-                viewState.onError("Проверьте связь с интернетом или адрес сервера")
+                //viewState.onError("Проверьте связь с интернетом или адрес сервера")
+                navigateTo(R.id.connectionErrorFragment, bundleOf())
             }
             is IllegalArgumentException -> {
                 viewState.onError("Произошла ошибка, попробуйте позже")
             }
             is SocketTimeoutException -> {
-                viewState.onError("Проверьте связь с интернетом и попробуйте позже")
+                //viewState.onError("Проверьте связь с интернетом и попробуйте позже")
+                navigateTo(R.id.connectionErrorFragment, bundleOf())
             }
             else -> {}
         }
@@ -57,7 +60,7 @@ class NewsPresenter constructor(private val newsRepository: NewsRepository): Bas
             is AddNewsItem -> navigateTo(R.id.newsAdd, bundleOf())
             is NewsItem -> navigateTo(R.id.newsDetailFragment, bundleOf(
                     Constants.EXTRA_NEWS_ID to item.newsId,
-                    Constants.EXTRA_NEWS_TITLE to item.title))
+                    Constants.EXTRA_TITLE to item.title))
             else -> {}
         }
     }

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parentView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/ivAvatar"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@drawable/vector_ic_gingerbread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvUserName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="10dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text=""
+        app:layout_constraintEnd_toStartOf="@+id/tvDateTime"
+        app:layout_constraintStart_toEndOf="@+id/ivAvatar"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="UserName UserName UserName" />
+
+    <TextView
+        android:id="@+id/tvDateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="15:49 10 августа 2020"/>
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="12dp"
+        android:text=""
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ivAvatar"
+        app:layout_constraintTop_toBottomOf="@+id/tvUserName"
+        tools:text="Обсуждение вопросов и новостей про предприятия и организации города. Никакой рекламы. Одна фирма - одна тема. Ну может максимум две темы. Обсуждение вопросов и новостей про предприятия и организации города\n
+Обсуждение вопросов и новостей про предприятия и организации города. Никакой рекламы. Одна фирма - одна тема. Ну может максимум две темы. Обсуждение вопросов и новостей про предприятия и организации города\n
+Обсуждение вопросов и новостей про предприятия и организации города. Никакой рекламы. Одна фирма - одна тема. Ну может максимум две темы. Обсуждение вопросов и новостей про предприятия и организации города\n
+Обсуждение вопросов и новостей про предприятия и организации города. Никакой рекламы. Одна фирма - одна тема. Ну может максимум две темы. Обсуждение вопросов и новостей про предприятия и организации города" />
+
+    <ImageView
+        android:id="@+id/ivCopyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="30dp"
+        android:src="@drawable/vector_ic_copy"
+        app:layout_constraintEnd_toStartOf="@+id/ivShareText"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
+
+    <ImageView
+        android:id="@+id/ivShareText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/vector_ic_share"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -43,7 +43,7 @@ class MainActivity: AppCompatActivity(), MainActivityView {
             R.id.announcementsFragment -> navController.navigate(resourceIdNav, args)
             R.id.newsAdd -> navController.navigate(resourceIdNav, args)
             android.R.id.home -> navController.popBackStack()
-            else -> navController.navigate(R.id.noContentErrorFragment)
+            else -> navController.navigate(R.id.connectionErrorFragment)
         }
         //invalidateOptionsMenu()
         return true

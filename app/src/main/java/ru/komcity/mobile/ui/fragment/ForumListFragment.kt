@@ -18,6 +18,7 @@ import ru.komcity.mobile.view.ForumView
 import ru.komcity.mobile.viewModel.ForumItem
 import ru.komcity.mobile.viewModel.ForumMessagesItem
 import ru.komcity.mobile.viewModel.SubForumItem
+import ru.komcity.uicomponent.DividerWithRemoveDecorator
 
 class ForumListFragment : BaseFragment(), ForumView {
 
@@ -43,21 +44,44 @@ class ForumListFragment : BaseFragment(), ForumView {
     private fun initRecyclerView() = with(rvListForum) {
         setHasFixedSize(true)
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        addItemDecoration(DividerWithRemoveDecorator(context, R.drawable.recycler_divider, 0, 1))
     }
 
     override fun onLoading(isLoading: Boolean) {
         progress.isVisible = isLoading
     }
 
+    override fun onError(message: String) {
+        onMessage(message)
+    }
+
+    override fun navigateToScreen(screenId: Int, args: Bundle) {
+        navigateTo(screenId, args)
+    }
+
+    override fun navigateToBackScreen() {
+    }
+
+    override fun setToolbarTitle(title: String) {
+    }
+
     override fun onForumList(items: List<ForumItem>) {
-        rvListForum.adapter = ForumAdapter(items) {
-            navigateTo(R.id.forumSubListDetailFragment, bundleOf(Constants.EXTRA_FORUM_ID to it))
+        rvListForum.adapter = ForumAdapter(items) { title, forumName ->
+            navigateTo(R.id.forumSubListDetailFragment, bundleOf(
+                    Constants.EXTRA_TITLE to title,
+                    Constants.EXTRA_FORUM_NAME to forumName))
         }
     }
 
-    override fun onSubForumList(items: List<SubForumItem>) {
+    override fun onSubForumList(items: List<SubForumItem>, forumName: String) {
     }
 
     override fun onForumMessages(items: List<ForumMessagesItem>) {
+    }
+
+    override fun onCopyText(text: String) {
+    }
+
+    override fun onShareText(text: String) {
     }
 }

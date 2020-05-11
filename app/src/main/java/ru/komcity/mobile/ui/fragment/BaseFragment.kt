@@ -49,13 +49,10 @@ abstract class BaseFragment : MvpAppCompatFragment(), MvpView {
     }
 
     protected fun hideKeyboard() {
-        val imm = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        var view = activity?.currentFocus
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
-        if (view == null) {
-            view = View(activity)
+        (activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager).apply {
+            val view = activity?.currentFocus ?: View(activity)
+            hideSoftInputFromWindow(view.windowToken, 0)
         }
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     fun onMessage(message: String) {

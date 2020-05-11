@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parentView"
     android:layout_width="match_parent"
-    android:layout_height="90dp">
+    android:layout_height="120dp"
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/tvTitle"
@@ -19,28 +21,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/lineTopInfo"
-        tools:text="TextView" />
+        tools:text="Обсуждение новостей и прочей городской ерунды которая никому не нужна" />
 
     <TextView
         android:id="@+id/tvThemeCount"
-        android:layout_width="40dp"
+        android:layout_width="80dp"
         android:layout_height="0dp"
         android:layout_alignParentTop="true"
+        android:gravity="center_horizontal"
         android:text=""
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tvReplicCount"
         app:layout_constraintBottom_toTopOf="@+id/lineTopInfo"
-        tools:text="Тем 400" />
+        tools:text="99 999 999" />
 
     <TextView
         android:id="@+id/tvReplicCount"
-        android:layout_width="50dp"
+        android:layout_width="80dp"
         android:layout_height="0dp"
+        android:gravity="center_horizontal"
         android:text=""
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tvDescription"
         app:layout_constraintBottom_toTopOf="@+id/lineTopInfo"
-        tools:text="Реплик" />
+        tools:text="99 999 999" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/lineTopInfo"
@@ -53,6 +57,8 @@
         android:id="@+id/tvDescription"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:gravity="start|top"
         android:ellipsize="end"
         android:maxLines="3"
         android:text=""
@@ -60,5 +66,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lineTopInfo"
-        tools:text="Description" />
+        tools:text="Обсуждение вопросов и новостей про предприятия и организации города. Никакой рекламы. Одна фирма - одна тема. Ну может максимум две темы. Обсуждение вопросов и новостей про предприятия и организации города" />
 </androidx.constraintlayout.widget.ConstraintLayout>

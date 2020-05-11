@@ -14,7 +14,7 @@ import ru.komcity.mobile.viewModel.ForumItem
  * Адаптер для списка форумов
  */
 class ForumAdapter(private val items: List<ForumItem>,
-                   private val listener: (item: String) -> Unit) : RecyclerView.Adapter<ForumAdapter.ViewHolder>() {
+                   private val listener: (title: String, forumName: String) -> Unit) : RecyclerView.Adapter<ForumAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_forum, parent, false)
@@ -42,11 +42,11 @@ class ForumAdapter(private val items: List<ForumItem>,
 
         private fun initClickListener(itemView: View, item: ForumItem) {
             with(itemView) {
-                tvTitle.setOnClickListener {listener(item.linkForum)  }
-                tvThemeCount.setOnClickListener {listener(item.linkForum)  }
-                tvReplicCount.setOnClickListener {listener(item.linkForum)  }
-                tvDescription.setOnClickListener {listener(item.linkForum)  }
-                setOnClickListener { listener(item.linkForum) }
+                tvTitle.setOnClickListener {listener(item.forumName, item.linkForum)  }
+                tvThemeCount.setOnClickListener {listener(item.forumName, item.linkForum)  }
+                tvReplicCount.setOnClickListener {listener(item.forumName, item.linkForum)  }
+                tvDescription.setOnClickListener {listener(item.forumName, item.linkForum)  }
+                setOnClickListener { listener(item.forumName, item.linkForum) }
             }
         }
     }

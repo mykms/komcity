@@ -18,6 +18,7 @@ import ru.komcity.mobile.view.ForumView
 import ru.komcity.mobile.viewModel.ForumItem
 import ru.komcity.mobile.viewModel.ForumMessagesItem
 import ru.komcity.mobile.viewModel.SubForumItem
+import ru.komcity.uicomponent.DividerWithRemoveDecorator
 
 class SubForumFragment : BaseFragment(), ForumView {
 
@@ -29,7 +30,8 @@ class SubForumFragment : BaseFragment(), ForumView {
     fun providePresenter() = ForumPresenter(repo)
 
     override fun getArgs(args: Bundle?) {
-        //
+        forumPresenter.initSubForumState(args?.getString(Constants.EXTRA_TITLE, "") ?: "",
+                args?.getString(Constants.EXTRA_FORUM_NAME, "") ?: "")
     }
 
     override fun setResourceLayout(): Int {
@@ -37,28 +39,63 @@ class SubForumFragment : BaseFragment(), ForumView {
     }
 
     override fun initComponents(view: View) {
+        initToolbar()
         initRecyclerView()
         forumPresenter.getSubForum()
+    }
+
+    private fun initToolbar() = with(toolbar) {
+        title = ""
+        setNavigationIcon(R.drawable.vector_ic_arrow_back_white)
+        setNavigationOnClickListener {
+            forumPresenter.navigateToBackScreen()
+        }
     }
 
     private fun initRecyclerView() = with(rvSubForum) {
         setHasFixedSize(true)
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        addItemDecoration(DividerWithRemoveDecorator(context, R.drawable.recycler_divider, 0, 1))
     }
 
     override fun onLoading(isLoading: Boolean) {
         progress.isVisible = isLoading
     }
 
+    override fun onError(message: String) {
+        onMessage(message)
+    }
+
+    override fun navigateToScreen(screenId: Int, args: Bundle) {
+        navigateTo(screenId, args)
+    }
+
+    override fun navigateToBackScreen() {
+        navigateToBack()
+    }
+
+    override fun setToolbarTitle(title: String) {
+        toolbar.title = title
+    }
+
     override fun onForumList(items: List<ForumItem>) {
     }
 
-    override fun onSubForumList(items: List<SubForumItem>) {
-        rvSubForum.adapter = SubForumAdapter(items) {
-            navigateTo(R.id.forumDetailMessageFragment, bundleOf(Constants.EXTRA_SUB_FORUM_ID to it))
+    override fun onSubForumList(items: List<SubForumItem>, forumName: String) {
+        rvSubForum.adapter = SubForumAdapter(items) { title, forumId ->
+            navigateTo(R.id.forumDetailMessageFragment, bundleOf(
+                    Constants.EXTRA_TITLE to title,
+                    Constants.EXTRA_FORUM_NAME to forumName,
+                    Constants.EXTRA_SUB_FORUM_ID to forumId))
         }
     }
 
     override fun onForumMessages(items: List<ForumMessagesItem>) {
+    }
+
+    override fun onCopyText(text: String) {
+    }
+
+    override fun onShareText(text: String) {
     }
 }
