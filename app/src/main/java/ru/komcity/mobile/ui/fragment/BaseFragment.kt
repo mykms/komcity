@@ -28,7 +28,6 @@ abstract class BaseFragment : MvpAppCompatFragment(), MvpView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getArgs(arguments)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -37,6 +36,7 @@ abstract class BaseFragment : MvpAppCompatFragment(), MvpView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getArgs(arguments)
         initComponents(view)
     }
 

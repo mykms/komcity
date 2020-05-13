@@ -32,7 +32,6 @@ class MainActivity: AppCompatActivity(), MainActivityView {
     private fun navigateApp(navController: NavController, @IdRes resourceIdNav: Int, args: Bundle): Boolean {
         when(resourceIdNav) {
             R.id.newsListFragment -> {
-                //args.putBoolean(Constants.EXTRA_IS_PANEL_VISIBLE, isVisibleBottomPanel())
                 navController.navigate(resourceIdNav, args)
             }
             R.id.newsDetailFragment -> navController.navigate(resourceIdNav, args)
@@ -42,6 +41,7 @@ class MainActivity: AppCompatActivity(), MainActivityView {
             R.id.announcementFilterFragment -> navController.navigate(resourceIdNav, args)
             R.id.announcementsFragment -> navController.navigate(resourceIdNav, args)
             R.id.newsAdd -> navController.navigate(resourceIdNav, args)
+            R.id.imageViewFragment -> navController.navigate(resourceIdNav, args)
             android.R.id.home -> navController.popBackStack()
             else -> navController.navigate(R.id.connectionErrorFragment)
         }

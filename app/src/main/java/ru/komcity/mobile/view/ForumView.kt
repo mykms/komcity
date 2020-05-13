@@ -1,6 +1,7 @@
 package ru.komcity.mobile.view
 
 import android.os.Bundle
+import com.sharetosocial.android.SocialApp
 import moxy.MvpView
 import moxy.viewstate.strategy.OneExecutionStateStrategy
 import moxy.viewstate.strategy.StateStrategyType
@@ -18,5 +19,7 @@ interface ForumView : MvpView {
     @StateStrategyType(OneExecutionStateStrategy::class) fun onSubForumList(items: List<SubForumItem>, forumName: String)
     @StateStrategyType(OneExecutionStateStrategy::class) fun onForumMessages(items: List<ForumMessagesItem>)
     @StateStrategyType(OneExecutionStateStrategy::class) fun onCopyText(text: String)
-    @StateStrategyType(OneExecutionStateStrategy::class) fun onShareText(text: String)
+    @StateStrategyType(OneExecutionStateStrategy::class) fun showSocial()
+    @StateStrategyType(OneExecutionStateStrategy::class) fun hideSocial()
+    @StateStrategyType(OneExecutionStateStrategy::class) fun onShareSocial(item: SocialApp, description: String)
 }

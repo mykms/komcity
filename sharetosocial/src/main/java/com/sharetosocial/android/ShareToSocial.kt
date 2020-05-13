@@ -46,10 +46,7 @@ class ShareToSocial(context: Context?, attrs: AttributeSet?) : RelativeLayout(co
     }
 
     private fun checkMediaFileAndShare(packageName: String) {
-        mediaFile?.let {
-            setPackageToShare(packageName)
-        } ?: Toast.makeText(context, "Выберите файл, чтобы поделиться", Toast.LENGTH_SHORT)
-                .show()
+        setPackageToShare(packageName)
     }
 
     fun setOnSocialClickListener(onSocialClick: (item: SocialApp) -> Unit) {
@@ -59,7 +56,7 @@ class ShareToSocial(context: Context?, attrs: AttributeSet?) : RelativeLayout(co
     /**
      * Поделиться файлом и описанием
      */
-    fun shareMedia(item: SocialApp, mediaFile: File, mediaDescription: String) {
+    fun shareMedia(item: SocialApp, mediaFile: File?, mediaDescription: String) {
         this.mediaFile = mediaFile
         this.mediaDescription = mediaDescription
         when (item) {
@@ -110,23 +107,35 @@ class ShareToSocial(context: Context?, attrs: AttributeSet?) : RelativeLayout(co
     private fun shareToApp(packageName: String) {
         val shareIntent = Intent(Intent.ACTION_SEND).apply {
             action = Intent.ACTION_SEND
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            type = "image/*"
             putExtra(Intent.EXTRA_TEXT, mediaDescription)
+            type = "text/plain"
             setPackage(packageName)
         }
-        try {
-            if (mediaFile?.exists() == true) {
-                val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    mediaFile?.let { FileProvider.getUriForFile(context, context.packageName + ".provider", it) }
-                } else {
-                    Uri.fromFile(mediaFile)
-                }
-                shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
-            }
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }
+        addFileInfoIfExist(shareIntent)
         context.startActivity(Intent.createChooser(shareIntent, "Поделиться в"))
+    }
+
+    private fun addFileInfoIfExist(intent: Intent): Intent {
+        return mediaFile?.let {
+            try {
+                if (mediaFile?.exists() == true) {
+                    val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        mediaFile?.let { FileProvider.getUriForFile(context, context.packageName + ".provider", it) }
+                    } else {
+                        Uri.fromFile(mediaFile)
+                    }
+                    intent.apply {
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        type = "image/*"
+                        putExtra(Intent.EXTRA_STREAM, uri)
+                    }
+                } else {
+                    intent
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+                intent
+            }
+        } ?: intent
     }
 }

@@ -2,6 +2,7 @@ package ru.komcity.mobile.presenter
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
+import com.sharetosocial.android.SocialApp
 import kotlinx.coroutines.*
 import moxy.InjectViewState
 import ru.komcity.mobile.R
@@ -22,7 +23,9 @@ class ForumPresenter constructor(private val forumRepository: ForumRepository): 
     private var title = ""
     private var forumName = ""
     private var subForumId = ""
-    private val hideSocialTimer = Timer()
+    private var socialItem: SocialApp = SocialApp.unknown
+    private var shareText = ""
+    private var hideSocialTimer: Timer? = null
 
     fun initSubForumState(title: String, forumName: String) {
         this.title = title
@@ -122,11 +125,36 @@ class ForumPresenter constructor(private val forumRepository: ForumRepository): 
     }
 
     fun onForumMessageAction(text: String, isShare: Boolean) {
-        if (isShare) {
-            viewState.onCopyText(text)
+        shareText = if (isShare) {
+            viewState.showSocial()
+            startTimer()
+            text
         } else {
-            viewState.onShareText(text)
+            viewState.onCopyText(text)
+            ""
         }
+    }
+
+    private fun startTimer() {
+        stopTimer()
+        hideSocialTimer = Timer().apply {
+            schedule(object : TimerTask() {
+                override fun run() {
+                    viewState.hideSocial()
+                    stopTimer()
+                }
+            }, 5 * 1000.toLong()) // Скроем через 5 секунд
+        }
+    }
+
+    private fun stopTimer() {
+        hideSocialTimer?.cancel()
+        hideSocialTimer = null
+    }
+
+    fun onShareSocialClick(item: SocialApp) {
+        socialItem = item
+        viewState.onShareSocial(socialItem, shareText)
     }
 
     override fun onDestroy() {

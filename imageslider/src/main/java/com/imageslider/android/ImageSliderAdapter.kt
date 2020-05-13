@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
@@ -50,13 +51,16 @@ internal class ImageSliderAdapter(private val items: List<String>,
             target = object: Target {
                 override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
                     itemView.imageItem.setImageDrawable(placeHolderDrawable)
+                    itemView.imageItem.scaleType = ImageView.ScaleType.FIT_CENTER
                 }
 
                 override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-                    itemView.imageItem.setImageDrawable(errorDrawable)
+                    itemView.imageItem.scaleType = ImageView.ScaleType.FIT_CENTER
+                    itemView.imageItem.setImageResource(R.drawable.vector_ic_warning)
                 }
 
                 override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                    itemView.imageItem.scaleType = ImageView.ScaleType.CENTER_CROP
                     itemView.imageItem.setImageBitmap(bitmap)
                     itemView.imageItem.setOnClickListener { itemCallback?.onImageClick(bitmap, position) }
                     itemCallback?.onImageLoaded(bitmap, position)

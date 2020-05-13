@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.sharetosocial.android.SocialApp
 import kotlinx.android.synthetic.main.fragment_forum_sub_list_detail.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
@@ -96,6 +97,12 @@ class SubForumFragment : BaseFragment(), ForumView {
     override fun onCopyText(text: String) {
     }
 
-    override fun onShareText(text: String) {
+    override fun showSocial() {
+    }
+
+    override fun hideSocial() {
+    }
+
+    override fun onShareSocial(item: SocialApp, description: String) {
     }
 }

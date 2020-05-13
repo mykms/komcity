@@ -11,5 +11,6 @@ enum class SocialApp {
     vkontakte,
     twitter,
     facebook,
-    instagram;
+    instagram,
+    unknown;
 }

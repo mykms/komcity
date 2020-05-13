@@ -5,8 +5,10 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.sharetosocial.android.SocialApp
 import kotlinx.android.synthetic.main.fragment_forum_detail_message.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
@@ -44,6 +46,7 @@ class ForumMessagesFragment : BaseFragment(), ForumView {
     override fun initComponents(view: View) {
         initToolbar()
         initRecyclerView()
+        initSocial()
         forumPresenter.getForumMessages()
     }
 
@@ -61,6 +64,13 @@ class ForumMessagesFragment : BaseFragment(), ForumView {
         addItemDecoration(DividerWithRemoveDecorator(context, R.drawable.recycler_divider, 0, 1))
     }
 
+    private fun initSocial() = with(viewShare) {
+        isVisible = false
+        setOnSocialClickListener {
+            forumPresenter.onShareSocialClick(it)
+        }
+    }
+
     override fun onCopyText(text: String) {
         context?.let {
             copyToClipBoardBuffer(it, text)
@@ -68,32 +78,28 @@ class ForumMessagesFragment : BaseFragment(), ForumView {
         }
     }
 
-    override fun onShareText(text: String) {
-        // Если спрятано, то покажем
-        if (viewShare.getVisibility() === View.GONE) {
-            viewShare.setVisibility(View.VISIBLE)
-            //viewShare.setTextForShare(textForShare)
-            // Если таймер без работы
-//            hideTimer.schedule(object : TimerTask() {
-//                override fun run() {
-//                    activity?.runOnUiThread(Runnable {
-//                        if (viewShare.getVisibility() === View.VISIBLE) {
-//                            viewShare.setVisibility(View.GONE)
-//                            if (hideTimer != null) {
-//                                hideTimer.cancel()
-//                                hideTimer = null
-//                            }
-//                        }
-//                    })
-//                }
-//            }, 5 * 1000.toLong()) // Скроем через 5 секунд
-        }
-    }
-
     private fun copyToClipBoardBuffer(context: Context, text: String) {
         (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).apply {
             setPrimaryClip(ClipData.newPlainText("forum_copy_text", text))
         }
+    }
+
+    override fun showSocial() {
+        if (!viewShare.isVisible) {
+            viewShare.isVisible = true
+        }
+    }
+
+    override fun hideSocial() {
+        activity?.runOnUiThread {
+            if (viewShare.isVisible) {
+                viewShare.isVisible = false
+            }
+        }
+    }
+
+    override fun onShareSocial(item: SocialApp, description: String) {
+        viewShare.shareMedia(item, null, description)
     }
 
     override fun onLoading(isLoading: Boolean) {

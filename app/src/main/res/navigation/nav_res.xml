@@ -54,4 +54,9 @@
         android:name="ru.komcity.mobile.ConnectionErrorFragment"
         android:label="fragment_connection_error"
         tools:layout="@layout/fragment_connection_error" />
+    <fragment
+        android:id="@+id/imageViewFragment"
+        android:name="ru.komcity.mobile.ui.fragment.ImageViewFragment"
+        android:label="fragment_image_view"
+        tools:layout="@layout/fragment_image_view" />
 </navigation>

@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.imageslider.android.ImageSliderCallback
 import com.sharetosocial.android.SocialApp
@@ -103,6 +104,7 @@ class NewsDetailFragment : BaseFragment(), NewsDetailView {
         imageSliderView.apply {
             setOnImageClickListener(object : ImageSliderCallback {
                 override fun onImageClick(bitmap: Bitmap?, position: Int) {
+                    newsPresenter.navigateTo(R.id.imageViewFragment, bundleOf("Bitmap" to bitmap))
                 }
 
                 override fun onImageLoaded(bitmap: Bitmap?, position: Int) {
