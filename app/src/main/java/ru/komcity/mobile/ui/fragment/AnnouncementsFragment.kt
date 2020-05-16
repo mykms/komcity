@@ -73,6 +73,14 @@ class AnnouncementsFragment : BaseFragment(), AnnouncementsView {
         progress.isVisible = isLoading
     }
 
+    override fun navigateToScreen(screenId: Int, args: Bundle) {
+        navigateTo(screenId, args)
+    }
+
+    override fun onError(message: String) {
+        onMessage(message)
+    }
+
     override fun navigateToBackScreen() {
         navigateToBack()
     }

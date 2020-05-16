@@ -1,4 +1,4 @@
-package ru.komcity.mobile
+package ru.komcity.mobile.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_connection_error.*
+import ru.komcity.mobile.R
 import ru.komcity.mobile.view.MainActivityView
 
 class ConnectionErrorFragment : Fragment() {

@@ -43,6 +43,7 @@ class MainActivity: AppCompatActivity(), MainActivityView {
             R.id.announcementsFragment -> navController.navigate(resourceIdNav, args)
             R.id.newsAdd -> navController.navigate(resourceIdNav, args)
             R.id.imageViewFragment -> navController.navigate(resourceIdNav, args)
+            R.id.infoFragment -> navController.navigate(resourceIdNav, args)
             android.R.id.home -> navController.popBackStack()
             else -> navController.navigate(R.id.connectionErrorFragment)
         }

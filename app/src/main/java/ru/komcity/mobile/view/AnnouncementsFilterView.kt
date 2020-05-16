@@ -14,6 +14,7 @@ import moxy.viewstate.strategy.StateStrategyType
 interface AnnouncementsFilterView : MvpView {
     @StateStrategyType(OneExecutionStateStrategy::class) fun onLoading(isLoading: Boolean)
     @StateStrategyType(SkipStrategy::class) fun navigateToScreen(screenId: Int, args: Bundle)
+    @StateStrategyType(OneExecutionStateStrategy::class) fun onError(message: String)
     @StateStrategyType(OneExecutionStateStrategy::class) fun showMessage(message: String)
     @StateStrategyType(OneExecutionStateStrategy::class) fun navigateToBackScreen()
     @StateStrategyType(OneExecutionStateStrategy::class) fun setCategoryTitle(text: String, isCloseVisible: Boolean)

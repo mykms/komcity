@@ -1,11 +1,10 @@
 package ru.komcity.mobile.presenter
 
+import android.os.Bundle
 import androidx.core.os.bundleOf
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import moxy.InjectViewState
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.Constants
@@ -13,6 +12,9 @@ import ru.komcity.mobile.repository.AnnouncementsFilterRepository
 import ru.komcity.mobile.view.AnnouncementsFilterView
 import ru.komcity.mobile.viewModel.AnnouncementCategory
 import ru.komcity.mobile.viewModel.AnnouncementSubCategory
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 /**
  * Created by Aleksey on 2020.03.01
@@ -39,48 +41,64 @@ class AnnouncementsFilterPresenter constructor(private val repository: Announcem
     }
 
     fun getFilters() {
-        filterJob = CoroutineScope(Dispatchers.Main).launch {
-            viewState.onLoading(true)
-            repository.getAnnouncementFilters()
-                    .onStart {
-                        categories.clear()
-                    }
-                    .catch {
-                        viewState.onLoading(false)
-                        it.printStackTrace()
-                    }
-                    .map {
-                        categories.add(AnnouncementCategory(it.title, it.items))
-                    }
-                    .onCompletion {
-                        viewState.onLoading(false)
-                        setCategoryTitle()
-                        setSubCategoryTitle()
-                    }
-                    .collect()
+        viewState.onLoading(true)
+        categories.clear()
+        filterJob = CoroutineScope(getExceptionHandler { doOnError(it) }).launch {
+            withContext(Dispatchers.IO) {
+                val item = repository.getAnnouncementFilters().map {
+                    categories.add(AnnouncementCategory(it.title, it.items))
+                }
+                item.collect()
+                withContext(Dispatchers.Main) {
+                    setCategoryTitle()
+                    setSubCategoryTitle()
+                    viewState.onLoading(false)
+                }
+            }
         }
     }
 
+    private fun doOnError(throwable: Throwable) {
+        viewState.onLoading(false)
+        when (throwable) {
+            is ConnectException -> {
+                //viewState.onError("Не удается соединиться с сервером")
+                navigateTo(R.id.connectionErrorFragment, bundleOf())
+            }
+            is UnknownHostException -> {
+                //viewState.onError("Проверьте связь с интернетом или адрес сервера")
+                navigateTo(R.id.connectionErrorFragment, bundleOf())
+            }
+            is IllegalArgumentException -> {
+                viewState.onError("Произошла ошибка, попробуйте позже")
+            }
+            is SocketTimeoutException -> {
+                //viewState.onError("Проверьте связь с интернетом и попробуйте позже")
+                navigateTo(R.id.connectionErrorFragment, bundleOf())
+            }
+            else -> {}
+        }
+    }
+
+    private fun navigateTo(screenId: Int, args: Bundle) {
+        viewState.navigateToScreen(screenId, args)
+    }
+
     private fun getFilterDetails(ref1: Int, ref2: Int) {
-        filterJob = CoroutineScope(Dispatchers.Main).launch {
-            viewState.onLoading(true)
-            repository.getAnnouncementSubCategories(ref1, ref2)
-                    .onStart {
-                        subCategories.clear()
-                    }
-                    .catch {
-                        viewState.onLoading(false)
-                        it.printStackTrace()
-                    }
-                    .map {
-                        subCategories.add(AnnouncementSubCategory(it.title, it.items))
-                    }
-                    .onCompletion {
-                        viewState.onLoading(false)
-                        setDetailCategoryTitle()
-                        setDetailSubCategoryTitle()
-                    }
-                    .collect()
+        viewState.onLoading(true)
+        subCategories.clear()
+        filterJob = CoroutineScope(getExceptionHandler { doOnError(it) }).launch {
+            withContext(Dispatchers.IO) {
+                val item = repository.getAnnouncementSubCategories(ref1, ref2).map {
+                    subCategories.add(AnnouncementSubCategory(it.title, it.items))
+                }
+                item.collect()
+                withContext(Dispatchers.Main) {
+                    setDetailCategoryTitle()
+                    setDetailSubCategoryTitle()
+                    viewState.onLoading(false)
+                }
+            }
         }
     }
 

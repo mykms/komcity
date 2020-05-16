@@ -113,6 +113,10 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
         navigateTo(screenId, args)
     }
 
+    override fun onError(message: String) {
+        onMessage(message)
+    }
+
     override fun showMessage(message: String) {
         onMessage(message)
     }

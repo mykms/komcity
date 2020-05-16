@@ -51,7 +51,7 @@
         tools:layout="@layout/fragment_info" />
     <fragment
         android:id="@+id/connectionErrorFragment"
-        android:name="ru.komcity.mobile.ConnectionErrorFragment"
+        android:name="ru.komcity.mobile.ui.fragment.ConnectionErrorFragment"
         android:label="fragment_connection_error"
         tools:layout="@layout/fragment_connection_error" />
     <fragment
