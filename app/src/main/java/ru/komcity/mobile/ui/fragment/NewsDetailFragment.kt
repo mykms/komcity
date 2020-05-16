@@ -20,6 +20,8 @@ import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.Constants
+import ru.komcity.mobile.common.analytic.AnalyticManager
+import ru.komcity.mobile.common.analytic.AnalyticManagerImpl
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.presenter.NewsDetailPresenter
 import ru.komcity.mobile.repository.NewsRepositoryImpl
@@ -40,8 +42,14 @@ class NewsDetailFragment : BaseFragment(), NewsDetailView {
     lateinit var newsPresenter: NewsDetailPresenter
     @ProvidePresenter
     fun providePresenter() = NewsDetailPresenter(repo)
+    private lateinit var analytics: AnalyticManager
 
     var item = NewsItem("", "", "", "", emptyList(), 0, 0)
+
+    override fun onCreateInit(clientId: String, context: Context) {
+        analytics = AnalyticManagerImpl(clientId, context)
+        analytics.onScreenOpen(Constants.SCREEN_NAME_NEWS_DETAILS)
+    }
 
     override fun getArgs(args: Bundle?) {
         newsPresenter.init(
@@ -130,6 +138,9 @@ class NewsDetailFragment : BaseFragment(), NewsDetailView {
     }
 
     override fun setVisibilitySharePanel(isVisible: Boolean) {
+        if (isVisible) {
+            analytics.onShareInfoClick(Constants.SCREEN_NAME_NEWS_DETAILS)
+        }
         viewShare.isVisible = isVisible
         viewShare.setOnSocialClickListener {
             // Запросить права на сохранение медиа
@@ -157,6 +168,7 @@ class NewsDetailFragment : BaseFragment(), NewsDetailView {
     override fun onSaveMediaSuccess(item: SocialApp, file: File) {
         val text = tvDescription.text?.toString() ?: ""
         viewShare.shareMedia(item, file, text)
+        analytics.onShareInfoComplete(Constants.SCREEN_NAME_NEWS_DETAILS, item.name)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

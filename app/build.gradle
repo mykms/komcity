@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.firebase.crashlytics'
 apply from: "$rootProject.projectDir/depends.gradle"
 
 android {
@@ -22,6 +23,7 @@ android {
         targetSdkVersion AndroidSDK.targetApi
         versionCode 5
         versionName "1.0.5"
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -62,6 +64,11 @@ dependencies {
     implementation kotlinDepends.core
     implementation kotlinDepends.coroutinesCore
     implementation kotlinDepends.coroutinesAndroid
+
+    implementation firebase.core
+    implementation firebase.messaging
+    implementation firebase.crashlytics
+    implementation firebase.analytics
 
     implementation moxyDepends.moxy
     implementation moxyDepends.moxyAndroidX

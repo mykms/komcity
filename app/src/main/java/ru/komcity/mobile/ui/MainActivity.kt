@@ -1,5 +1,6 @@
 package ru.komcity.mobile.ui
 
+import android.content.Context
 import android.os.Bundle
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
@@ -55,6 +56,14 @@ class MainActivity: AppCompatActivity(), MainActivityView {
 
     override fun navigateToBack() {
         this.onBackPressed()
+    }
+
+    override fun getClientId(): String {
+        var userId = ""
+        getSharedPreferences("ru.komcity.mobile", Context.MODE_PRIVATE).apply {
+            userId = getString("USER_ID", "") ?: ""
+        }
+        return userId
     }
 
     override fun onMessage(message: String) {

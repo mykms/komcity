@@ -1,5 +1,6 @@
 package ru.komcity.mobile.ui.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
@@ -11,6 +12,8 @@ import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.Constants
+import ru.komcity.mobile.common.analytic.AnalyticManager
+import ru.komcity.mobile.common.analytic.AnalyticManagerImpl
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.presenter.ForumPresenter
 import ru.komcity.mobile.repository.ForumRepositoryImpl
@@ -29,6 +32,12 @@ class SubForumFragment : BaseFragment(), ForumView {
     lateinit var forumPresenter: ForumPresenter
     @ProvidePresenter
     fun providePresenter() = ForumPresenter(repo)
+    private lateinit var analytics: AnalyticManager
+
+    override fun onCreateInit(clientId: String, context: Context) {
+        analytics = AnalyticManagerImpl(clientId, context)
+        analytics.onScreenOpen(Constants.SCREEN_NAME_FORUM_DETAILS)
+    }
 
     override fun getArgs(args: Bundle?) {
         forumPresenter.initSubForumState(args?.getString(Constants.EXTRA_TITLE, "") ?: "",
@@ -84,6 +93,7 @@ class SubForumFragment : BaseFragment(), ForumView {
 
     override fun onSubForumList(items: List<SubForumItem>, forumName: String) {
         rvSubForum.adapter = SubForumAdapter(items) { title, forumId ->
+            analytics.onForumMessagesClick(forumId)
             navigateTo(R.id.forumDetailMessageFragment, bundleOf(
                     Constants.EXTRA_TITLE to title,
                     Constants.EXTRA_FORUM_NAME to forumName,

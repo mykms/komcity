@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import moxy.InjectViewState
 import ru.komcity.mobile.repository.AnnouncementsRepository
 import ru.komcity.mobile.view.AnnouncementsView
+import ru.komcity.mobile.viewModel.Announcement
 
 /**
  * Created by Aleksey on 2020.03.01
@@ -20,7 +21,7 @@ class AnnouncementsPresenter constructor(private val repository: AnnouncementsRe
 
     private var announcementJob: Job? = null
     private var id = 0
-    private val items = arrayListOf<String>()
+    private val items = arrayListOf<Announcement>()
 
     fun initState(id: String) {
         this.id = id.removePrefix("r").toIntOrNull() ?: 0

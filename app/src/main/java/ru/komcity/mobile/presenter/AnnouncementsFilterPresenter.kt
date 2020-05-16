@@ -1,8 +1,11 @@
 package ru.komcity.mobile.presenter
 
 import androidx.core.os.bundleOf
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import moxy.InjectViewState
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.Constants
@@ -247,6 +250,7 @@ class AnnouncementsFilterPresenter constructor(private val repository: Announcem
             val items = subCategories[selectedDetailCategoryPosition].items
             if (items.size > selectedDetailSubCategoryPosition && selectedDetailSubCategoryPosition >= 0) {
                 val id = items[selectedDetailSubCategoryPosition].id
+                viewState.onShowClick(id)
                 viewState.navigateToScreen(R.id.announcementsFragment, bundleOf(Constants.EXTRA_ANNOUNCEMENTS_ID to id))
             }
         } else {

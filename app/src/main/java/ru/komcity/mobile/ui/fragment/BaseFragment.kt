@@ -28,6 +28,9 @@ abstract class BaseFragment : MvpAppCompatFragment(), MvpView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        context?.let {
+            onCreateInit(activityListener?.getClientId() ?: "", it)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -87,6 +90,14 @@ abstract class BaseFragment : MvpAppCompatFragment(), MvpView {
         activityListener = null
     }
 
+    /**
+     * Инициализация метода onCreate
+     */
+    abstract fun onCreateInit(clientId: String, context: Context)
+
+    /**
+     * Получаем переданные аргументы
+     */
     abstract fun getArgs(args: Bundle?)
     /**
      * Устанавливает разметку

@@ -1,5 +1,6 @@
 package ru.komcity.mobile.ui.fragment
 
+import android.content.Context
 import android.graphics.drawable.ShapeDrawable
 import android.os.Bundle
 import android.view.View
@@ -12,12 +13,15 @@ import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.Constants
+import ru.komcity.mobile.common.analytic.AnalyticManager
+import ru.komcity.mobile.common.analytic.AnalyticManagerImpl
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.presenter.AnnouncementsPresenter
 import ru.komcity.mobile.repository.AnnouncementsRepositoryImpl
 import ru.komcity.mobile.repository.mapping.AnnouncementsMapper
 import ru.komcity.mobile.ui.adapter.AnnouncementAdapter
 import ru.komcity.mobile.view.AnnouncementsView
+import ru.komcity.mobile.viewModel.Announcement
 
 class AnnouncementsFragment : BaseFragment(), AnnouncementsView {
 
@@ -27,6 +31,12 @@ class AnnouncementsFragment : BaseFragment(), AnnouncementsView {
     lateinit var presenter: AnnouncementsPresenter
     @ProvidePresenter
     fun providePresenter() = AnnouncementsPresenter(repo)
+    private lateinit var analytics: AnalyticManager
+
+    override fun onCreateInit(clientId: String, context: Context) {
+        analytics = AnalyticManagerImpl(clientId, context)
+        analytics.onScreenOpen(Constants.SCREEN_NAME_ANNOUNCEMENTS)
+    }
 
     override fun getArgs(args: Bundle?) {
         args?.let {
@@ -67,8 +77,9 @@ class AnnouncementsFragment : BaseFragment(), AnnouncementsView {
         navigateToBack()
     }
 
-    override fun showAnnouncements(items: List<String>) {
+    override fun showAnnouncements(items: List<Announcement>) {
         rvAnnouncements.adapter = AnnouncementAdapter(items) {
+            analytics.onAnnouncementDetailsClick(it.id)
             onMessage("Нет возможности просмотреть детальную информацию")
         }
     }

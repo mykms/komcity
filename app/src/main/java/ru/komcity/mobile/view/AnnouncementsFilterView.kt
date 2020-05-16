@@ -2,7 +2,9 @@ package ru.komcity.mobile.view
 
 import android.os.Bundle
 import moxy.MvpView
-import moxy.viewstate.strategy.*
+import moxy.viewstate.strategy.OneExecutionStateStrategy
+import moxy.viewstate.strategy.SkipStrategy
+import moxy.viewstate.strategy.StateStrategyType
 
 /**
  * Created by Aleksey on 2020.03.01
@@ -26,4 +28,5 @@ interface AnnouncementsFilterView : MvpView {
     @StateStrategyType(OneExecutionStateStrategy::class) fun showSubCategoryDialog(items: List<String>)
     @StateStrategyType(OneExecutionStateStrategy::class) fun showDetailCategoryDialog(items: List<String>)
     @StateStrategyType(OneExecutionStateStrategy::class) fun showDetailSubCategoryDialog(items: List<String>)
+    @StateStrategyType(OneExecutionStateStrategy::class) fun onShowClick(listId: String)
 }

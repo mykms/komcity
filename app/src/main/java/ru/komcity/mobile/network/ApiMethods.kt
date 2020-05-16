@@ -1,8 +1,7 @@
 package ru.komcity.mobile.network
 
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.Call
+import retrofit2.http.*
 import ru.komcity.mobile.repository.model.*
 
 interface ApiMethods {
@@ -32,4 +31,7 @@ interface ApiMethods {
 
     @GET("announcement/{id}")
     suspend fun getAnnouncements(@Path("id") id: Int): List<AnnouncementDto>
+
+    @POST("register/push")
+    fun registerPushToken(@Body token: KomcityPushDto): Call<Void>
 }

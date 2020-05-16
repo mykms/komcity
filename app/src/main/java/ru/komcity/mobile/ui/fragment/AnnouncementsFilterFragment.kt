@@ -1,5 +1,6 @@
 package ru.komcity.mobile.ui.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
@@ -7,6 +8,9 @@ import kotlinx.android.synthetic.main.fragment_announcement_search.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
+import ru.komcity.mobile.common.Constants
+import ru.komcity.mobile.common.analytic.AnalyticManager
+import ru.komcity.mobile.common.analytic.AnalyticManagerImpl
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.presenter.AnnouncementsFilterPresenter
 import ru.komcity.mobile.repository.AnnouncementsFilterRepositoryImpl
@@ -23,10 +27,16 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
     lateinit var presenter: AnnouncementsFilterPresenter
     @ProvidePresenter
     fun providePresenter() = AnnouncementsFilterPresenter(repo)
+    private lateinit var analytics: AnalyticManager
     private val categoryListSelectorTag = "categoryListSelectorTag"
     private val subCategoryListSelectorTag = "subCategoryListSelectorTag"
     private val detailCategoryListSelectorTag = "detailCategoryListSelectorTag"
     private val detailSubCategoryListSelectorTag = "detailSubCategoryListSelectorTag"
+
+    override fun onCreateInit(clientId: String, context: Context) {
+        analytics = AnalyticManagerImpl(clientId, context)
+        analytics.onScreenOpen(Constants.SCREEN_NAME_ANNOUNCEMENT_FILTER)
+    }
 
     override fun getArgs(args: Bundle?) {
         presenter.init()
@@ -221,6 +231,10 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
                 setTitle("Выберите значение")
             }.show(it, detailSubCategoryListSelectorTag)
         }
+    }
+
+    override fun onShowClick(listId: String) {
+        analytics.onAnnouncementShowClick(listId)
     }
 
     private fun closeDialog(dialogTag: String) {

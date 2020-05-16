@@ -14,6 +14,8 @@ import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.Constants
+import ru.komcity.mobile.common.analytic.AnalyticManager
+import ru.komcity.mobile.common.analytic.AnalyticManagerImpl
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.presenter.ForumPresenter
 import ru.komcity.mobile.repository.ForumRepositoryImpl
@@ -32,6 +34,12 @@ class ForumMessagesFragment : BaseFragment(), ForumView {
     lateinit var forumPresenter: ForumPresenter
     @ProvidePresenter
     fun providePresenter() = ForumPresenter(repo)
+    private lateinit var analytics: AnalyticManager
+
+    override fun onCreateInit(clientId: String, context: Context) {
+        analytics = AnalyticManagerImpl(clientId, context)
+        analytics.onScreenOpen(Constants.SCREEN_NAME_FORUM_MESSAGES)
+    }
 
     override fun getArgs(args: Bundle?) {
         forumPresenter.initForumMessagesState(args?.getString(Constants.EXTRA_TITLE, "") ?: "",
@@ -72,6 +80,7 @@ class ForumMessagesFragment : BaseFragment(), ForumView {
     }
 
     override fun onCopyText(text: String) {
+        analytics.onCopyTextClick(Constants.SCREEN_NAME_FORUM_MESSAGES)
         context?.let {
             copyToClipBoardBuffer(it, text)
             onMessage("Скопировано")
@@ -85,6 +94,7 @@ class ForumMessagesFragment : BaseFragment(), ForumView {
     }
 
     override fun showSocial() {
+        analytics.onShareInfoClick(Constants.SCREEN_NAME_FORUM_MESSAGES)
         if (!viewShare.isVisible) {
             viewShare.isVisible = true
         }
@@ -100,6 +110,7 @@ class ForumMessagesFragment : BaseFragment(), ForumView {
 
     override fun onShareSocial(item: SocialApp, description: String) {
         viewShare.shareMedia(item, null, description)
+        analytics.onShareInfoComplete(Constants.SCREEN_NAME_FORUM_MESSAGES, item.name)
     }
 
     override fun onLoading(isLoading: Boolean) {

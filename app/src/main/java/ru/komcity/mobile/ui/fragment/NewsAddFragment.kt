@@ -1,5 +1,6 @@
 package ru.komcity.mobile.ui.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -8,6 +9,8 @@ import kotlinx.android.synthetic.main.fragment_news_add.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
+import ru.komcity.mobile.common.analytic.AnalyticManager
+import ru.komcity.mobile.common.analytic.AnalyticManagerImpl
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.network.MailSenderData
 import ru.komcity.mobile.presenter.NewsAddPresenter
@@ -29,6 +32,11 @@ class NewsAddFragment: BaseFragment(), NewsAddView {
     lateinit var newsPresenter: NewsAddPresenter
     @ProvidePresenter
     fun providePresenter() = NewsAddPresenter(repo)
+    private lateinit var analytics: AnalyticManager
+
+    override fun onCreateInit(clientId: String, context: Context) {
+        analytics = AnalyticManagerImpl(clientId, context)
+    }
 
     override fun getArgs(args: Bundle?) {
     }
