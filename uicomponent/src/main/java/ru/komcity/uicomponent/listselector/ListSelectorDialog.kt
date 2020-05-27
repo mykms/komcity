@@ -1,21 +1,18 @@
 package ru.komcity.uicomponent.listselector
 
-import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.ShapeDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.ui_list_selector_dialog.*
+import ru.komcity.uicomponent.DividerWithRemoveDecorator
 import ru.komcity.uicomponent.R
 
 /**
@@ -34,6 +31,11 @@ class ListSelectorDialog(private val items: List<String>,
     private var pTitle = ""
     private val adapterItems = ListSelectorAdapter(items) { item, position ->
         listener.onSelectItem(item, position)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.Theme_Design_BottomSheetDialog)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -69,10 +71,7 @@ class ListSelectorDialog(private val items: List<String>,
         adapter = adapterItems
         setHasFixedSize(true)
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL).apply {
-            setDrawable(ContextCompat.getDrawable(context, R.drawable.ui_recycler_divider)
-                    ?: ShapeDrawable())
-        })
+        addItemDecoration(DividerWithRemoveDecorator(context, R.drawable.ui_recycler_divider, 0, 1))
     }
 
     fun setTitle(title: String) {
