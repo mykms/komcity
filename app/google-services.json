@@ -8,26 +8,34 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:441743854542:android:abb19a1262b676f6",
+        "mobilesdk_app_id": "1:441743854542:android:bcea9c175d0e4133",
         "android_client_info": {
           "package_name": "ru.komcity.mobile"
         }
       },
       "oauth_client": [
         {
-          "client_id": "441743854542-158384q2o94e98aqhtmkotekf8seui0q.apps.googleusercontent.com",
+          "client_id": "441743854542-cgns4e5bsdqsvd1i25v7e04tbo56nb1p.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "ru.komcity.mobile",
-            "certificate_hash": "816120c680c380c6623c7adfe71656d871e1bc04"
+            "certificate_hash": "2b6ca8b9ab3bf570605b3ea457a7f97286999b09"
           }
         },
         {
-          "client_id": "441743854542-m8cafon6u02p0fq9481r2rqp2rjubck1.apps.googleusercontent.com",
+          "client_id": "441743854542-1qecp0uidkpom49jrn1fmeujn50gskmp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "ru.komcity.mobile",
-            "certificate_hash": "c43bbf9b890922110bba0a0a0025af0ce91c592c"
+            "certificate_hash": "47760704504c0054570cd87a5a11d89464fb6fe6"
+          }
+        },
+        {
+          "client_id": "441743854542-v31j8o4dhjsmiba9ghd8ul3s02n5149d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ru.komcity.mobile",
+            "certificate_hash": "85d608f85a45e4e7ef3e104831f78954844a1710"
           }
         },
         {
@@ -37,24 +45,17 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBSYCnoSBckEmQ2bhsVz9MIjWNPzVcyMog"
+          "current_key": "AIzaSyDFsX1JK2z-X-aajJcHLEG8Ik1zwGoHqQM"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "441743854542-ehifnqcbilvdd6vnprq1p05psbkdsaat.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

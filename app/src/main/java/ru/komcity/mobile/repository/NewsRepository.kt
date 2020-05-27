@@ -14,17 +14,18 @@ import java.util.*
  */
 interface NewsRepository {
 
-    suspend fun getNews(): List<NewsItem>
+    suspend fun getNews(page: Int, startDate: Long, endDate: Long): List<NewsItem>
     suspend fun getNewsDetail(id: Int): NewsItem
 }
 
 class NewsRepositoryImpl constructor(private val apiMethods: ApiMethods): NewsRepository {
 
-    override suspend fun getNews(): List<NewsItem> {
-        return apiMethods.getNews().map {
+    override suspend fun getNews(page: Int, startDate: Long, endDate: Long): List<NewsItem> {
+        return apiMethods.getNews(page, startDate, endDate).map {
             with(it) {
                 val humanTime = DateTimeUtils.toHumanDateTime(convertDate(date))
-                NewsItem(title, humanTime, shortText, previewImg, imageUrls, newsId.toIntOrNull() ?: 0, forumId.toIntOrNull() ?: 0)
+                val item = NewsItem(title, humanTime, shortText, previewImg, imageUrls, newsId.toIntOrNull() ?: 0, forumId.toIntOrNull() ?: 0)
+                item
             }
         }
     }

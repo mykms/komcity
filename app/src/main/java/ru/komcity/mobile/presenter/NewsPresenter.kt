@@ -19,16 +19,43 @@ import java.net.UnknownHostException
 class NewsPresenter constructor(private val newsRepository: NewsRepository): BasePresenter<NewsListView>() {
 
     private var newsJob: Job? = null
+    private var isSearchMode = false
+    private var startDateTime = 0L
+    private var endDateTime = 0L
+    private val items = arrayListOf<NewsItem>()
+    private val searchItems = arrayListOf<NewsItem>()
+    private var searchPage = 1
+    private var listPage = 1
+    private var scrollPosition = 0
 
     fun getNewsList() {
+        loadNews(listPage, startDateTime, endDateTime)
+    }
+
+    private fun loadNews(page: Int, startDate: Long, endDate: Long) {
         newsJob = CoroutineScope(getExceptionHandler { doOnError(it) }).launch {
-            viewState.onLoading(true)
+            withContext(Dispatchers.Main) {
+                viewState.onLoading(true)
+            }
             withContext(Dispatchers.IO) {
-                val items = newsRepository.getNews()
+                val repoItems = newsRepository.getNews(page, startDate, endDate)
                 withContext(Dispatchers.Main) {
-                    viewState.onNewsLoaded(items)
+                    viewState.onNewsLoaded(checkCache(page, startDate, endDate, repoItems))
+                    viewState.scrollTo(scrollPosition)
                     viewState.onLoading(false)
                 }
+            }
+        }
+    }
+
+    private fun checkCache(page: Int, startDate: Long, endDate: Long, repoItems: List<NewsItem>): List<NewsItem> {
+        return if (startDate == 0L && endDate == 0L) {
+            items.apply {
+                addAll(repoItems)
+            }
+        } else {
+            searchItems.apply {
+                addAll(repoItems)
             }
         }
     }
@@ -55,6 +82,18 @@ class NewsPresenter constructor(private val newsRepository: NewsRepository): Bas
         }
     }
 
+    fun getNextPageNews(totalCount: Int, lastPosition: Int) {
+        if (lastPosition == totalCount - 1) {
+            val page = if (startDateTime == 0L && endDateTime == 0L) {
+                ++listPage
+            } else {
+                ++searchPage
+            }
+            scrollPosition = lastPosition
+            loadNews(page, startDateTime, endDateTime)
+        }
+    }
+
     fun navigateByItemType(item: BaseHolderItem) {
         when (item) {
             is AddNewsItem -> navigateTo(R.id.newsAdd, bundleOf())
@@ -67,6 +106,41 @@ class NewsPresenter constructor(private val newsRepository: NewsRepository): Bas
 
     fun navigateTo(screenId: Int, args: Bundle) {
         viewState.navigateToScreen(screenId, args)
+    }
+
+    fun onSearchDialogPositive(start: Long, end: Long) {
+        isSearchMode = true
+        startDateTime = start
+        endDateTime = end
+        searchPage = 1
+        searchItems.clear()
+        viewState.searchResetIsVisible(true)
+        loadNews(searchPage, startDateTime, endDateTime)
+    }
+
+    fun onSearchDialogNegative() {
+    }
+
+    /**
+     * Диалоговое окно с выбором даты закрылось
+     */
+    fun onSearchDialogClosed() {
+    }
+
+    fun onSearchReset() {
+        isSearchMode = false
+        startDateTime = 0L
+        endDateTime = 0L
+        searchPage = 1
+        listPage = 1
+        searchItems.clear()
+        items.clear()
+        viewState.searchResetIsVisible(false)
+        loadNews(listPage, startDateTime, endDateTime)
+    }
+
+    fun onSearchClick() {
+        viewState.showSearchDialog()
     }
 
     override fun onDestroy() {
