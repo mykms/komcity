@@ -20,6 +20,7 @@ class NewsPresenter constructor(private val newsRepository: NewsRepository): Bas
 
     private var newsJob: Job? = null
     private var isSearchMode = false
+    private var isHasItemsMore = true
     private var startDateTime = 0L
     private var endDateTime = 0L
     private val items = arrayListOf<NewsItem>()
@@ -40,6 +41,7 @@ class NewsPresenter constructor(private val newsRepository: NewsRepository): Bas
             withContext(Dispatchers.IO) {
                 val repoItems = newsRepository.getNews(page, startDate, endDate)
                 withContext(Dispatchers.Main) {
+                    isHasItemsMore = !(repoItems.isEmpty() && startDate == 0L && endDate == 0L)
                     viewState.onNewsLoaded(checkCache(page, startDate, endDate, repoItems))
                     viewState.scrollTo(scrollPosition)
                     viewState.onLoading(false)
@@ -83,7 +85,7 @@ class NewsPresenter constructor(private val newsRepository: NewsRepository): Bas
     }
 
     fun getNextPageNews(totalCount: Int, lastPosition: Int) {
-        if (lastPosition == totalCount - 1) {
+        if (lastPosition == totalCount - 1 && isHasItemsMore) {
             val page = if (startDateTime == 0L && endDateTime == 0L) {
                 ++listPage
             } else {
@@ -129,6 +131,7 @@ class NewsPresenter constructor(private val newsRepository: NewsRepository): Bas
 
     fun onSearchReset() {
         isSearchMode = false
+        isHasItemsMore = true
         startDateTime = 0L
         endDateTime = 0L
         searchPage = 1

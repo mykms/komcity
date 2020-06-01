@@ -58,6 +58,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:441743854542:android:71314c559d4ed21d3ab99f",
+        "android_client_info": {
+          "package_name": "ru.komcity.mobile.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "441743854542-ehifnqcbilvdd6vnprq1p05psbkdsaat.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFsX1JK2z-X-aajJcHLEG8Ik1zwGoHqQM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "441743854542-ehifnqcbilvdd6vnprq1p05psbkdsaat.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

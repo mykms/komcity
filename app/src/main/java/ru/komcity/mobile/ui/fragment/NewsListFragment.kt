@@ -80,7 +80,6 @@ class NewsListFragment: BaseFragment(), NewsListView {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val totalCount = recyclerView.layoutManager?.itemCount ?: 0
-                val childCount = recyclerView.layoutManager?.childCount ?: 0
                 val lastPosition = (recyclerView.layoutManager as? LinearLayoutManager)?.findLastCompletelyVisibleItemPosition() ?: 0
                 newsPresenter.getNextPageNews(totalCount, lastPosition)
             }
