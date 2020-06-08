@@ -21,8 +21,8 @@ android {
         applicationId "ru.komcity.mobile"
         minSdkVersion AndroidSDK.minApi
         targetSdkVersion AndroidSDK.targetApi
-        versionCode 5
-        versionName "1.0.5"
+        versionCode 6
+        versionName "1.0.6"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
