@@ -130,6 +130,12 @@ class NewsPresenter constructor(private val newsRepository: NewsRepository): Bas
     }
 
     fun onSearchReset() {
+        clearData()
+        viewState.searchResetIsVisible(false)
+        loadNews(listPage, startDateTime, endDateTime)
+    }
+
+    private fun clearData() {
         isSearchMode = false
         isHasItemsMore = true
         startDateTime = 0L
@@ -138,8 +144,6 @@ class NewsPresenter constructor(private val newsRepository: NewsRepository): Bas
         listPage = 1
         searchItems.clear()
         items.clear()
-        viewState.searchResetIsVisible(false)
-        loadNews(listPage, startDateTime, endDateTime)
     }
 
     fun onSearchClick() {
@@ -148,6 +152,7 @@ class NewsPresenter constructor(private val newsRepository: NewsRepository): Bas
 
     override fun onDestroy() {
         newsJob?.cancel()
+        clearData()
         super.onDestroy()
     }
 }

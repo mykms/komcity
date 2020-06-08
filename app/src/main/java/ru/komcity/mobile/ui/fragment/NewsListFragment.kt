@@ -150,4 +150,9 @@ class NewsListFragment: BaseFragment(), NewsListView {
     override fun searchResetIsVisible(isVisible: Boolean) {
         tvReset.isVisible = isVisible
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        newsPresenter.onDestroy()
+    }
 }
