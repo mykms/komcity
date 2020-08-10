@@ -5,12 +5,15 @@ import androidx.core.os.bundleOf
 import com.sharetosocial.android.SocialApp
 import kotlinx.coroutines.*
 import moxy.InjectViewState
+import retrofit2.HttpException
 import ru.komcity.mobile.R
+import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.repository.ForumRepository
 import ru.komcity.mobile.view.ForumView
 import ru.komcity.mobile.viewModel.ForumItem
 import ru.komcity.mobile.viewModel.ForumMessagesItem
 import ru.komcity.mobile.viewModel.SubForumItem
+import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -75,8 +78,16 @@ class ForumPresenter constructor(private val forumRepository: ForumRepository): 
                 //viewState.onError("Проверьте связь с интернетом и попробуйте позже")
                 navigateTo(R.id.connectionErrorFragment, bundleOf())
             }
+            is IOException -> {
+                viewState.onError("${throwable.printStackTrace()}")
+            }
+            is HttpException -> {
+                ApiNetwork().getErrorConverter().convert(throwable.response()?.errorBody())?.let {
+                    viewState.onError("${it.message}")
+                }
+            }
             else -> {
-                viewState.onError("Произошла ошибка, попробуйте позже")
+                viewState.onError("Произошла ошибка, попробуйте позже\n${throwable.printStackTrace()}")
             }
         }
     }

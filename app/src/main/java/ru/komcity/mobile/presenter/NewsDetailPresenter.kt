@@ -2,14 +2,20 @@ package ru.komcity.mobile.presenter
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import com.sharetosocial.android.SocialApp
 import kotlinx.coroutines.*
 import moxy.InjectViewState
+import retrofit2.HttpException
+import ru.komcity.mobile.R
+import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.repository.NewsRepository
 import ru.komcity.mobile.view.NewsDetailView
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.net.ConnectException
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.*
 
@@ -54,13 +60,32 @@ class NewsDetailPresenter constructor(private val newsRepository: NewsRepository
     private fun doOnError(throwable: Throwable) {
         viewState.onLoading(false)
         when (throwable) {
+            is ConnectException -> {
+                //viewState.onError("Не удается соединиться с сервером")
+                navigateTo(R.id.connectionErrorFragment, bundleOf())
+            }
             is UnknownHostException -> {
-                viewState.onError("Проверьте связь с интернетом или адрес сервера")
+                //viewState.onError("Проверьте связь с интернетом или адрес сервера")
+                navigateTo(R.id.connectionErrorFragment, bundleOf())
             }
             is IllegalArgumentException -> {
                 viewState.onError("Произошла ошибка, попробуйте позже")
             }
-            else -> {}
+            is SocketTimeoutException -> {
+                //viewState.onError("Проверьте связь с интернетом и попробуйте позже")
+                navigateTo(R.id.connectionErrorFragment, bundleOf())
+            }
+            is IOException -> {
+                viewState.onError("${throwable.printStackTrace()}")
+            }
+            is HttpException -> {
+                ApiNetwork().getErrorConverter().convert(throwable.response()?.errorBody())?.let {
+                    viewState.onError("${it.message}")
+                }
+            }
+            else -> {
+                viewState.onError("Произошла ошибка, попробуйте позже\n${throwable.printStackTrace()}")
+            }
         }
     }
 

@@ -3,13 +3,13 @@ package ru.komcity.mobile.network
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Response
+import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.komcity.mobile.BuildConfig
 import ru.komcity.mobile.common.Constants
-import java.io.IOException
 import java.util.*
 
 class ApiNetwork {
@@ -29,22 +29,19 @@ class ApiNetwork {
         return retrofitBuilder.build()
     }
 
-//    fun getErrorConverter() : Converter<ResponseBody, BaseNetError> {
-//        val retrofit = getRetrofit()
-//        return retrofit.responseBodyConverter<BaseNetError>(BaseNetError::class.java, arrayOf(object: Annotation {}))
-//    }
+    fun getErrorConverter() : Converter<ResponseBody, BaseNetError> {
+        val retrofit = getRetrofit()
+        return retrofit.responseBodyConverter<BaseNetError>(BaseNetError::class.java, arrayOf(object: Annotation {}))
+    }
 
     private val interceptorAuthorizationParam: Interceptor
-        get() = object : Interceptor {
-            @Throws(IOException::class)
-            override fun intercept(chain: Interceptor.Chain): Response {
-                val original = chain.request()
-                val request = original.newBuilder()
-                        .header("Content-Type", "application/json")
-                        .method(original.method, original.body)
-                        .build()
-                return chain.proceed(request)
-            }
+        get() = Interceptor { chain ->
+            val original = chain.request()
+            val request = original.newBuilder()
+                    .header("Content-Type", "application/json")
+                    .method(original.method(), original.body())
+                    .build()
+            chain.proceed(request)
         }
 
     private val interceptorLogging: HttpLoggingInterceptor

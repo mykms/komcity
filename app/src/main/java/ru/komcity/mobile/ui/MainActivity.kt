@@ -6,6 +6,7 @@ import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.snackbar.Snackbar
@@ -19,11 +20,18 @@ class MainActivity: AppCompatActivity(), MainActivityView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        initNavHostFragment()
         initNavigation()
     }
 
+    private fun initNavHostFragment() {
+        navController = Navigation.findNavController(this, R.id.navHostFragment).apply {
+            val graph: NavGraph = navInflater.inflate(R.navigation.nav_res)
+            setGraph(graph)
+        }
+    }
+
     private fun initNavigation() {
-        navController = Navigation.findNavController(this, R.id.navHostFragment)
         NavigationUI.setupWithNavController(bottomNavigation, navController)
         bottomNavigation.setOnNavigationItemSelectedListener {
             item -> navigateApp(navController, item.itemId, Bundle())

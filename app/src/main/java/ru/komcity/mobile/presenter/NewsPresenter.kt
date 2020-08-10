@@ -4,13 +4,16 @@ import android.os.Bundle
 import androidx.core.os.bundleOf
 import kotlinx.coroutines.*
 import moxy.InjectViewState
+import retrofit2.HttpException
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.Constants
+import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.repository.NewsRepository
 import ru.komcity.mobile.view.NewsListView
 import ru.komcity.mobile.viewModel.AddNewsItem
 import ru.komcity.mobile.viewModel.BaseHolderItem
 import ru.komcity.mobile.viewModel.NewsItem
+import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -80,7 +83,17 @@ class NewsPresenter constructor(private val newsRepository: NewsRepository): Bas
                 //viewState.onError("Проверьте связь с интернетом и попробуйте позже")
                 navigateTo(R.id.connectionErrorFragment, bundleOf())
             }
-            else -> {}
+            is IOException -> {
+                viewState.onError("${throwable.printStackTrace()}")
+            }
+            is HttpException -> {
+                ApiNetwork().getErrorConverter().convert(throwable.response()?.errorBody())?.let {
+                    viewState.onError("${it.message}")
+                }
+            }
+            else -> {
+                viewState.onError("${throwable.printStackTrace()}")
+            }
         }
     }
 

@@ -6,12 +6,15 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import moxy.InjectViewState
+import retrofit2.HttpException
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.Constants
+import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.repository.AnnouncementsFilterRepository
 import ru.komcity.mobile.view.AnnouncementsFilterView
 import ru.komcity.mobile.viewModel.AnnouncementCategory
 import ru.komcity.mobile.viewModel.AnnouncementSubCategory
+import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -76,7 +79,17 @@ class AnnouncementsFilterPresenter constructor(private val repository: Announcem
                 //viewState.onError("Проверьте связь с интернетом и попробуйте позже")
                 navigateTo(R.id.connectionErrorFragment, bundleOf())
             }
-            else -> {}
+            is IOException -> {
+                viewState.onError("${throwable.printStackTrace()}")
+            }
+            is HttpException -> {
+                ApiNetwork().getErrorConverter().convert(throwable.response()?.errorBody())?.let {
+                    viewState.onError("${it.message}")
+                }
+            }
+            else -> {
+                viewState.onError("Произошла ошибка, попробуйте позже\n${throwable.printStackTrace()}")
+            }
         }
     }
 

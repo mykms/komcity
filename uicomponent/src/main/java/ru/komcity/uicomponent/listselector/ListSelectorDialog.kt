@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -14,24 +15,24 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.ui_list_selector_dialog.*
 import ru.komcity.uicomponent.DividerWithRemoveDecorator
 import ru.komcity.uicomponent.R
+import java.io.Serializable
 
 /**
  * Created by Aleksei Kholoimov on 05.04.2020
  * <p>
  * Выбор из списка в Диалоге (Fragment)
  */
-interface ListSelectorDialogListener {
+interface ListSelectorDialogListener: Serializable {
     fun onCloseClick()
     fun onSelectItem(item: String, position: Int)
 }
 
-class ListSelectorDialog(private val items: List<String>,
-                         private val listener: ListSelectorDialogListener) : BottomSheetDialogFragment() {
+class ListSelectorDialog: BottomSheetDialogFragment() {
 
     private var pTitle = ""
-    private val adapterItems = ListSelectorAdapter(items) { item, position ->
-        listener.onSelectItem(item, position)
-    }
+    private var items: List<String>? = null
+    private var listener: ListSelectorDialogListener? = null
+    private val keyItems = "items"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +40,7 @@ class ListSelectorDialog(private val items: List<String>,
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        items = arguments?.getStringArrayList(keyItems)
         return inflater.inflate(R.layout.ui_list_selector_dialog, container, false)
     }
 
@@ -51,7 +53,9 @@ class ListSelectorDialog(private val items: List<String>,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initComponents()
+        listener?.let {
+            initComponents(items ?: emptyList(), it)
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -59,16 +63,24 @@ class ListSelectorDialog(private val items: List<String>,
         (view?.parent as View).background = ColorDrawable(Color.TRANSPARENT)
     }
 
-    private fun initComponents() {
+    fun setParams(items: List<String>, listener: ListSelectorDialogListener) {
+        this.items = items
+        this.listener = listener
+        this.arguments = bundleOf(keyItems to items)
+    }
+
+    private fun initComponents(items: List<String>, listener: ListSelectorDialogListener) {
         ivClose.setOnClickListener {
             listener.onCloseClick()
         }
         textTitle.text = pTitle
-        initRecyclerView()
+        initRecyclerView(items, listener)
     }
 
-    private fun initRecyclerView() = with(rvItems) {
-        adapter = adapterItems
+    private fun initRecyclerView(items: List<String>, listener: ListSelectorDialogListener) = with(rvItems) {
+        adapter = ListSelectorAdapter(items) { item, position ->
+            listener.onSelectItem(item, position)
+        }
         setHasFixedSize(true)
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         addItemDecoration(DividerWithRemoveDecorator(context, R.drawable.ui_recycler_divider, 0, 1))
@@ -76,5 +88,10 @@ class ListSelectorDialog(private val items: List<String>,
 
     fun setTitle(title: String) {
         pTitle = title
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        listener = null
     }
 }

@@ -135,16 +135,14 @@ class NewsListFragment: BaseFragment(), NewsListView {
     }
 
     override fun showSearchDialog() {
-        fragmentManager?.let {
-            if (!calendarDialog.isAdded) {
-                calendarDialog.show(it, calendarDialogTag)
-            }
+        if (!calendarDialog.isAdded) {
+            calendarDialog.show(parentFragmentManager, calendarDialogTag)
         }
     }
 
     override fun hideSearchDialog() {
         fab.show()
-        (fragmentManager?.findFragmentByTag(calendarDialogTag) as? DialogFragment)?.dismiss()
+        (parentFragmentManager.findFragmentByTag(calendarDialogTag) as? DialogFragment)?.dismiss()
     }
 
     override fun searchResetIsVisible(isVisible: Boolean) {

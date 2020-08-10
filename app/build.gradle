@@ -64,6 +64,12 @@ dependencies {
     implementation supportDepends.material
     implementation supportDepends.navFragment
     implementation supportDepends.navUI
+    implementation supportDepends.legacy
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-livedata:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.2.0"
+    kapt "androidx.lifecycle:lifecycle-compiler:2.2.0"
 
     implementation kotlinDepends.stdlib
     implementation kotlinDepends.core
@@ -83,6 +89,9 @@ dependencies {
     implementation retrofitDepends.retrofitGson
     implementation retrofitDepends.retrofitRxJava
     implementation retrofitDepends.retrofitInterceptor
+    implementation ("com.squareup.okhttp3:okhttp:3.12.12"){
+        force = true //API 19 support
+    }
 
     implementation picassoDepends.picasso
     implementation "io.supercharge:shimmerlayout:2.1.0"

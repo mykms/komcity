@@ -31,7 +31,11 @@ class NewsRepositoryImpl constructor(private val apiMethods: ApiMethods): NewsRe
     }
 
     private fun convertDate(dateTime: String): Calendar {
-        return dateTime.toCalendar(DateTimePattern.DATE_TIME_ZONE.pattern)
+        return try {
+            dateTime.toCalendar(DateTimePattern.DATE_TIME_ZONE.pattern)
+        } catch (ex: Exception) {
+            Calendar.getInstance()
+        }
     }
 
     override suspend fun getNewsDetail(id: Int): NewsItem {

@@ -174,7 +174,8 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
                     presenter.onCategorySelected(item, position)
                 }
             }
-            ListSelectorDialog(items, dialogListener).apply {
+            ListSelectorDialog().apply {
+                setParams(items, dialogListener)
                 setTitle("Категория")
             }.show(it, categoryListSelectorTag)
         }
@@ -193,7 +194,8 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
                     presenter.onSubCategorySelected(item, position)
                 }
             }
-            ListSelectorDialog(items, dialogListener).apply {
+            ListSelectorDialog().apply {
+                setParams(items, dialogListener)
                 setTitle("Подкатегория")
             }.show(it, subCategoryListSelectorTag)
         }
@@ -212,7 +214,8 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
                     presenter.onDetailCategorySelected(item, position)
                 }
             }
-            ListSelectorDialog(items, dialogListener).apply {
+            ListSelectorDialog().apply {
+                setParams(items, dialogListener)
                 setTitle("Детали подкатегории")
             }.show(it, detailCategoryListSelectorTag)
         }
@@ -231,7 +234,8 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
                     presenter.onDetailSubCategorySelected(item, position)
                 }
             }
-            ListSelectorDialog(items, dialogListener).apply {
+            ListSelectorDialog().apply {
+                setParams(items, dialogListener)
                 setTitle("Выберите значение")
             }.show(it, detailSubCategoryListSelectorTag)
         }
