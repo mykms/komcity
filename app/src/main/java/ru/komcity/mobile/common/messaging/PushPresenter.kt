@@ -12,6 +12,9 @@ import ru.komcity.mobile.repository.model.KomcityPushDto
 class PushPresenter(private val api: ApiMethods) {
 
     fun registerToken(token: String) {
+        if (token.isEmpty()) {
+            return
+        }
         val request = api.registerPushToken(KomcityPushDto(token))
         request.enqueue {
             onResponse = {

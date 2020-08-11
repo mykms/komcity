@@ -10,18 +10,33 @@ import androidx.navigation.NavGraph
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.komcity.mobile.R
+import ru.komcity.mobile.common.messaging.PushPresenter
+import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.view.MainActivityView
 
 class MainActivity: AppCompatActivity(), MainActivityView {
+
     private lateinit var navController: NavController
+    private val pushPresenter: PushPresenter = PushPresenter(ApiNetwork().api)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        updatePushToken()
         initNavHostFragment()
         initNavigation()
+    }
+
+    private fun updatePushToken() {
+        FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val pushToken = task.result?.token ?: ""
+                pushPresenter.registerToken(pushToken)
+            }
+        }
     }
 
     private fun initNavHostFragment() {
