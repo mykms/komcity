@@ -80,6 +80,7 @@ dependencies {
     implementation firebase.messaging
     implementation firebase.crashlytics
     implementation firebase.analytics
+    //implementation firebase.config
 
     implementation moxyDepends.moxy
     implementation moxyDepends.moxyAndroidX

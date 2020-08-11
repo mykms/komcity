@@ -44,6 +44,7 @@ ext {
             core        : "com.google.firebase:firebase-core:$firebaseCore",
             messaging   : "com.google.firebase:firebase-messaging:20.2.0",
             crashlytics : "com.google.firebase:firebase-crashlytics:17.0.1",
+            config      : "com.google.firebase:firebase-config:19.2.0",
             analytics   : "com.google.firebase:firebase-analytics:$firebaseCore"
     ]
 
