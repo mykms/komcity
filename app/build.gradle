@@ -8,10 +8,7 @@ apply from: "$rootProject.projectDir/depends.gradle"
 android {
     signingConfigs {
         ProdBuild {
-            keyAlias 'komcity'
-            keyPassword 'ButerBroD37'
             storeFile file('../keystore/keystore.jks')
-            storePassword 'StoRe_kms37'
         }
     }
     compileSdkVersion AndroidSDK.compile
@@ -21,8 +18,8 @@ android {
         applicationId "ru.komcity.mobile"
         minSdkVersion AndroidSDK.minApi
         targetSdkVersion AndroidSDK.targetApi
-        versionCode 7
-        versionName "1.0.7"
+        versionCode 8
+        versionName "1.0.8"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
