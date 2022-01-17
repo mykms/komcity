@@ -1,7 +1,7 @@
 ext {
     navLib = '2.3.0'
-    buildTools = '29.0.2'
-    constraintLib = '1.1.3'
+    buildTools = '30.0.2'
+    constraintLib = '2.1.3'
     coroutinLib = '1.3.7'
     coreKtx = '1.3.0'
     kotlinVersion = '1.3.72'
@@ -12,11 +12,12 @@ ext {
     testRunnerLib = '1.2.0'
     junitLib = '4.13'
     espressoLib = '3.2.0'
+    compose = '1.2.0-alpha01'
 
     AndroidSDK = [
-            compile   : 29,
+            compile   : 31,
             minApi    : 19,
-            targetApi : 29,
+            targetApi : 31,
             buildTools: "$buildTools"
     ]
 
@@ -38,6 +39,13 @@ ext {
             coroutinesCore   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinLib",
             coroutinesAndroid: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinLib",
             stdlib           : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    ]
+
+    composeDepends = [
+            //ui      : "androidx.compose.ui:ui:$compose",
+            //material: "androidx.compose.material:material:$compose",
+            //preview : "androidx.compose.ui:ui-tooling-preview:$compose",
+            //activity: "androidx.activity:activity-compose:1.3.1"
     ]
 
     firebase = [

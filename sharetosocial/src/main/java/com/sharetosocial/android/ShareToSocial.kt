@@ -78,6 +78,7 @@ class ShareToSocial(context: Context?, attrs: AttributeSet?) : RelativeLayout(co
             SocialApp.instagram -> {
                 checkMediaFileAndShare("com.instagram.android")
             }
+            else -> Unit
         }
     }
 

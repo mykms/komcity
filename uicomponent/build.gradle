@@ -27,6 +27,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+//    buildFeatures {
+//        compose  true
+//    }
+//    composeOptions {
+//        kotlinCompilerExtensionVersion = "$compose"
+//    }
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -40,6 +46,11 @@ dependencies {
     implementation supportDepends.recyclerview
     implementation supportDepends.constraintLayout
     implementation supportDepends.material
+
+    //implementation composeDepends.ui
+    //implementation composeDepends.material
+    //implementation composeDepends.preview
+    //implementation composeDepends.activity
 
     implementation kotlinDepends.stdlib
     implementation kotlinDepends.core

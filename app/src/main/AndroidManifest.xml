@@ -18,7 +18,8 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".ui.MainActivity"
-            android:screenOrientation="fullSensor">
+            android:screenOrientation="fullSensor"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

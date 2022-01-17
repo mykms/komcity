@@ -3,6 +3,6 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">orderbrains.ru</domain>
         <domain includeSubdomains="true">komcity.ru</domain>
-        <domain includeSubdomains="true">192.168.43.199</domain>
+        <domain includeSubdomains="true">192.168.43.120</domain>
     </domain-config>
 </network-security-config>
