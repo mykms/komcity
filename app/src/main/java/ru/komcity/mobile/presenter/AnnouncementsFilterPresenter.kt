@@ -83,8 +83,12 @@ class AnnouncementsFilterPresenter constructor(private val repository: Announcem
                 viewState.onError("${throwable.printStackTrace()}")
             }
             is HttpException -> {
-                ApiNetwork().getErrorConverter().convert(throwable.response()?.errorBody())?.let {
-                    viewState.onError("${it.message}")
+                try {
+                    ApiNetwork().getErrorConverter().convert(throwable.response()?.errorBody())?.let {
+                        viewState.onError("${it.message}")
+                    }
+                } catch (ex: Exception) {
+                    viewState.onError("${ex.message}")
                 }
             }
             else -> {
