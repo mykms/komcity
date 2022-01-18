@@ -1,8 +1,10 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'com.google.firebase.crashlytics'
+plugins {
+    id('com.android.application')
+    id('kotlin-android-extensions')
+    id('kotlin-android')
+    id('kotlin-kapt')
+    id('com.google.firebase.crashlytics')
+}
 apply from: "$rootProject.projectDir/depends.gradle"
 
 android {
@@ -41,12 +43,14 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-//    buildFeatures {
-//        compose = true
-//    }
-//    composeOptions {
-//        kotlinCompilerExtensionVersion = "$compose"
-//    }
+    buildFeatures {
+        //compose true
+        viewBinding true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "$compose"
+        kotlinCompilerVersion "$kotlin_version"
+    }
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -70,6 +74,11 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0"
     implementation "androidx.lifecycle:lifecycle-common-java8:2.4.0"
+
+    implementation composeDepends.ui
+    implementation composeDepends.material
+    implementation composeDepends.preview
+    implementation composeDepends.activity
 
     implementation kotlinDepends.stdlib
     implementation kotlinDepends.core

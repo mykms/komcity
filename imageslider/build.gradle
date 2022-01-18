@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply from: "$rootProject.projectDir/depends.gradle"
@@ -23,6 +22,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    buildFeatures {
+        compose true
+        viewBinding true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "$compose"
+        kotlinCompilerVersion "$kotlin_version"
+    }
 }
 
 dependencies {
@@ -31,6 +38,11 @@ dependencies {
     implementation supportDepends.appCompat
     implementation supportDepends.constraintLayout
     implementation supportDepends.viewPager2
+
+    implementation composeDepends.ui
+    implementation composeDepends.material
+    implementation composeDepends.preview
+    implementation composeDepends.activity
 
     implementation kotlinDepends.stdlib
     implementation kotlinDepends.core

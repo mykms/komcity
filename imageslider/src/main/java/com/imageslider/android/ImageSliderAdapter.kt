@@ -3,13 +3,12 @@ package com.imageslider.android
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.imageslider.android.databinding.LayoutSliderImageBinding
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
-import kotlinx.android.synthetic.main.layout_silder_image.view.*
 
 /**
  * Created by Aleksei Kholoimov on 19.04.2020
@@ -23,7 +22,7 @@ internal class ImageSliderAdapter(private val items: List<String>,
     private val itemsBitmap = arrayOfNulls<Bitmap?>(items.size)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_silder_image, parent, false)
+        val view = LayoutSliderImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
     }
 
@@ -43,26 +42,26 @@ internal class ImageSliderAdapter(private val items: List<String>,
         } else null
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(private val binding: LayoutSliderImageBinding) : RecyclerView.ViewHolder(binding.root) {
 
         private lateinit var target: Target
 
         fun bind(imageUrl: String, position: Int, listener: HolderImageLoaderResult) {
             target = object: Target {
                 override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                    itemView.imageItem.setImageDrawable(placeHolderDrawable)
-                    itemView.imageItem.scaleType = ImageView.ScaleType.FIT_CENTER
+                    binding.imageItem.setImageDrawable(placeHolderDrawable)
+                    binding.imageItem.scaleType = ImageView.ScaleType.FIT_CENTER
                 }
 
                 override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-                    itemView.imageItem.scaleType = ImageView.ScaleType.FIT_CENTER
-                    itemView.imageItem.setImageResource(R.drawable.vector_ic_warning)
+                    binding.imageItem.scaleType = ImageView.ScaleType.FIT_CENTER
+                    binding.imageItem.setImageResource(R.drawable.vector_ic_warning)
                 }
 
                 override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                    itemView.imageItem.scaleType = ImageView.ScaleType.CENTER_CROP
-                    itemView.imageItem.setImageBitmap(bitmap)
-                    itemView.imageItem.setOnClickListener { itemCallback?.onImageClick(bitmap, position) }
+                    binding.imageItem.scaleType = ImageView.ScaleType.CENTER_CROP
+                    binding.imageItem.setImageBitmap(bitmap)
+                    binding.imageItem.setOnClickListener { itemCallback?.onImageClick(bitmap, position) }
                     itemCallback?.onImageLoaded(bitmap, position)
                     listener.onImageLoaded(position, bitmap)
                 }

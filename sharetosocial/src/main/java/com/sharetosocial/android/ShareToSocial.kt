@@ -11,7 +11,7 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
-import kotlinx.android.synthetic.main.share_to_social_view.view.*
+import com.sharetosocial.android.databinding.ShareToSocialViewBinding
 import java.io.File
 
 class ShareToSocial(context: Context?, attrs: AttributeSet?) : RelativeLayout(context, attrs) {
@@ -20,16 +20,16 @@ class ShareToSocial(context: Context?, attrs: AttributeSet?) : RelativeLayout(co
     private var mediaFile: File? = null
     private var mediaDescription: String = ""
     private var onSocialClick: ((item: SocialApp) -> Unit)? = null
+    private val binding = ShareToSocialViewBinding.inflate(LayoutInflater.from(context), this, true)
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.share_to_social_view, this)
-        groupMessenger.isVisible = isVisibleMessenger
+        binding.groupMessenger.isVisible = isVisibleMessenger
         initButtons()
     }
 
     private fun initButtons() {
-        imgShare.setOnClickListener {
-            groupMessenger.isVisible = !isVisibleMessenger
+        binding.imgShare.setOnClickListener {
+            binding.groupMessenger.isVisible = !isVisibleMessenger
             it.rotation = if (isVisibleMessenger) {
                 0f
             } else {
@@ -37,12 +37,14 @@ class ShareToSocial(context: Context?, attrs: AttributeSet?) : RelativeLayout(co
             }
             isVisibleMessenger = !isVisibleMessenger
         }
-        imgTelegram.setOnClickListener { onSocialClick?.invoke(SocialApp.telegram) }
-        imgWhatsapp.setOnClickListener { onSocialClick?.invoke(SocialApp.whatsapp) }
-        imgVkontakte.setOnClickListener { onSocialClick?.invoke(SocialApp.vkontakte) }
-        imgTwitter.setOnClickListener { onSocialClick?.invoke(SocialApp.twitter) }
-        imgFacebook.setOnClickListener { onSocialClick?.invoke(SocialApp.facebook) }
-        imgInstagram.setOnClickListener { onSocialClick?.invoke(SocialApp.instagram) }
+        with(binding) {
+            imgTelegram.setOnClickListener { onSocialClick?.invoke(SocialApp.telegram) }
+            imgWhatsapp.setOnClickListener { onSocialClick?.invoke(SocialApp.whatsapp) }
+            imgVkontakte.setOnClickListener { onSocialClick?.invoke(SocialApp.vkontakte) }
+            imgTwitter.setOnClickListener { onSocialClick?.invoke(SocialApp.twitter) }
+            imgFacebook.setOnClickListener { onSocialClick?.invoke(SocialApp.facebook) }
+            imgInstagram.setOnClickListener { onSocialClick?.invoke(SocialApp.instagram) }
+        }
     }
 
     private fun checkMediaFileAndShare(packageName: String) {

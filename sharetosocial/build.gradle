@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply from: "$rootProject.projectDir/depends.gradle"
@@ -27,6 +26,14 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        compose true
+        viewBinding true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "$compose"
+        kotlinCompilerVersion "$kotlin_version"
+    }
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -41,6 +48,11 @@ dependencies {
     implementation kotlinDepends.core
     implementation kotlinDepends.coroutinesCore
     implementation kotlinDepends.coroutinesAndroid
+
+    implementation composeDepends.ui
+    implementation composeDepends.material
+    implementation composeDepends.preview
+    implementation composeDepends.activity
 
     testImplementation testDepends.junit
     androidTestImplementation testDepends.runner

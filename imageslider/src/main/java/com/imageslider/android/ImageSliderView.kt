@@ -9,7 +9,7 @@ import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import kotlinx.android.synthetic.main.layout_silder.view.*
+import com.imageslider.android.databinding.LayoutSliderBinding
 
 /**
  * Created by Aleksei Kholoimov on 19.04.2020
@@ -27,9 +27,9 @@ class ImageSliderView(context: Context, attrs: AttributeSet?) : FrameLayout(cont
     private var inActiveItem = R.drawable.bg_point_switcher
     private var activeItemSize = 12
     private var inActiveItemSize = 8
+    private val binding = LayoutSliderBinding.inflate(LayoutInflater.from(context), this, true)
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.layout_silder, this)
         initAttributes(attrs)
         initComponents()
     }
@@ -52,13 +52,13 @@ class ImageSliderView(context: Context, attrs: AttributeSet?) : FrameLayout(cont
         initDotsSlider()
     }
 
-    private fun initImageSlider() = with(imageViewPager) {
+    private fun initImageSlider() = with(binding.imageViewPager) {
         orientation = ViewPager2.ORIENTATION_HORIZONTAL
         offscreenPageLimit = 4
         adapter = null
     }
 
-    private fun initDotsSlider() = with(dotList) {
+    private fun initDotsSlider() = with(binding.dotList) {
         layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         adapter = null
     }
@@ -77,7 +77,7 @@ class ImageSliderView(context: Context, attrs: AttributeSet?) : FrameLayout(cont
     }
 
     private fun getBitmapFromAdapterByPosition(position: Int): Bitmap? {
-        return (imageViewPager.adapter as? ImageSliderAdapter)?.getBitmapByPosition(position)
+        return (binding.imageViewPager.adapter as? ImageSliderAdapter)?.getBitmapByPosition(position)
     }
 
     /**
@@ -90,18 +90,18 @@ class ImageSliderView(context: Context, attrs: AttributeSet?) : FrameLayout(cont
     }
 
     private fun setImageAdapter(items: List<String>) {
-        imageViewPager.adapter = ImageSliderAdapter(items, onImageListener)
+        binding.imageViewPager.adapter = ImageSliderAdapter(items, onImageListener)
     }
 
     private fun setDotsAdapter(items: List<Boolean>) {
-        dotList.adapter = DotsSliderAdapter(arrayListOf<Boolean>().apply { addAll(items) },
+        binding.dotList.adapter = DotsSliderAdapter(arrayListOf<Boolean>().apply { addAll(items) },
                 activeItem, inActiveItem, activeItemSize, inActiveItemSize) {
-            imageViewPager.currentItem = it
+            binding.imageViewPager.currentItem = it
         }
-        imageViewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+        binding.imageViewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                (dotList?.adapter as? DotsSliderAdapter)?.apply {
+                (binding.dotList.adapter as? DotsSliderAdapter)?.apply {
                     changeItemAndUpdate(selectedPosition, false)
                     changeItemAndUpdate(position, true)
                 }
