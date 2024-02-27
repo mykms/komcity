@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.ui_list_selector_dialog.*
 import ru.komcity.uicomponent.DividerWithRemoveDecorator
 import ru.komcity.uicomponent.R
+import ru.komcity.uicomponent.databinding.UiListSelectorDialogBinding
 import java.io.Serializable
 
 /**
@@ -28,7 +28,8 @@ interface ListSelectorDialogListener: Serializable {
 }
 
 class ListSelectorDialog: BottomSheetDialogFragment() {
-
+    private var _binding: UiListSelectorDialogBinding? = null
+    private val binding get() = _binding!!
     private var pTitle = ""
     private var items: List<String>? = null
     private var listener: ListSelectorDialogListener? = null
@@ -40,8 +41,10 @@ class ListSelectorDialog: BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = UiListSelectorDialogBinding.inflate(inflater, container, false)
         items = arguments?.getStringArrayList(keyItems)
-        return inflater.inflate(R.layout.ui_list_selector_dialog, container, false)
+        //return inflater.inflate(R.layout.ui_list_selector_dialog, container, false)
+        return binding.root
     }
 
     override fun onStart() {
@@ -70,14 +73,14 @@ class ListSelectorDialog: BottomSheetDialogFragment() {
     }
 
     private fun initComponents(items: List<String>, listener: ListSelectorDialogListener) {
-        ivClose.setOnClickListener {
+        binding.ivClose.setOnClickListener {
             listener.onCloseClick()
         }
-        textTitle.text = pTitle
+        binding.textTitle.text = pTitle
         initRecyclerView(items, listener)
     }
 
-    private fun initRecyclerView(items: List<String>, listener: ListSelectorDialogListener) = with(rvItems) {
+    private fun initRecyclerView(items: List<String>, listener: ListSelectorDialogListener) = with(binding.rvItems) {
         adapter = ListSelectorAdapter(items) { item, position ->
             listener.onSelectItem(item, position)
         }

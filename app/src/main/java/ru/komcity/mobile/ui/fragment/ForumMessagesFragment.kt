@@ -4,18 +4,20 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sharetosocial.android.SocialApp
-import kotlinx.android.synthetic.main.fragment_forum_detail_message.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.Constants
 import ru.komcity.mobile.common.analytic.AnalyticManager
 import ru.komcity.mobile.common.analytic.AnalyticManagerImpl
+import ru.komcity.mobile.databinding.FragmentForumDetailMessageBinding
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.presenter.ForumPresenter
 import ru.komcity.mobile.repository.ForumRepositoryImpl
@@ -27,7 +29,8 @@ import ru.komcity.mobile.viewModel.SubForumItem
 import ru.komcity.uicomponent.DividerWithRemoveDecorator
 
 class ForumMessagesFragment : BaseFragment(), ForumView {
-
+    private var _binding: FragmentForumDetailMessageBinding? = null
+    private val binding get() = _binding!!
     private val api = ApiNetwork().api
     private val repo = ForumRepositoryImpl(api)
     @InjectPresenter
@@ -35,6 +38,15 @@ class ForumMessagesFragment : BaseFragment(), ForumView {
     @ProvidePresenter
     fun providePresenter() = ForumPresenter(repo)
     private lateinit var analytics: AnalyticManager
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentForumDetailMessageBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onCreateInit(clientId: String, context: Context) {
         analytics = AnalyticManagerImpl(clientId, context)
@@ -58,7 +70,7 @@ class ForumMessagesFragment : BaseFragment(), ForumView {
         forumPresenter.getForumMessages()
     }
 
-    private fun initToolbar() = with(toolbar) {
+    private fun initToolbar() = with(binding.toolbar) {
         title = ""
         setNavigationIcon(R.drawable.vector_ic_arrow_back_white)
         setNavigationOnClickListener {
@@ -66,13 +78,13 @@ class ForumMessagesFragment : BaseFragment(), ForumView {
         }
     }
 
-    private fun initRecyclerView() = with(rvForumMessages) {
+    private fun initRecyclerView() = with(binding.rvForumMessages) {
         setHasFixedSize(true)
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         addItemDecoration(DividerWithRemoveDecorator(context, R.drawable.recycler_divider, 0, 1))
     }
 
-    private fun initSocial() = with(viewShare) {
+    private fun initSocial() = with(binding.viewShare) {
         isVisible = false
         setOnSocialClickListener {
             forumPresenter.onShareSocialClick(it)
@@ -95,26 +107,26 @@ class ForumMessagesFragment : BaseFragment(), ForumView {
 
     override fun showSocial() {
         analytics.onShareInfoClick(Constants.SCREEN_NAME_FORUM_MESSAGES)
-        if (!viewShare.isVisible) {
-            viewShare.isVisible = true
+        if (!binding.viewShare.isVisible) {
+            binding.viewShare.isVisible = true
         }
     }
 
     override fun hideSocial() {
         activity?.runOnUiThread {
-            if (viewShare.isVisible) {
-                viewShare.isVisible = false
+            if (binding.viewShare.isVisible) {
+                binding.viewShare.isVisible = false
             }
         }
     }
 
     override fun onShareSocial(item: SocialApp, description: String) {
-        viewShare.shareMedia(item, null, description)
+        binding.viewShare.shareMedia(item, null, description)
         analytics.onShareInfoComplete(Constants.SCREEN_NAME_FORUM_MESSAGES, item.name)
     }
 
     override fun onLoading(isLoading: Boolean) {
-        progress.isVisible = isLoading
+        binding.progress.isVisible = isLoading
     }
 
     override fun onError(message: String) {
@@ -130,7 +142,7 @@ class ForumMessagesFragment : BaseFragment(), ForumView {
     }
 
     override fun setToolbarTitle(title: String) {
-        toolbar.title = title
+        binding.toolbar.title = title
     }
 
     override fun onForumList(items: List<ForumItem>) {
@@ -140,7 +152,7 @@ class ForumMessagesFragment : BaseFragment(), ForumView {
     }
 
     override fun onForumMessages(items: List<ForumMessagesItem>) {
-        rvForumMessages.adapter = ForumMessageAdapter(items) { text, isShare ->
+        binding.rvForumMessages.adapter = ForumMessageAdapter(items) { text, isShare ->
             forumPresenter.onForumMessageAction(text, isShare)
         }
     }

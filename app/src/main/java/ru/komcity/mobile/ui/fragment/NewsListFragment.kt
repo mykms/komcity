@@ -2,7 +2,9 @@ package ru.komcity.mobile.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.util.Pair
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
@@ -10,13 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
-import kotlinx.android.synthetic.main.fragment_news_list.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.Constants
 import ru.komcity.mobile.common.analytic.AnalyticManager
 import ru.komcity.mobile.common.analytic.AnalyticManagerImpl
+import ru.komcity.mobile.databinding.FragmentNewsListBinding
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.presenter.NewsPresenter
 import ru.komcity.mobile.repository.NewsRepositoryImpl
@@ -27,10 +29,11 @@ import ru.komcity.mobile.viewModel.BaseHolderItem
 import ru.komcity.mobile.viewModel.NewsItem
 import ru.komcity.mobile.viewModel.SearchNewsItem
 import ru.komcity.uicomponent.DividerWithRemoveDecorator
-import java.util.*
+import java.util.Calendar
 
 class NewsListFragment: BaseFragment(), NewsListView {
-
+    private var _binding: FragmentNewsListBinding? = null
+    private val binding get() = _binding!!
     private val api = ApiNetwork().api
     private val repo = NewsRepositoryImpl(api)
     @InjectPresenter
@@ -42,6 +45,15 @@ class NewsListFragment: BaseFragment(), NewsListView {
     private val calendarBuilder: MaterialDatePicker.Builder<Pair<Long, Long>> = MaterialDatePicker.Builder.dateRangePicker()
     private lateinit var calendarDialog: MaterialDatePicker<Pair<Long, Long>>
     private val calendarDialogTag = "CalendarDialogTag"
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentNewsListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onCreateInit(clientId: String, context: Context) {
         analytics = AnalyticManagerImpl(clientId, context)
@@ -62,7 +74,7 @@ class NewsListFragment: BaseFragment(), NewsListView {
         newsPresenter.getNewsList()
     }
 
-    private fun initFab() {
+    private fun initFab() = with(binding) {
         tvReset.isVisible = false
         tvReset.setOnClickListener {
             newsPresenter.onSearchReset()
@@ -72,7 +84,7 @@ class NewsListFragment: BaseFragment(), NewsListView {
         }
     }
 
-    private fun initRecyclerView(view: View) = with(rvListNews) {
+    private fun initRecyclerView(view: View) = with(binding.rvListNews) {
         setHasFixedSize(true)
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         addItemDecoration(DividerWithRemoveDecorator(context, R.drawable.recycler_divider, 0, 0))
@@ -106,7 +118,7 @@ class NewsListFragment: BaseFragment(), NewsListView {
     }
 
     override fun onLoading(isLoading: Boolean) {
-        progress.isVisible = isLoading
+        binding.progress.isVisible = isLoading
     }
 
     override fun onError(message: String) {
@@ -118,7 +130,7 @@ class NewsListFragment: BaseFragment(), NewsListView {
             //addAll(searchAndAddNewsItems)
             addAll(items)
         }
-        rvListNews.adapter = NewsAdapter(totalItems) {
+        binding.rvListNews.adapter = NewsAdapter(totalItems) {
             (it as? NewsItem)?.let { item ->
                 analytics.onNewsDetailClick(item.newsId)
             }
@@ -127,7 +139,7 @@ class NewsListFragment: BaseFragment(), NewsListView {
     }
 
     override fun scrollTo(position: Int) {
-        rvListNews.scrollToPosition(position)
+        binding.rvListNews.scrollToPosition(position)
     }
 
     override fun navigateToScreen(screenId: Int, args: Bundle) {
@@ -141,12 +153,12 @@ class NewsListFragment: BaseFragment(), NewsListView {
     }
 
     override fun hideSearchDialog() {
-        fab.show()
+        binding.fab.show()
         (parentFragmentManager.findFragmentByTag(calendarDialogTag) as? DialogFragment)?.dismiss()
     }
 
     override fun searchResetIsVisible(isVisible: Boolean) {
-        tvReset.isVisible = isVisible
+        binding.tvReset.isVisible = isVisible
     }
 
     override fun onDestroyView() {

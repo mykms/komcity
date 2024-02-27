@@ -4,8 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_forum_message.view.*
-import ru.komcity.mobile.R
+import ru.komcity.mobile.databinding.ItemForumMessageBinding
 import ru.komcity.mobile.viewModel.ForumMessagesItem
 
 /**
@@ -15,10 +14,12 @@ import ru.komcity.mobile.viewModel.ForumMessagesItem
  */
 class ForumMessageAdapter(private val items: List<ForumMessagesItem>,
                           private val onActionClick: (text: String, isShare: Boolean) -> Unit) : RecyclerView.Adapter<ForumMessageAdapter.ViewHolder>() {
+    private var _binding: ItemForumMessageBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_forum_message, parent, false)
-        return ViewHolder(view)
+        _binding = ItemForumMessageBinding.inflate(LayoutInflater.from(parent.context), parent, true)
+        return ViewHolder(binding.root)
     }
 
     override fun getItemCount(): Int {
@@ -31,7 +32,7 @@ class ForumMessageAdapter(private val items: List<ForumMessagesItem>,
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: ForumMessagesItem) {
-            with(itemView) {
+            with(binding) {
                 tvUserName.text = item.userName
                 tvDateTime.text = item.date
                 tvDescription.text = item.message

@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
-import kotlinx.android.synthetic.main.ui_selected_category_view.view.*
+import ru.komcity.uicomponent.databinding.UiSelectedCategoryViewBinding
 
 /**
  * Created by Aleksei Kholoimov on 05.04.2020
@@ -14,6 +14,8 @@ import kotlinx.android.synthetic.main.ui_selected_category_view.view.*
  * UI-component for showing title nd close button
  */
 class SelectedCategoryView: FrameLayout {
+    private var _binding: UiSelectedCategoryViewBinding? = UiSelectedCategoryViewBinding.inflate(LayoutInflater.from(context), this, true)
+    private val binding get() = _binding!!
     private var pTitle = ""
     private var pIsVisibleCloseButton = false
     private var attrs: AttributeSet? = null
@@ -51,26 +53,26 @@ class SelectedCategoryView: FrameLayout {
 
     var isCloseButtonVisible: Boolean
         get() {
-            return ivClose?.isVisible ?: false
+            return binding.ivClose?.isVisible ?: false
         }
         set(value) {
-            ivClose?.isVisible = value
+            binding.ivClose?.isVisible = value
         }
 
     var title: String
         get() {
-            return tvTitle?.text?.toString() ?: ""
+            return binding.tvTitle?.text?.toString() ?: ""
         }
         set(value) {
-            tvTitle?.text = value
+            binding.tvTitle?.text = value
         }
 
     fun setOnCloseListener(l: (View) -> Unit) {
-        ivClose?.setOnClickListener(l)
+        binding.ivClose?.setOnClickListener(l)
     }
 
     override fun setOnClickListener(l: OnClickListener?) {
         super.setOnClickListener(l)
-        tvTitle.setOnClickListener(l)
+        binding.tvTitle.setOnClickListener(l)
     }
 }

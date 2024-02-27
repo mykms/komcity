@@ -2,15 +2,17 @@ package ru.komcity.mobile.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_news_add.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.analytic.AnalyticManager
 import ru.komcity.mobile.common.analytic.AnalyticManagerImpl
+import ru.komcity.mobile.databinding.FragmentNewsAddBinding
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.network.MailSenderData
 import ru.komcity.mobile.presenter.NewsAddPresenter
@@ -25,7 +27,8 @@ import ru.komcity.mobile.viewModel.addnews.AddNewsBaseItem
  * Добавление новой новости
  */
 class NewsAddFragment: BaseFragment(), NewsAddView {
-
+    private var _binding: FragmentNewsAddBinding? = null
+    private val binding get() = _binding!!
     private val api = ApiNetwork().api
     private val repo = SendRepositoryImpl(api)
     @InjectPresenter
@@ -33,6 +36,15 @@ class NewsAddFragment: BaseFragment(), NewsAddView {
     @ProvidePresenter
     fun providePresenter() = NewsAddPresenter(repo)
     private lateinit var analytics: AnalyticManager
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentNewsAddBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onCreateInit(clientId: String, context: Context) {
         analytics = AnalyticManagerImpl(clientId, context)
@@ -44,18 +56,18 @@ class NewsAddFragment: BaseFragment(), NewsAddView {
     override fun setResourceLayout(): Int = R.layout.fragment_news_add
 
     override fun initComponents(view: View) {
-        progress.isVisible = false
+        binding.progress.isVisible = false
         setBottomPanelVisibility(false)
         initToolbar()
         initRecyclerView()
-        btSend.setOnClickListener {
+        binding.btSend.setOnClickListener {
             hideKeyboard()
-            newsPresenter.checkAndSendNews(etSubject.text.toString(), etDescription.text.toString())
+            newsPresenter.checkAndSendNews(binding.etSubject.text.toString(), binding.etDescription.text.toString())
         }
         newsPresenter.getSendParams()
     }
 
-    private fun initToolbar() = with(toolbar) {
+    private fun initToolbar() = with(binding.toolbar) {
         title = "Предложить новость"
         setNavigationIcon(R.drawable.vector_ic_arrow_back_white)
         setNavigationOnClickListener {
@@ -63,13 +75,13 @@ class NewsAddFragment: BaseFragment(), NewsAddView {
         }
     }
 
-    private fun initRecyclerView() = with(rvAttaches) {
+    private fun initRecyclerView() = with(binding.rvAttaches) {
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         adapter = null
     }
 
     override fun onLoading(isLoading: Boolean) {
-        progress.isVisible = isLoading
+        binding.progress.isVisible = isLoading
     }
 
     override fun onError(message: String) {
@@ -85,7 +97,7 @@ class NewsAddFragment: BaseFragment(), NewsAddView {
     }
 
     override fun onFileLoadComplete(items: List<AddNewsBaseItem>) {
-        rvAttaches.adapter = NewsAddFileAdapter(items) {
+        binding.rvAttaches.adapter = NewsAddFileAdapter(items) {
             newsPresenter.onAttachFileClick(it)
         }
     }

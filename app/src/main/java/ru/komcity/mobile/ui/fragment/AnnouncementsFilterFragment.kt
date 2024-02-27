@@ -2,15 +2,17 @@ package ru.komcity.mobile.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
-import kotlinx.android.synthetic.main.fragment_announcement_search.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.Constants
 import ru.komcity.mobile.common.analytic.AnalyticManager
 import ru.komcity.mobile.common.analytic.AnalyticManagerImpl
+import ru.komcity.mobile.databinding.FragmentAnnouncementSearchBinding
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.presenter.AnnouncementsFilterPresenter
 import ru.komcity.mobile.repository.AnnouncementsFilterRepositoryImpl
@@ -20,7 +22,8 @@ import ru.komcity.uicomponent.listselector.ListSelectorDialog
 import ru.komcity.uicomponent.listselector.ListSelectorDialogListener
 
 class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
-
+    private var _binding: FragmentAnnouncementSearchBinding? = null
+    private val binding get() = _binding!!
     private val api = ApiNetwork().api
     private val repo = AnnouncementsFilterRepositoryImpl(api, AnnouncementCategoryMapper())
     @InjectPresenter
@@ -46,18 +49,27 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
         return R.layout.fragment_announcement_search
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentAnnouncementSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun initComponents(view: View) {
         initCategory()
         initSubCategory()
         initDetailCategory()
         initDetailSubCategory()
-        btShow.setOnClickListener {
+        binding.btShow.setOnClickListener {
             presenter.navigateToAnnouncements()
         }
         presenter.getFilters()
     }
 
-    private fun initCategory() = with(viewCategory) {
+    private fun initCategory() = with(binding.viewCategory) {
         title = ""
         isCloseButtonVisible = false
         isVisible = false
@@ -69,7 +81,7 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
         }
     }
 
-    private fun initSubCategory() = with(viewSubCategory) {
+    private fun initSubCategory() = with(binding.viewSubCategory) {
         title = ""
         isCloseButtonVisible = false
         isVisible = false
@@ -81,7 +93,7 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
         }
     }
 
-    private fun initDetailCategory() = with(viewDetailCategory) {
+    private fun initDetailCategory() = with(binding.viewDetailCategory) {
         title = ""
         isCloseButtonVisible = false
         isVisible = false
@@ -93,7 +105,7 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
         }
     }
 
-    private fun initDetailSubCategory() = with(viewDetailSubCategory) {
+    private fun initDetailSubCategory() = with(binding.viewDetailSubCategory) {
         title = ""
         isCloseButtonVisible = false
         isVisible = false
@@ -106,7 +118,7 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
     }
 
     override fun onLoading(isLoading: Boolean) {
-        progress.isVisible = isLoading
+        binding.progress.isVisible = isLoading
     }
 
     override fun navigateToScreen(screenId: Int, args: Bundle) {
@@ -126,39 +138,39 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
     }
 
     override fun setCategoryTitle(text: String, isCloseVisible: Boolean) {
-        viewCategory.title = text
-        viewCategory.isCloseButtonVisible = isCloseVisible
+        binding.viewCategory.title = text
+        binding.viewCategory.isCloseButtonVisible = isCloseVisible
     }
 
     override fun setCategoryVisibility(isVisible: Boolean) {
-        viewCategory.isVisible = isVisible
+        binding.viewCategory.isVisible = isVisible
     }
 
     override fun setSubCategoryCategoryTitle(text: String, isCloseVisible: Boolean) {
-        viewSubCategory.title = text
-        viewSubCategory.isCloseButtonVisible = isCloseVisible
+        binding.viewSubCategory.title = text
+        binding.viewSubCategory.isCloseButtonVisible = isCloseVisible
     }
 
     override fun setSubCategoryVisibility(isVisible: Boolean) {
-        viewSubCategory.isVisible = isVisible
+        binding.viewSubCategory.isVisible = isVisible
     }
 
     override fun setDetailCategoryTitle(text: String, isCloseVisible: Boolean) {
-        viewDetailCategory.title = text
-        viewDetailCategory.isCloseButtonVisible = isCloseVisible
+        binding.viewDetailCategory.title = text
+        binding.viewDetailCategory.isCloseButtonVisible = isCloseVisible
     }
 
     override fun setDetailCategoryVisibility(isVisible: Boolean) {
-        viewDetailCategory.isVisible = isVisible
+        binding.viewDetailCategory.isVisible = isVisible
     }
 
     override fun setDetailSubCategoryCategoryTitle(text: String, isCloseVisible: Boolean) {
-        viewDetailSubCategory.title = text
-        viewDetailSubCategory.isCloseButtonVisible = isCloseVisible
+        binding.viewDetailSubCategory.title = text
+        binding.viewDetailSubCategory.isCloseButtonVisible = isCloseVisible
     }
 
     override fun setDetailSubCategoryVisibility(isVisible: Boolean) {
-        viewDetailSubCategory.isVisible = isVisible
+        binding.viewDetailSubCategory.isVisible = isVisible
     }
 
     override fun showCategoryDialog(items: List<String>) {

@@ -6,13 +6,25 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import kotlinx.android.synthetic.main.fragment_info.*
 import ru.komcity.mobile.BuildConfig
 import ru.komcity.mobile.R
+import ru.komcity.mobile.databinding.FragmentInfoBinding
 
 class InfoFragment : BaseFragment() {
+    private var _binding: FragmentInfoBinding? = null
+    private val binding get() = _binding!!
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentInfoBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onCreateInit(clientId: String, context: Context) {
     }
@@ -26,15 +38,17 @@ class InfoFragment : BaseFragment() {
     }
 
     override fun initComponents(view: View) {
-        tvVersion.text = "Версия: ${BuildConfig.VERSION_NAME}"
-        tvShareApp.setOnClickListener {
-            shareMyApplication(it.context)
-        }
-        tvRateAndReview.setOnClickListener {
-            retaWithPlayMarket(it.context)
-        }
-        tvClose.setOnClickListener {
-            activity?.finish()
+        with(binding) {
+            tvVersion.text = "Версия: ${BuildConfig.VERSION_NAME}"
+            tvShareApp.setOnClickListener {
+                shareMyApplication(it.context)
+            }
+            tvRateAndReview.setOnClickListener {
+                retaWithPlayMarket(it.context)
+            }
+            tvClose.setOnClickListener {
+                activity?.finish()
+            }
         }
     }
 

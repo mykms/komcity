@@ -1,10 +1,13 @@
 plugins {
     id('com.android.application')
-    id('kotlin-android-extensions')
+    id('org.jetbrains.kotlin.android')
     id('kotlin-android')
     id('kotlin-kapt')
+    id 'com.google.gms.google-services'
     id('com.google.firebase.crashlytics')
+    id 'kotlin-parcelize'
 }
+
 apply from: "$rootProject.projectDir/depends.gradle"
 
 android {
@@ -14,7 +17,6 @@ android {
         }
     }
     compileSdkVersion AndroidSDK.compile
-    buildToolsVersion AndroidSDK.buildTools
 
     defaultConfig {
         applicationId "ru.komcity.mobile"
@@ -22,7 +24,6 @@ android {
         targetSdkVersion AndroidSDK.targetApi
         versionCode 8
         versionName "1.0.8"
-        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -36,24 +37,22 @@ android {
             debuggable true
         }
     }
-    androidExtensions {
-        experimental = true
-    }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     buildFeatures {
-        //compose true
+        compose true
         viewBinding true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "$compose"
+        kotlinCompilerExtensionVersion '1.5.8'
         kotlinCompilerVersion "$kotlin_version"
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
+    namespace 'ru.komcity.mobile'
 }
 
 repositories {
@@ -63,22 +62,23 @@ repositories {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation supportDepends.supportCompat
-    implementation supportDepends.appCompat
-    implementation supportDepends.recyclerview
-    implementation supportDepends.constraintLayout
+    implementation "androidx.core:core-ktx:1.12.0"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "androidx.recyclerview:recyclerview:1.3.2"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
     implementation supportDepends.navFragment
     implementation supportDepends.navUI
     implementation supportDepends.legacy
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0"
-    implementation "androidx.lifecycle:lifecycle-common-java8:2.4.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.7.0"
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.7.0"
 
-    implementation composeDepends.ui
-    implementation composeDepends.material
-    implementation composeDepends.preview
-    implementation composeDepends.activity
+    implementation "com.google.android.material:material:1.11.0"
+    implementation "androidx.compose.ui:ui:1.6.2"
+    implementation "androidx.compose.material:material:1.6.2"
+    implementation "androidx.compose.ui:ui-tooling-preview:1.6.2"
+    implementation "androidx.activity:activity-compose:1.8.2"
 
     implementation kotlinDepends.stdlib
     implementation kotlinDepends.core
@@ -99,9 +99,7 @@ dependencies {
     implementation retrofitDepends.retrofitGson
     implementation retrofitDepends.retrofitRxJava
     implementation retrofitDepends.retrofitInterceptor
-    implementation ("com.squareup.okhttp3:okhttp:3.12.12"){
-        force = true //API 19 support
-    }
+    implementation ("com.squareup.okhttp3:okhttp:3.12.12")
 
     implementation picassoDepends.picasso
     implementation "io.supercharge:shimmerlayout:2.1.0"

@@ -6,22 +6,24 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Environment
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.imageslider.android.ImageSliderCallback
 import com.sharetosocial.android.SocialApp
-import kotlinx.android.synthetic.main.fragment_news_detail.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.Constants
 import ru.komcity.mobile.common.analytic.AnalyticManager
 import ru.komcity.mobile.common.analytic.AnalyticManagerImpl
+import ru.komcity.mobile.databinding.FragmentNewsDetailBinding
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.presenter.NewsDetailPresenter
 import ru.komcity.mobile.repository.NewsRepositoryImpl
@@ -35,7 +37,8 @@ import java.io.File
  * Fragment for screen news detail info
  */
 class NewsDetailFragment : BaseFragment(), NewsDetailView {
-
+    private var _binding: FragmentNewsDetailBinding? = null
+    private val binding get() = _binding!!
     private val api = ApiNetwork().api
     private val repo = NewsRepositoryImpl(api)
     @InjectPresenter
@@ -45,6 +48,15 @@ class NewsDetailFragment : BaseFragment(), NewsDetailView {
     private lateinit var analytics: AnalyticManager
 
     var item = NewsItem("", "", "", "", emptyList(), 0, 0)
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentNewsDetailBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onCreateInit(clientId: String, context: Context) {
         analytics = AnalyticManagerImpl(clientId, context)
@@ -67,7 +79,7 @@ class NewsDetailFragment : BaseFragment(), NewsDetailView {
         initToolbar()
     }
 
-    private fun initToolbar() = with(toolbar) {
+    private fun initToolbar() = with(binding.toolbar) {
         title = ""
         setNavigationIcon(R.drawable.vector_ic_arrow_back_white)
         setNavigationOnClickListener {
@@ -82,7 +94,7 @@ class NewsDetailFragment : BaseFragment(), NewsDetailView {
 
     private fun changeMenuIconColor(menu: Menu, context: Context) {
         menu.findItem(R.id.menu_share)?.let {
-            val drawable = it.icon.apply {
+            val drawable = it.icon?.apply {
                 DrawableCompat.setTint(DrawableCompat.wrap(this), ContextCompat.getColor(context, R.color.white))
             }
             it.icon = drawable
@@ -98,7 +110,7 @@ class NewsDetailFragment : BaseFragment(), NewsDetailView {
     }
 
     override fun onLoading(isLoading: Boolean) {
-        progress.isVisible = isLoading
+        binding.progress.isVisible = isLoading
     }
 
     override fun onError(message: String) {
@@ -106,22 +118,27 @@ class NewsDetailFragment : BaseFragment(), NewsDetailView {
     }
 
     override fun onNewsDetailLoaded(item: NewsItem) {
-        tvDate.text = item.date
-        tvTitle.text = item.title
-        tvDescription.text = item.text
-        imageSliderView.apply {
-            setOnImageClickListener(object : ImageSliderCallback {
-                override fun onImageClick(bitmap: Bitmap?, position: Int) {
-                    newsPresenter.navigateTo(R.id.imageViewFragment, bundleOf("Bitmap" to bitmap))
-                }
+        with(binding) {
+            tvDate.text = item.date
+            tvTitle.text = item.title
+            tvDescription.text = item.text
+            imageSliderView.apply {
+                setOnImageClickListener(object : ImageSliderCallback {
+                    override fun onImageClick(bitmap: Bitmap?, position: Int) {
+                        newsPresenter.navigateTo(
+                            R.id.imageViewFragment,
+                            bundleOf("Bitmap" to bitmap)
+                        )
+                    }
 
-                override fun onImageLoaded(bitmap: Bitmap?, position: Int) {
-                }
+                    override fun onImageLoaded(bitmap: Bitmap?, position: Int) {
+                    }
 
-                override fun onImageSwipe(bitmap: Bitmap?, position: Int) {
-                }
-            })
-            setItems(item.imageUrls)
+                    override fun onImageSwipe(bitmap: Bitmap?, position: Int) {
+                    }
+                })
+                setItems(item.imageUrls)
+            }
         }
     }
 
@@ -134,15 +151,15 @@ class NewsDetailFragment : BaseFragment(), NewsDetailView {
     }
 
     override fun setToolbarTitle(title: String) {
-        toolbar.title = title
+        binding.toolbar.title = title
     }
 
     override fun setVisibilitySharePanel(isVisible: Boolean) {
         if (isVisible) {
             analytics.onShareInfoClick(Constants.SCREEN_NAME_NEWS_DETAILS)
         }
-        viewShare.isVisible = isVisible
-        viewShare.setOnSocialClickListener {
+        binding.viewShare.isVisible = isVisible
+        binding.viewShare.setOnSocialClickListener {
             // Запросить права на сохранение медиа
             newsPresenter.onShareSocialClick(it)
         }
@@ -161,13 +178,13 @@ class NewsDetailFragment : BaseFragment(), NewsDetailView {
     }
 
     override fun onShareSocial(item: SocialApp, position: Int) {
-        val bmp = imageSliderView.getImageByPosition(position)
+        val bmp = binding.imageSliderView.getImageByPosition(position)
         newsPresenter.saveFileOnDisk(context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES), bmp)
     }
 
     override fun onSaveMediaSuccess(item: SocialApp, file: File) {
-        val text = tvDescription.text?.toString() ?: ""
-        viewShare.shareMedia(item, file, text)
+        val text = binding.tvDescription.text?.toString() ?: ""
+        binding.viewShare.shareMedia(item, file, text)
         analytics.onShareInfoComplete(Constants.SCREEN_NAME_NEWS_DETAILS, item.name)
     }
 

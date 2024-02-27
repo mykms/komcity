@@ -4,8 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.ui_list_selector_item.view.*
-import ru.komcity.uicomponent.R
+import ru.komcity.uicomponent.databinding.UiSelectedCategoryViewBinding
 
 /**
  * Created by Aleksei Kholoimov on 05.04.2020
@@ -15,9 +14,13 @@ import ru.komcity.uicomponent.R
 class ListSelectorAdapter(private val items: List<String>,
                           private val listener: (item: String, position: Int) -> Unit) : RecyclerView.Adapter<ListSelectorAdapter.ViewHolder>() {
 
+    private var _binding: UiSelectedCategoryViewBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.ui_list_selector_item, parent, false)
-        return ViewHolder(view)
+        _binding = UiSelectedCategoryViewBinding.inflate(LayoutInflater.from(parent.context), parent, true)
+        //val view = LayoutInflater.from(parent.context).inflate(R.layout.ui_list_selector_item, parent, false)
+        return ViewHolder(binding.root)
     }
 
     override fun getItemCount(): Int {
@@ -31,7 +34,7 @@ class ListSelectorAdapter(private val items: List<String>,
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: String, position: Int) {
             with(itemView) {
-                tvTitle.text = item
+                binding.tvTitle.text = item
                 setOnClickListener { listener(item, position) }
             }
         }

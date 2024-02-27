@@ -3,18 +3,20 @@ package ru.komcity.mobile.ui.fragment
 import android.content.Context
 import android.graphics.drawable.ShapeDrawable
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_announcements.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.Constants
 import ru.komcity.mobile.common.analytic.AnalyticManager
 import ru.komcity.mobile.common.analytic.AnalyticManagerImpl
+import ru.komcity.mobile.databinding.FragmentAnnouncementsBinding
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.presenter.AnnouncementsPresenter
 import ru.komcity.mobile.repository.AnnouncementsRepositoryImpl
@@ -24,7 +26,8 @@ import ru.komcity.mobile.view.AnnouncementsView
 import ru.komcity.mobile.viewModel.Announcement
 
 class AnnouncementsFragment : BaseFragment(), AnnouncementsView {
-
+    private var _binding: FragmentAnnouncementsBinding? = null
+    private val binding get() = _binding!!
     private val api = ApiNetwork().api
     private val repo = AnnouncementsRepositoryImpl(api, AnnouncementsMapper())
     @InjectPresenter
@@ -32,6 +35,15 @@ class AnnouncementsFragment : BaseFragment(), AnnouncementsView {
     @ProvidePresenter
     fun providePresenter() = AnnouncementsPresenter(repo)
     private lateinit var analytics: AnalyticManager
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentAnnouncementsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onCreateInit(clientId: String, context: Context) {
         analytics = AnalyticManagerImpl(clientId, context)
@@ -52,7 +64,7 @@ class AnnouncementsFragment : BaseFragment(), AnnouncementsView {
         presenter.getAnnouncements()
     }
 
-    private fun initToolbar() = with(toolbar) {
+    private fun initToolbar() = with(binding.toolbar) {
         title = "Список объявлений"
         setNavigationIcon(R.drawable.vector_ic_arrow_back_white)
         setNavigationOnClickListener {
@@ -60,7 +72,7 @@ class AnnouncementsFragment : BaseFragment(), AnnouncementsView {
         }
     }
 
-    private fun initRecyclerView(view: View) = with(rvAnnouncements) {
+    private fun initRecyclerView(view: View) = with(binding.rvAnnouncements) {
         setHasFixedSize(true)
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL).apply {
@@ -70,7 +82,7 @@ class AnnouncementsFragment : BaseFragment(), AnnouncementsView {
     }
 
     override fun onLoading(isLoading: Boolean) {
-        progress.isVisible = isLoading
+        binding.progress.isVisible = isLoading
     }
 
     override fun navigateToScreen(screenId: Int, args: Bundle) {
@@ -86,7 +98,7 @@ class AnnouncementsFragment : BaseFragment(), AnnouncementsView {
     }
 
     override fun showAnnouncements(items: List<Announcement>) {
-        rvAnnouncements.adapter = AnnouncementAdapter(items) {
+        binding.rvAnnouncements.adapter = AnnouncementAdapter(items) {
             analytics.onAnnouncementDetailsClick(it.id)
             onMessage("Нет возможности просмотреть детальную информацию")
         }

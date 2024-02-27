@@ -4,8 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_announcement.view.*
-import ru.komcity.mobile.R
+import ru.komcity.mobile.databinding.ItemAnnouncementBinding
 import ru.komcity.mobile.viewModel.Announcement
 
 /**
@@ -16,9 +15,12 @@ import ru.komcity.mobile.viewModel.Announcement
 class AnnouncementAdapter(val items: List<Announcement>, private val onItemClick: (item: Announcement) -> Unit)
     : RecyclerView.Adapter<AnnouncementAdapter.ViewHolder>() {
 
+    private var _binding: ItemAnnouncementBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_announcement, parent, false)
-        return ViewHolder(view)
+        _binding = ItemAnnouncementBinding.inflate(LayoutInflater.from(parent.context), parent, true)
+        return ViewHolder(binding.root)
     }
 
     override fun getItemCount(): Int {
@@ -31,8 +33,8 @@ class AnnouncementAdapter(val items: List<Announcement>, private val onItemClick
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: Announcement) {
-            itemView.tvDescription.text = item.description
-            itemView.tvDescription.setOnClickListener {
+            binding.tvDescription.text = item.description
+            binding.tvDescription.setOnClickListener {
                 onItemClick(item)
             }
         }

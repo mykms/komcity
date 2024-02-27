@@ -2,18 +2,20 @@ package ru.komcity.mobile.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sharetosocial.android.SocialApp
-import kotlinx.android.synthetic.main.fragment_forum_list.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.Constants
 import ru.komcity.mobile.common.analytic.AnalyticManager
 import ru.komcity.mobile.common.analytic.AnalyticManagerImpl
+import ru.komcity.mobile.databinding.FragmentForumListBinding
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.presenter.ForumPresenter
 import ru.komcity.mobile.repository.ForumRepositoryImpl
@@ -25,7 +27,8 @@ import ru.komcity.mobile.viewModel.SubForumItem
 import ru.komcity.uicomponent.DividerWithRemoveDecorator
 
 class ForumListFragment : BaseFragment(), ForumView {
-
+    private var _binding: FragmentForumListBinding? = null
+    private val binding get() = _binding!!
     private val api = ApiNetwork().api
     private val repo = ForumRepositoryImpl(api)
     @InjectPresenter
@@ -33,6 +36,15 @@ class ForumListFragment : BaseFragment(), ForumView {
     @ProvidePresenter
     fun providePresenter() = ForumPresenter(repo)
     private lateinit var analytics: AnalyticManager
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentForumListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onCreateInit(clientId: String, context: Context) {
         analytics = AnalyticManagerImpl(clientId, context)
@@ -51,14 +63,14 @@ class ForumListFragment : BaseFragment(), ForumView {
         forumPresenter.getForums()
     }
 
-    private fun initRecyclerView() = with(rvListForum) {
+    private fun initRecyclerView() = with(binding.rvListForum) {
         setHasFixedSize(true)
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         addItemDecoration(DividerWithRemoveDecorator(context, R.drawable.recycler_divider, 0, 1))
     }
 
     override fun onLoading(isLoading: Boolean) {
-        progress.isVisible = isLoading
+        binding.progress.isVisible = isLoading
     }
 
     override fun onError(message: String) {
@@ -76,7 +88,7 @@ class ForumListFragment : BaseFragment(), ForumView {
     }
 
     override fun onForumList(items: List<ForumItem>) {
-        rvListForum.adapter = ForumAdapter(items) { title, forumName ->
+        binding.rvListForum.adapter = ForumAdapter(items) { title, forumName ->
             analytics.onForumDetailClick(forumName)
             navigateTo(R.id.forumSubListDetailFragment, bundleOf(
                     Constants.EXTRA_TITLE to title,

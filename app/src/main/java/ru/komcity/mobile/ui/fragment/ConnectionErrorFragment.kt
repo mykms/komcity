@@ -6,11 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.fragment_connection_error.*
-import ru.komcity.mobile.R
+import ru.komcity.mobile.databinding.FragmentConnectionErrorBinding
 import ru.komcity.mobile.view.MainActivityView
 
 class ConnectionErrorFragment : Fragment() {
+    private var _binding: FragmentConnectionErrorBinding? = null
+    private val binding get() = _binding!!
 
     private var activityListener: MainActivityView? = null
 
@@ -23,7 +24,8 @@ class ConnectionErrorFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_connection_error, container, false)
+        _binding = FragmentConnectionErrorBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -32,7 +34,7 @@ class ConnectionErrorFragment : Fragment() {
     }
 
     private fun initComponents() {
-        btTryAgain.setOnClickListener {
+        binding.btTryAgain.setOnClickListener {
             activityListener?.navigateToBack()
         }
     }

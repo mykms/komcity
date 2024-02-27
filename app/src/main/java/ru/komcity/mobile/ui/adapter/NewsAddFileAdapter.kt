@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_news_add_file.view.*
 import ru.komcity.mobile.R
+import ru.komcity.mobile.databinding.ItemNewsAddFileBinding
 import ru.komcity.mobile.viewModel.addnews.AddNewsBaseItem
 import ru.komcity.mobile.viewModel.addnews.AddNewsItemEmpty
 import ru.komcity.mobile.viewModel.addnews.AddNewsItemFile
@@ -49,11 +49,11 @@ class NewsAddFileAdapter(private val items: List<AddNewsBaseItem>, private val o
 
     inner class ViewHolderItemFile(itemView: View): RecyclerView.ViewHolder(itemView) {
         fun bind(item: AddNewsItemFile) {
-            with(itemView) {
-                tvFileName.text = item.file.path
-                tvFileName.setOnClickListener { onItemClick(true) }
-                setOnClickListener { onItemClick(true) }
-            }
+//            with(itemView) {
+//                tvFileName.text = item.file.path
+//                tvFileName.setOnClickListener { onItemClick(true) }
+//                setOnClickListener { onItemClick(true) }
+//            }
         }
     }
 

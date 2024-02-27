@@ -4,8 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_sub_forum.view.*
-import ru.komcity.mobile.R
+import ru.komcity.mobile.databinding.ItemSubForumBinding
 import ru.komcity.mobile.viewModel.SubForumItem
 
 /**
@@ -16,9 +15,12 @@ import ru.komcity.mobile.viewModel.SubForumItem
 class SubForumAdapter(private val items: List<SubForumItem>,
                       private val listener: (title: String, forumId: String) -> Unit) : RecyclerView.Adapter<SubForumAdapter.ViewHolder>() {
 
+    private var _binding: ItemSubForumBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_sub_forum, parent, false)
-        return ViewHolder(view)
+        _binding = ItemSubForumBinding.inflate(LayoutInflater.from(parent.context), parent, true)
+        return ViewHolder(binding.root)
     }
 
     override fun getItemCount(): Int {
@@ -31,22 +33,22 @@ class SubForumAdapter(private val items: List<SubForumItem>,
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: SubForumItem) {
-            with(itemView) {
+            with(binding) {
                 tvTitle.text = item.forumName
                 tvThemeCount.text = item.countTheme
                 tvReplicCount.text = item.countReplic
                 tvDescription.text = item.description
-                initClickListener(this, item)
+                initClickListener(root, item)
             }
         }
 
         private fun initClickListener(itemView: View, item: SubForumItem) {
-            with(itemView) {
+            with(binding) {
                 tvTitle.setOnClickListener {listener(item.forumName, item.linkForum)  }
                 tvThemeCount.setOnClickListener {listener(item.forumName, item.linkForum)  }
                 tvReplicCount.setOnClickListener {listener(item.forumName, item.linkForum)  }
                 tvDescription.setOnClickListener {listener(item.forumName, item.linkForum)  }
-                setOnClickListener { listener(item.forumName, item.linkForum) }
+                root.setOnClickListener { listener(item.forumName, item.linkForum) }
             }
         }
     }

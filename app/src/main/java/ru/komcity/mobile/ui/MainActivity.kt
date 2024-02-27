@@ -11,20 +11,24 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.iid.FirebaseInstanceId
-import kotlinx.android.synthetic.main.activity_main.*
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.messaging.PushPresenter
+import ru.komcity.mobile.databinding.ActivityMainBinding
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.view.MainActivityView
 
 class MainActivity: AppCompatActivity(), MainActivityView {
+
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var navController: NavController
     private val pushPresenter: PushPresenter = PushPresenter(ApiNetwork().api)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         updatePushToken()
         initNavHostFragment()
         initNavigation()
@@ -47,8 +51,8 @@ class MainActivity: AppCompatActivity(), MainActivityView {
     }
 
     private fun initNavigation() {
-        NavigationUI.setupWithNavController(bottomNavigation, navController)
-        bottomNavigation.setOnNavigationItemSelectedListener {
+        NavigationUI.setupWithNavController(binding.bottomNavigation, navController)
+        binding.bottomNavigation.setOnNavigationItemSelectedListener {
             item -> navigateApp(navController, item.itemId, Bundle())
         }
     }
@@ -91,11 +95,11 @@ class MainActivity: AppCompatActivity(), MainActivityView {
     }
 
     override fun onMessage(message: String) {
-        Snackbar.make(bottomNavigation, message, Snackbar.LENGTH_SHORT)
+        Snackbar.make(binding.bottomNavigation, message, Snackbar.LENGTH_SHORT)
                 .show()
     }
 
     override fun isBottomPanelVisible(isVisible: Boolean) {
-        bottomNavigation.isVisible = isVisible
+        binding.bottomNavigation.isVisible = isVisible
     }
 }

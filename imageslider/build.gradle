@@ -5,14 +5,10 @@ apply from: "$rootProject.projectDir/depends.gradle"
 
 android {
     compileSdkVersion AndroidSDK.compile
-    buildToolsVersion AndroidSDK.buildTools
 
     defaultConfig {
         minSdkVersion AndroidSDK.minApi
         targetSdkVersion AndroidSDK.targetApi
-        versionCode 1
-        versionName "1.0"
-        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -26,23 +22,34 @@ android {
         compose true
         viewBinding true
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
     composeOptions {
-        kotlinCompilerExtensionVersion = "$compose"
+        kotlinCompilerExtensionVersion '1.5.8'
         kotlinCompilerVersion "$kotlin_version"
     }
+    namespace 'com.imageslider.android'
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation supportDepends.appCompat
-    implementation supportDepends.constraintLayout
-    implementation supportDepends.viewPager2
+    implementation "androidx.core:core-ktx:1.12.0"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "androidx.recyclerview:recyclerview:1.3.2"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
 
-    implementation composeDepends.ui
-    implementation composeDepends.material
-    implementation composeDepends.preview
-    implementation composeDepends.activity
+    implementation "com.google.android.material:material:1.11.0"
+    implementation "androidx.compose.ui:ui:1.6.2"
+    implementation "androidx.compose.material:material:1.6.2"
+    implementation "androidx.compose.ui:ui-tooling-preview:1.6.2"
+    implementation "androidx.activity:activity-compose:1.8.2"
 
     implementation kotlinDepends.stdlib
     implementation kotlinDepends.core
