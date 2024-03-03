@@ -1,7 +1,9 @@
 package ru.komcity.mobile.common
 
+import android.text.style.TtsSpan.TextBuilder
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.jsoup.nodes.TextNode
 import ru.komcity.mobile.viewModel.ForumItem
 import ru.komcity.mobile.viewModel.NewsItem
 import java.text.ParseException
@@ -9,9 +11,9 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class HtmlLoader(page: String?) {
+class HtmlLoader() {
     private val domen = "komcity.ru"
-    var rootAddress = "http://$domen/"
+    private var rootAddress = "http://$domen/"
     private val rootNewsAddress = "news/"
     private val tr = "tr"
     private val td = "td" // Тэг <td>
@@ -27,7 +29,7 @@ class HtmlLoader(page: String?) {
     //        iAsyncLoader = mIAsyncLoader;
     //    }
     init {
-        var page = page
+        var page = ""
         if (page == null) page = ""
         rootAddress = page.trim { it <= ' ' }
     }
@@ -52,109 +54,38 @@ class HtmlLoader(page: String?) {
     /**
      * @param mHtmlDoc Загруженный html-документ
      */
-    fun parseNews(mHtmlDoc: Document?) {
-        val newsList: MutableList<Any?> = ArrayList()
+    fun parseNews(mHtmlDoc: Document?): List<NewsItem> {
+        val newsList: MutableList<NewsItem> = ArrayList()
         //Если всё считалось, что вытаскиваем из считанного html документа table
         if (mHtmlDoc != null) {
-            val rootTR = mHtmlDoc.getElementsByTag(tr) // get all tags TD
-            if (rootTR != null) {
-                var date: String? = null
-                var theme: String? = null
-                var art: String? = null
-                var item: NewsItem? = NewsItem("", "", "", "", emptyList(), 0, 0)
-                for (i in rootTR.indices) {
-                    var row = rootTR[i]
-                    if (row != null) {
-                        // Найдем текст
-                        val cols = row.select(td)
-                        row = null
-                        if (cols.first() != null) {
-                            val text = cols.first().text().trim { it <= ' ' }
-                            // Не будем смотреть текст меньше определенной длины, т.к. мы там не сможем найти время в искомом формате
-                            if (text != null) {
-                                if (text.length < textLen) continue
-                                // Ищем время публикации
-                                try {
-                                    val formatTime =
-                                        SimpleDateFormat("HH:mm dd MMMM yyyy", Locale.getDefault())
-                                    val time = formatTime.parse(text)
-                                    date = text // поймали дату / время
-                                } catch (ex: ParseException) {
-                                    //utils.getException(ex);
-                                }
+            val newsSection = mHtmlDoc.body().getElementsByTag("section")
+            if (newsSection.isNotEmpty()) {
+                newsSection[0].getElementsByAttributeValue("class", "single-news-item").forEach { newsElement ->
+                    val newsItem = newsElement.getElementsByAttributeValue("class", "news-content").first()
+                    val title = newsItem?.getElementsByTag("h3")?.first()?.text() ?: ""
+                    val link = newsItem?.getElementsByTag("a")?.first()?.attr("href") ?: ""
+                    val text = newsItem?.getElementsByTag("p")?.first()?.text() ?: ""
+                    val category = newsItem?.getElementsByTag("p")?.last()?.firstElementChild()?.text() ?: ""
+                    val date = (newsItem?.getElementsByTag("p")?.last()?.lastChild() as? TextNode)?.text() ?: ""
 
-                                // Нашли заголовок
-                                if (text.substring(0, 4).equals("тема", ignoreCase = true)) {
-                                    theme = text.substring(5, text.length)
-                                    // После заголовка идет статья
-                                    try {
-                                        val body = rootTR[i + 1].select("td")[5]
-                                        val link = body.attr("onclick") // Ссылка на полную новость
-                                        if (body.getElementsByTag("span") != null) body.getElementsByTag(
-                                            "span"
-                                        ).remove()
-                                        // Ищем рисунок
-                                        val div_elems = body.getElementsByTag("div")
-                                        val photodiv = body.getElementById("photodiv")
-                                        if (photodiv != null && div_elems != null) {
-                                            try {
-                                                // Уточнение элемента
-                                                val div_elem = div_elems.first()
-                                                if (photodiv == div_elem) {
-                                                    val img_elems = div_elem.getElementsByTag("img")
-                                                    if (img_elems != null &&
-                                                        img_elems.first().attr("src") != null
-                                                    ) {
-//                                                        item.setImage(
-//                                                            img_elems.first().attr("src")
-//                                                        ) // Добавим ссылку на рисунок
-                                                    }
-                                                }
-                                            } catch (ex: Exception) {
-                                                //utils.getException(ex);
-                                            }
-                                        }
-                                        // Удалим в конце ненужное слово
-                                        val b_tag = body.getElementsByTag("b")
-                                        for (k in b_tag.indices) {
-                                            if (b_tag[k].text()
-                                                    .equals("обсудить", ignoreCase = true)
-                                            ) {
-                                                body.getElementsByTag("b").remove()
-                                            }
-                                            if (b_tag[k].text().lowercase(Locale.getDefault())
-                                                    .startsWith("посмотреть обсуждение")
-                                            ) {
-                                                body.getElementsByTag("b").remove()
-                                            }
-                                        }
-                                        art = body.text().trim { it <= ' ' }
-                                        if (art != null && theme != null) {
-                                            if (date == null) date =
-                                                Calendar.getInstance().time.toString()
-//                                            item.setDate(date)
-//                                            item.setTitle(theme)
-//                                            item.setText(art)
-//                                            item.setUrl(
-//                                                rootNewsAddress + link.replace("\'", "")
-//                                                    .replace("window.location=", "")
-//                                            )
-                                            newsList.add(item)
-                                            item = null
-                                            //item = NewsItem()
-                                        }
-                                    } catch (ex: Exception) {
-                                        //utils.getException(ex);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    val imgItem = newsElement.getElementsByAttributeValue("class", "news-image")
+                    val imgPreview = imgItem.first()?.getElementsByTag("img")?.first()?.attr("src") ?: ""
+
+                    newsList.add(NewsItem(title, date, text, imgPreview, link, category))
                 }
             }
         }
-        //        if (iHtmlLoader != null)
-//            iHtmlLoader.onReadyToShow(newsList);
+        return newsList
+    }
+
+    fun parseNewsDetails(mHtmlDoc: Document): NewsItem {
+        val contentElement = mHtmlDoc.body().getElementsByAttributeValue("class", "single-post")
+        val rows = contentElement.first()?.getElementsByTag("p")
+        var content = ""
+        rows?.forEach {
+            content += it.text() + "\n"
+        }
+        return NewsItem("", "", content, "", "", "")
     }
 
     fun parseNewsImageLinks(mHtmlDoc: Document?) {

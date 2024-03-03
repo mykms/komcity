@@ -6,11 +6,14 @@ import androidx.core.os.bundleOf
 import com.sharetosocial.android.SocialApp
 import kotlinx.coroutines.*
 import moxy.InjectViewState
+import org.jsoup.Jsoup
 import retrofit2.HttpException
 import ru.komcity.mobile.R
+import ru.komcity.mobile.common.HtmlLoader
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.repository.NewsRepository
 import ru.komcity.mobile.view.NewsDetailView
+import ru.komcity.mobile.viewModel.NewsItem
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -28,13 +31,13 @@ import java.util.*
 class NewsDetailPresenter constructor(private val newsRepository: NewsRepository) : BasePresenter<NewsDetailView>() {
 
     private var newsJob: Job? = null
-    private var newsId = 0
+    private var newsId: String = ""
     private var isVisibleSharePanel = false
     private var title: String = ""
     private var swipePosition: Int = 0
     private var socialItem: SocialApp? = null
 
-    fun init(newsId: Int, title: String) {
+    fun init(newsId: String, title: String) {
         this.newsId = newsId
         this.title = title
     }
@@ -48,7 +51,15 @@ class NewsDetailPresenter constructor(private val newsRepository: NewsRepository
         viewState.onLoading(true)
         newsJob = CoroutineScope(getExceptionHandler { doOnError(it) }).launch {
             withContext(Dispatchers.IO) {
-                val item = newsRepository.getNewsDetail(newsId)
+                //val item = newsRepository.getNewsDetail(newsId)
+                var item = NewsItem("", "", "", "", "", "")
+                try {
+                    //Считываем заглавную страницу
+                    val html = Jsoup.connect(newsId).get()
+                    item = HtmlLoader().parseNewsDetails(html)
+                } catch (ex: Exception) {
+                    ex.printStackTrace()
+                }
                 withContext(Dispatchers.Main) {
                     viewState.onNewsDetailLoaded(item)
                     viewState.onLoading(false)

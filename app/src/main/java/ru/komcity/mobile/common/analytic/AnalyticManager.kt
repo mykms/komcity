@@ -17,7 +17,7 @@ interface AnalyticManager {
     fun sendEvent(tag: String)
     fun sendEvent(tag: String, params: Bundle = Bundle())
     fun onScreenOpen(screenName: String)
-    fun onNewsDetailClick(newsId: Int)
+    fun onNewsDetailClick(newsUrl: String)
     fun onForumDetailClick(forumName: String)
     fun onForumMessagesClick(forumId: String)
     fun onAnnouncementShowClick(listId: String)
@@ -58,8 +58,8 @@ class AnalyticManagerImpl(private val clientId: String,
         sendKeyValueEvent(AnalyticTags.SCREEN_OPEN, bundleOf(AnalyticParamTags.SCREEN_NAME to screenName))
     }
 
-    override fun onNewsDetailClick(newsId: Int) {
-        sendKeyValueEvent(AnalyticTags.NEWS_DETAIL, bundleOf(AnalyticParamTags.NEWS_ID to newsId))
+    override fun onNewsDetailClick(newsUrl: String) {
+        sendKeyValueEvent(AnalyticTags.NEWS_DETAIL, bundleOf(AnalyticParamTags.NEWS_ID to newsUrl))
     }
 
     override fun onForumDetailClick(forumName: String) {

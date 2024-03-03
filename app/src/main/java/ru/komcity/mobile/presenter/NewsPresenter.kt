@@ -4,9 +4,11 @@ import android.os.Bundle
 import androidx.core.os.bundleOf
 import kotlinx.coroutines.*
 import moxy.InjectViewState
+import org.jsoup.Jsoup
 import retrofit2.HttpException
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.Constants
+import ru.komcity.mobile.common.HtmlLoader
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.repository.NewsRepository
 import ru.komcity.mobile.view.NewsListView
@@ -42,9 +44,17 @@ class NewsPresenter constructor(private val newsRepository: NewsRepository): Bas
                 viewState.onLoading(true)
             }
             withContext(Dispatchers.IO) {
-                val repoItems = newsRepository.getNews(page, startDate, endDate)
+                var repoItems = emptyList<NewsItem>()
+                try {
+                    //Считываем заглавную страницу
+                    val html = Jsoup.connect("https://kom.city/news/").get()
+                    repoItems = HtmlLoader().parseNews(html)
+                } catch (ex: Exception) {
+                    ex.printStackTrace()
+                }
+                //val repoItems = newsRepository.getNews(page, startDate, endDate)
                 withContext(Dispatchers.Main) {
-                    isHasItemsMore = !(repoItems.isEmpty() && startDate == 0L && endDate == 0L)
+                    //isHasItemsMore = !(repoItems.isEmpty() && startDate == 0L && endDate == 0L)
                     viewState.onNewsLoaded(checkCache(page, startDate, endDate, repoItems))
                     viewState.scrollTo(scrollPosition)
                     viewState.onLoading(false)
@@ -117,7 +127,7 @@ class NewsPresenter constructor(private val newsRepository: NewsRepository): Bas
         when (item) {
             is AddNewsItem -> navigateTo(R.id.newsAdd, bundleOf())
             is NewsItem -> navigateTo(R.id.newsDetailFragment, bundleOf(
-                    Constants.EXTRA_NEWS_ID to item.newsId,
+                    Constants.EXTRA_NEWS_URL to item.newsUrl,
                     Constants.EXTRA_TITLE to item.title))
             else -> {}
         }

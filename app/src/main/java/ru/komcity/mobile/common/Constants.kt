@@ -6,6 +6,7 @@ class Constants {
 
     companion object {
         val DEFAULT_CROP_TYPE = ImageCropType.CROP_ROUNDED
+        const val EXTRA_NEWS_URL = "EXTRA_NEWS_URL"
         const val EXTRA_NEWS_ID = "EXTRA_NEWS_ID"
         const val EXTRA_TITLE = "EXTRA_TITLE"
         const val EXTRA_FORUM_NAME = "EXTRA_FORUM_NAME"

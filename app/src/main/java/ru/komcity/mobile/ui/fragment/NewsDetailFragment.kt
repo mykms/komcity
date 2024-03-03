@@ -47,7 +47,7 @@ class NewsDetailFragment : BaseFragment(), NewsDetailView {
     fun providePresenter() = NewsDetailPresenter(repo)
     private lateinit var analytics: AnalyticManager
 
-    var item = NewsItem("", "", "", "", emptyList(), 0, 0)
+    var item = NewsItem("", "", "", "", "", "")
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,7 +65,7 @@ class NewsDetailFragment : BaseFragment(), NewsDetailView {
 
     override fun getArgs(args: Bundle?) {
         newsPresenter.init(
-                args?.getInt(Constants.EXTRA_NEWS_ID, 0) ?: 0,
+                args?.getString(Constants.EXTRA_NEWS_URL, "") ?: "",
                 args?.getString(Constants.EXTRA_TITLE, "") ?: "")
     }
 
@@ -137,7 +137,7 @@ class NewsDetailFragment : BaseFragment(), NewsDetailView {
                     override fun onImageSwipe(bitmap: Bitmap?, position: Int) {
                     }
                 })
-                setItems(item.imageUrls)
+                //setItems(item.imageUrls)
             }
         }
     }

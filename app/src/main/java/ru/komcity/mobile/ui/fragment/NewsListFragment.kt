@@ -132,7 +132,7 @@ class NewsListFragment: BaseFragment(), NewsListView {
         }
         binding.rvListNews.adapter = NewsAdapter(totalItems) {
             (it as? NewsItem)?.let { item ->
-                analytics.onNewsDetailClick(item.newsId)
+                analytics.onNewsDetailClick(item.newsUrl)
             }
             newsPresenter.navigateByItemType(it)
         }

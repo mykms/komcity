@@ -24,7 +24,7 @@ class NewsRepositoryImpl constructor(private val apiMethods: ApiMethods): NewsRe
         return apiMethods.getNews(page, startDate, endDate).map {
             with(it) {
                 val humanTime = DateTimeUtils.toHumanDateTime(convertDate(date))
-                val item = NewsItem(title, humanTime, shortText, previewImg, imageUrls, newsId.toIntOrNull() ?: 0, forumId.toIntOrNull() ?: 0)
+                val item = NewsItem(title, humanTime, shortText, previewImg, "", "")
                 item
             }
         }
@@ -41,7 +41,7 @@ class NewsRepositoryImpl constructor(private val apiMethods: ApiMethods): NewsRe
     override suspend fun getNewsDetail(id: Int): NewsItem {
         return with(apiMethods.getNewsDetail(id)) {
             val humanTime = DateTimeUtils.toHumanDateTime(convertDate(date))
-            NewsItem(title, humanTime, shortText, previewImg, imageUrls, newsId.toIntOrNull() ?: 0, forumId.toIntOrNull() ?: 0)
+            NewsItem(title, humanTime, shortText, previewImg, "", "")
         }
     }
 }
