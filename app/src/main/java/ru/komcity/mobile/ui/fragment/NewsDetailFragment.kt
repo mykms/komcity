@@ -17,8 +17,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.imageslider.android.ImageSliderCallback
 import com.sharetosocial.android.SocialApp
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.Constants
 import ru.komcity.mobile.common.analytic.AnalyticManager
@@ -41,9 +39,7 @@ class NewsDetailFragment : BaseFragment(), NewsDetailView {
     private val binding get() = _binding!!
     private val api = ApiNetwork().api
     private val repo = NewsRepositoryImpl(api)
-    @InjectPresenter
     lateinit var newsPresenter: NewsDetailPresenter
-    @ProvidePresenter
     fun providePresenter() = NewsDetailPresenter(repo)
     private lateinit var analytics: AnalyticManager
 

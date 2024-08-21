@@ -2,24 +2,22 @@ package ru.komcity.mobile.view
 
 import android.os.Bundle
 import com.sharetosocial.android.SocialApp
-import moxy.MvpView
-import moxy.viewstate.strategy.OneExecutionStateStrategy
-import moxy.viewstate.strategy.StateStrategyType
+import ru.komcity.mobile.presenter.MvpView
 import ru.komcity.mobile.viewModel.ForumItem
 import ru.komcity.mobile.viewModel.ForumMessagesItem
 import ru.komcity.mobile.viewModel.SubForumItem
 
 interface ForumView : MvpView {
-    @StateStrategyType(OneExecutionStateStrategy::class) fun onLoading(isLoading: Boolean)
-    @StateStrategyType(OneExecutionStateStrategy::class) fun onError(message: String)
-    @StateStrategyType(OneExecutionStateStrategy::class) fun navigateToScreen(screenId: Int, args: Bundle)
-    @StateStrategyType(OneExecutionStateStrategy::class) fun navigateToBackScreen()
-    @StateStrategyType(OneExecutionStateStrategy::class) fun setToolbarTitle(title: String)
-    @StateStrategyType(OneExecutionStateStrategy::class) fun onForumList(items: List<ForumItem>)
-    @StateStrategyType(OneExecutionStateStrategy::class) fun onSubForumList(items: List<SubForumItem>, forumName: String)
-    @StateStrategyType(OneExecutionStateStrategy::class) fun onForumMessages(items: List<ForumMessagesItem>)
-    @StateStrategyType(OneExecutionStateStrategy::class) fun onCopyText(text: String)
-    @StateStrategyType(OneExecutionStateStrategy::class) fun showSocial()
-    @StateStrategyType(OneExecutionStateStrategy::class) fun hideSocial()
-    @StateStrategyType(OneExecutionStateStrategy::class) fun onShareSocial(item: SocialApp, description: String)
+    fun onLoading(isLoading: Boolean)
+    fun onError(message: String)
+    fun navigateToScreen(screenId: Int, args: Bundle)
+    fun navigateToBackScreen()
+    fun setToolbarTitle(title: String)
+    fun onForumList(items: List<ForumItem>)
+    fun onSubForumList(items: List<SubForumItem>, forumName: String)
+    fun onForumMessages(items: List<ForumMessagesItem>)
+    fun onCopyText(text: String)
+    fun showSocial()
+    fun hideSocial()
+    fun onShareSocial(item: SocialApp, description: String)
 }

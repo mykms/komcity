@@ -3,8 +3,11 @@ package ru.komcity.mobile.presenter
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import com.sharetosocial.android.SocialApp
-import kotlinx.coroutines.*
-import moxy.InjectViewState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import ru.komcity.mobile.R
 import ru.komcity.mobile.network.ApiNetwork
@@ -17,9 +20,9 @@ import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
 
-@InjectViewState
 class ForumPresenter constructor(private val forumRepository: ForumRepository): BasePresenter<ForumView>() {
 
     private var forumJob: Job? = null
@@ -29,6 +32,11 @@ class ForumPresenter constructor(private val forumRepository: ForumRepository): 
     private var socialItem: SocialApp = SocialApp.unknown
     private var shareText = ""
     private var hideSocialTimer: Timer? = null
+    lateinit var viewState: ForumView
+
+    fun init(view: ForumView) {
+        this.viewState = view
+    }
 
     fun initSubForumState(title: String, forumName: String) {
         this.title = title

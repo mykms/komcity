@@ -9,13 +9,13 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.IdRes
 import androidx.annotation.NonNull
-import moxy.MvpAppCompatFragment
-import moxy.MvpView
+import androidx.fragment.app.Fragment
+import ru.komcity.mobile.presenter.MvpView
 import ru.komcity.mobile.view.MainActivityView
 import ru.komcity.mobile.viewModel.User
-import java.util.*
+import java.util.Locale
 
-abstract class BaseFragment : MvpAppCompatFragment(), MvpView {
+abstract class BaseFragment : Fragment(), MvpView {
 
     private var activityListener: MainActivityView? = null
 

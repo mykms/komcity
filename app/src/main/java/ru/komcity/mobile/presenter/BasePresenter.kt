@@ -1,17 +1,19 @@
 package ru.komcity.mobile.presenter
 
 import kotlinx.coroutines.*
-import moxy.InjectViewState
-import moxy.MvpPresenter
-import moxy.MvpView
 
 /**
  * Created by Aleksei Kholoimov on 2020-02-27
  * <p>
  *
  */
-@InjectViewState
-open class BasePresenter<View : MvpView> : MvpPresenter<View>() {
+interface MvpView
+
+abstract class MvpPresenter<View> {
+    abstract fun onDestroy()
+}
+
+open class BasePresenter<View> : MvpPresenter<View>() {
 
     private var job: Job? = null
     protected fun getExceptionHandler(onErrorExecuteJob: (throwable: Throwable) -> Unit) = CoroutineExceptionHandler { scope, throwable ->
@@ -24,6 +26,6 @@ open class BasePresenter<View : MvpView> : MvpPresenter<View>() {
 
     override fun onDestroy() {
         job?.cancel()
-        super.onDestroy()
+        //super.onDestroy()
     }
 }

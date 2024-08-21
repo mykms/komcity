@@ -5,7 +5,6 @@ import androidx.core.os.bundleOf
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
-import moxy.InjectViewState
 import retrofit2.HttpException
 import ru.komcity.mobile.R
 import ru.komcity.mobile.network.ApiNetwork
@@ -22,13 +21,17 @@ import java.net.UnknownHostException
  * <p>
  * Presenter for Announcements screen
  */
-@InjectViewState
 class AnnouncementsPresenter constructor(private val repository: AnnouncementsRepository)
     : BasePresenter<AnnouncementsView>() {
 
     private var announcementJob: Job? = null
     private var id = 0
     private val items = arrayListOf<Announcement>()
+    lateinit var viewState: AnnouncementsView
+
+    fun init(view: AnnouncementsView) {
+        this.viewState = view
+    }
 
     fun initState(id: String) {
         this.id = id.removePrefix("r").toIntOrNull() ?: 0

@@ -4,8 +4,11 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import com.sharetosocial.android.SocialApp
-import kotlinx.coroutines.*
-import moxy.InjectViewState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import retrofit2.HttpException
 import ru.komcity.mobile.R
@@ -20,14 +23,13 @@ import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
-import java.util.*
+import java.util.Calendar
 
 /**
  * Created by Aleksei Kholoimov on 14.03.2020
  * <p>
  * Presenter for screen news detail info
  */
-@InjectViewState
 class NewsDetailPresenter constructor(private val newsRepository: NewsRepository) : BasePresenter<NewsDetailView>() {
 
     private var newsJob: Job? = null
@@ -36,6 +38,11 @@ class NewsDetailPresenter constructor(private val newsRepository: NewsRepository
     private var title: String = ""
     private var swipePosition: Int = 0
     private var socialItem: SocialApp? = null
+    lateinit var viewState: NewsDetailView
+
+    fun init(view: NewsDetailView) {
+        this.viewState = view
+    }
 
     fun init(newsId: String, title: String) {
         this.newsId = newsId

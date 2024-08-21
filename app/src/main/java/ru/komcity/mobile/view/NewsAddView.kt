@@ -1,9 +1,7 @@
 package ru.komcity.mobile.view
 
-import moxy.MvpView
-import moxy.viewstate.strategy.OneExecutionStateStrategy
-import moxy.viewstate.strategy.StateStrategyType
 import ru.komcity.mobile.network.MailSenderData
+import ru.komcity.mobile.presenter.MvpView
 import ru.komcity.mobile.viewModel.addnews.AddNewsBaseItem
 
 /**
@@ -12,9 +10,9 @@ import ru.komcity.mobile.viewModel.addnews.AddNewsBaseItem
  * View для экрана добавления новости
  */
 interface NewsAddView: MvpView {
-    @StateStrategyType(OneExecutionStateStrategy::class) fun onLoading(isLoading: Boolean)
-    @StateStrategyType(OneExecutionStateStrategy::class) fun onError(message: String)
-    @StateStrategyType(OneExecutionStateStrategy::class) fun onParamsLoaded(item: MailSenderData)
-    @StateStrategyType(OneExecutionStateStrategy::class) fun navigateToBackScreen()
-    @StateStrategyType(OneExecutionStateStrategy::class) fun onFileLoadComplete(items: List<AddNewsBaseItem>)
+    fun onLoading(isLoading: Boolean)
+    fun onError(message: String)
+    fun onParamsLoaded(item: MailSenderData)
+    fun navigateToBackScreen()
+    fun onFileLoadComplete(items: List<AddNewsBaseItem>)
 }

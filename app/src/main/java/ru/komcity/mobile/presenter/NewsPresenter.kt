@@ -2,8 +2,11 @@ package ru.komcity.mobile.presenter
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
-import kotlinx.coroutines.*
-import moxy.InjectViewState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import retrofit2.HttpException
 import ru.komcity.mobile.R
@@ -20,7 +23,6 @@ import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-@InjectViewState
 class NewsPresenter constructor(private val newsRepository: NewsRepository): BasePresenter<NewsListView>() {
 
     private var newsJob: Job? = null
@@ -33,6 +35,11 @@ class NewsPresenter constructor(private val newsRepository: NewsRepository): Bas
     private var searchPage = 1
     private var listPage = 1
     private var scrollPosition = 0
+    lateinit var viewState: NewsListView
+
+    fun init(view: NewsListView) {
+        this.viewState = view
+    }
 
     fun getNewsList() {
         loadNews(listPage, startDateTime, endDateTime)

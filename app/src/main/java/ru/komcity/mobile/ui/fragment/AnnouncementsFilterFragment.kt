@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.Constants
 import ru.komcity.mobile.common.analytic.AnalyticManager
@@ -26,9 +24,7 @@ class AnnouncementsFilterFragment : BaseFragment(), AnnouncementsFilterView {
     private val binding get() = _binding!!
     private val api = ApiNetwork().api
     private val repo = AnnouncementsFilterRepositoryImpl(api, AnnouncementCategoryMapper())
-    @InjectPresenter
     lateinit var presenter: AnnouncementsFilterPresenter
-    @ProvidePresenter
     fun providePresenter() = AnnouncementsFilterPresenter(repo)
     private lateinit var analytics: AnalyticManager
     private val categoryListSelectorTag = "categoryListSelectorTag"

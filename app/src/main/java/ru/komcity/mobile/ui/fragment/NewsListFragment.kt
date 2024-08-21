@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.Constants
 import ru.komcity.mobile.common.analytic.AnalyticManager
@@ -36,10 +34,7 @@ class NewsListFragment: BaseFragment(), NewsListView {
     private val binding get() = _binding!!
     private val api = ApiNetwork().api
     private val repo = NewsRepositoryImpl(api)
-    @InjectPresenter
-    lateinit var newsPresenter: NewsPresenter
-    @ProvidePresenter
-    fun providePresenter() = NewsPresenter(repo)
+    private var newsPresenter: NewsPresenter = NewsPresenter(repo)
     private val searchAndAddNewsItems = listOf(SearchNewsItem(), AddNewsItem())
     private lateinit var analytics: AnalyticManager
     private val calendarBuilder: MaterialDatePicker.Builder<Pair<Long, Long>> = MaterialDatePicker.Builder.dateRangePicker()
@@ -71,6 +66,7 @@ class NewsListFragment: BaseFragment(), NewsListView {
         initRecyclerView(view)
         initCalendarSearch()
         initFab()
+        newsPresenter.init(this)
         newsPresenter.getNewsList()
     }
 

@@ -9,8 +9,6 @@ import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sharetosocial.android.SocialApp
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.Constants
 import ru.komcity.mobile.common.analytic.AnalyticManager
@@ -31,9 +29,7 @@ class ForumListFragment : BaseFragment(), ForumView {
     private val binding get() = _binding!!
     private val api = ApiNetwork().api
     private val repo = ForumRepositoryImpl(api)
-    @InjectPresenter
     lateinit var forumPresenter: ForumPresenter
-    @ProvidePresenter
     fun providePresenter() = ForumPresenter(repo)
     private lateinit var analytics: AnalyticManager
 

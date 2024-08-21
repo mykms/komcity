@@ -91,10 +91,6 @@ dependencies {
     implementation firebase.analytics
     //implementation firebase.config
 
-    implementation moxyDepends.moxy
-    implementation moxyDepends.moxyAndroidX
-    kapt moxyDepends.moxyCompiler
-
     implementation retrofitDepends.retrofit
     implementation retrofitDepends.retrofitGson
     implementation retrofitDepends.retrofitRxJava

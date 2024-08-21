@@ -10,8 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
 import ru.komcity.mobile.R
 import ru.komcity.mobile.common.Constants
 import ru.komcity.mobile.common.analytic.AnalyticManager
@@ -30,9 +28,7 @@ class AnnouncementsFragment : BaseFragment(), AnnouncementsView {
     private val binding get() = _binding!!
     private val api = ApiNetwork().api
     private val repo = AnnouncementsRepositoryImpl(api, AnnouncementsMapper())
-    @InjectPresenter
     lateinit var presenter: AnnouncementsPresenter
-    @ProvidePresenter
     fun providePresenter() = AnnouncementsPresenter(repo)
     private lateinit var analytics: AnalyticManager
 

@@ -2,13 +2,15 @@ package ru.komcity.mobile.presenter
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
-import moxy.InjectViewState
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import ru.komcity.mobile.R
-import ru.komcity.mobile.common.Constants
 import ru.komcity.mobile.network.ApiNetwork
 import ru.komcity.mobile.repository.AnnouncementsFilterRepository
 import ru.komcity.mobile.view.AnnouncementsFilterView
@@ -24,7 +26,6 @@ import java.net.UnknownHostException
  * <p>
  * Presenter for Filtering Announcements screen
  */
-@InjectViewState
 class AnnouncementsFilterPresenter constructor(private val repository: AnnouncementsFilterRepository)
     : BasePresenter<AnnouncementsFilterView>() {
 
@@ -44,7 +45,7 @@ class AnnouncementsFilterPresenter constructor(private val repository: Announcem
     }
 
     fun getFilters() {
-        viewState.onLoading(true)
+        //viewState.onLoading(true)
         categories.clear()
         filterJob = CoroutineScope(getExceptionHandler { doOnError(it) }).launch {
             withContext(Dispatchers.IO) {
@@ -55,14 +56,14 @@ class AnnouncementsFilterPresenter constructor(private val repository: Announcem
                 withContext(Dispatchers.Main) {
                     setCategoryTitle()
                     setSubCategoryTitle()
-                    viewState.onLoading(false)
+                    //viewState.onLoading(false)
                 }
             }
         }
     }
 
     private fun doOnError(throwable: Throwable) {
-        viewState.onLoading(false)
+        //viewState.onLoading(false)
         when (throwable) {
             is ConnectException -> {
                 //viewState.onError("Не удается соединиться с сервером")
@@ -73,36 +74,36 @@ class AnnouncementsFilterPresenter constructor(private val repository: Announcem
                 navigateTo(R.id.connectionErrorFragment, bundleOf())
             }
             is IllegalArgumentException -> {
-                viewState.onError("Произошла ошибка, попробуйте позже")
+                //viewState.onError("Произошла ошибка, попробуйте позже")
             }
             is SocketTimeoutException -> {
                 //viewState.onError("Проверьте связь с интернетом и попробуйте позже")
                 navigateTo(R.id.connectionErrorFragment, bundleOf())
             }
             is IOException -> {
-                viewState.onError("${throwable.printStackTrace()}")
+                //viewState.onError("${throwable.printStackTrace()}")
             }
             is HttpException -> {
                 try {
                     ApiNetwork().getErrorConverter().convert(throwable.response()?.errorBody())?.let {
-                        viewState.onError("${it.message}")
+                        //viewState.onError("${it.message}")
                     }
                 } catch (ex: Exception) {
-                    viewState.onError("${ex.message}")
+                    //viewState.onError("${ex.message}")
                 }
             }
             else -> {
-                viewState.onError("Произошла ошибка, попробуйте позже\n${throwable.printStackTrace()}")
+                //viewState.onError("Произошла ошибка, попробуйте позже\n${throwable.printStackTrace()}")
             }
         }
     }
 
     private fun navigateTo(screenId: Int, args: Bundle) {
-        viewState.navigateToScreen(screenId, args)
+        //viewState.navigateToScreen(screenId, args)
     }
 
     private fun getFilterDetails(ref1: Int, ref2: Int) {
-        viewState.onLoading(true)
+        //viewState.onLoading(true)
         subCategories.clear()
         filterJob = CoroutineScope(getExceptionHandler { doOnError(it) }).launch {
             withContext(Dispatchers.IO) {
@@ -113,7 +114,7 @@ class AnnouncementsFilterPresenter constructor(private val repository: Announcem
                 withContext(Dispatchers.Main) {
                     setDetailCategoryTitle()
                     setDetailSubCategoryTitle()
-                    viewState.onLoading(false)
+                    //viewState.onLoading(false)
                 }
             }
         }
@@ -125,8 +126,8 @@ class AnnouncementsFilterPresenter constructor(private val repository: Announcem
         }
         if (categories.size > selectedCategoryPosition && selectedCategoryPosition >= 0) {
             val title = categories[selectedCategoryPosition].title
-            viewState.setCategoryVisibility(true)
-            viewState.setCategoryTitle(title, true)
+            //viewState.setCategoryVisibility(true)
+            //viewState.setCategoryTitle(title, true)
         }
     }
 
@@ -138,8 +139,8 @@ class AnnouncementsFilterPresenter constructor(private val repository: Announcem
             }
             if (items.size > selectedSubCategoryPosition && selectedSubCategoryPosition >= 0) {
                 val ref = items[selectedSubCategoryPosition]
-                viewState.setSubCategoryVisibility(true)
-                viewState.setSubCategoryCategoryTitle(ref.name, true)
+                //viewState.setSubCategoryVisibility(true)
+                //viewState.setSubCategoryCategoryTitle(ref.name, true)
                 getFilterDetails(ref.ref1, ref.ref2)
             }
         }
@@ -151,8 +152,8 @@ class AnnouncementsFilterPresenter constructor(private val repository: Announcem
         }
         if (subCategories.size > selectedDetailCategoryPosition && selectedDetailCategoryPosition >= 0) {
             val title = subCategories[selectedDetailCategoryPosition].title
-            viewState.setDetailCategoryVisibility(true)
-            viewState.setDetailCategoryTitle(title, true)
+            //viewState.setDetailCategoryVisibility(true)
+            //viewState.setDetailCategoryTitle(title, true)
         }
     }
 
@@ -163,96 +164,96 @@ class AnnouncementsFilterPresenter constructor(private val repository: Announcem
                 selectedDetailSubCategoryPosition = 0
             }
             if (items.size > selectedDetailSubCategoryPosition && selectedDetailSubCategoryPosition >= 0) {
-                viewState.setDetailSubCategoryVisibility(true)
-                viewState.setDetailSubCategoryCategoryTitle(items[selectedDetailSubCategoryPosition].name, true)
+                //viewState.setDetailSubCategoryVisibility(true)
+                //viewState.setDetailSubCategoryCategoryTitle(items[selectedDetailSubCategoryPosition].name, true)
             }
         }
     }
 
     fun onCategoryClick() {
-        viewState.showCategoryDialog(categories.map { it.title })
+        //viewState.showCategoryDialog(categories.map { it.title })
     }
 
     fun onCategoryCloseClick() {
         selectedCategoryPosition = -1
         selectedSubCategoryPosition = -1
-        viewState.setCategoryTitle("", false)
-        viewState.setSubCategoryVisibility(false)
-        viewState.setDetailCategoryVisibility(false)
-        viewState.setDetailSubCategoryVisibility(false)
+//        viewState.setCategoryTitle("", false)
+//        viewState.setSubCategoryVisibility(false)
+//        viewState.setDetailCategoryVisibility(false)
+//        viewState.setDetailSubCategoryVisibility(false)
         subCategories.clear()
     }
 
     fun onSubCategoryClick() {
         if (categories.size > selectedCategoryPosition && selectedCategoryPosition >= 0) {
-            viewState.showSubCategoryDialog(categories[selectedCategoryPosition].items.map { it.name })
+//            viewState.showSubCategoryDialog(categories[selectedCategoryPosition].items.map { it.name })
         }
     }
 
     fun onSubCategoryCloseClick() {
         selectedSubCategoryPosition = -1
-        viewState.setSubCategoryCategoryTitle("", false)
-        viewState.setDetailCategoryVisibility(false)
-        viewState.setDetailSubCategoryVisibility(false)
+//        viewState.setSubCategoryCategoryTitle("", false)
+//        viewState.setDetailCategoryVisibility(false)
+//        viewState.setDetailSubCategoryVisibility(false)
         subCategories.clear()
     }
 
     fun onDetailCategoryClick() {
         if (subCategories.isNotEmpty()) {
-            viewState.showDetailCategoryDialog(subCategories.map { it.title })
+//            viewState.showDetailCategoryDialog(subCategories.map { it.title })
         }
     }
 
     fun onDetailCategoryCloseClick() {
         selectedDetailCategoryPosition = -1
-        viewState.setDetailCategoryTitle("", false)
-        viewState.setDetailSubCategoryVisibility(false)
+//        viewState.setDetailCategoryTitle("", false)
+//        viewState.setDetailSubCategoryVisibility(false)
     }
 
     fun onDetailSubCategoryClick() {
         if (subCategories.size > selectedDetailCategoryPosition && selectedDetailCategoryPosition >= 0) {
             val items = subCategories[selectedDetailCategoryPosition].items
             if (items.isNotEmpty()) {
-                viewState.showDetailSubCategoryDialog(items.map { it.name })
+//                viewState.showDetailSubCategoryDialog(items.map { it.name })
             }
         }
     }
 
     fun onDetailSubCategoryCloseClick() {
         selectedDetailSubCategoryPosition = -1
-        viewState.setDetailSubCategoryCategoryTitle("", false)
+//        viewState.setDetailSubCategoryCategoryTitle("", false)
     }
 
     fun onCategorySelected(item: String, position: Int) {
         selectedCategoryPosition = position
-        viewState.setCategoryVisibility(true)
-        viewState.setCategoryTitle(item, true)
+//        viewState.setCategoryVisibility(true)
+//        viewState.setCategoryTitle(item, true)
 
         selectedSubCategoryPosition = -1
-        viewState.setSubCategoryVisibility(true)
-        viewState.setSubCategoryCategoryTitle("", false)
+//        viewState.setSubCategoryVisibility(true)
+//        viewState.setSubCategoryCategoryTitle("", false)
 
         selectedDetailCategoryPosition = -1
-        viewState.setDetailCategoryVisibility(false)
-        viewState.setDetailCategoryTitle("", false)
+//        viewState.setDetailCategoryVisibility(false)
+//        viewState.setDetailCategoryTitle("", false)
 
         selectedDetailSubCategoryPosition = -1
-        viewState.setDetailSubCategoryVisibility(false)
-        viewState.setDetailSubCategoryCategoryTitle("", false)
+//        viewState.setDetailSubCategoryVisibility(false)
+//        viewState.setDetailSubCategoryCategoryTitle("", false)
     }
 
     fun onSubCategorySelected(item: String, position: Int) {
         selectedSubCategoryPosition = position
-        viewState.setSubCategoryVisibility(true)
-        viewState.setSubCategoryCategoryTitle(item, true)
+//        viewState.setSubCategoryVisibility(true)
+//        viewState.setSubCategoryCategoryTitle(item, true)
 
         selectedDetailCategoryPosition = -1
-        viewState.setDetailCategoryVisibility(false)
-        viewState.setDetailCategoryTitle("", false)
+//        viewState.setDetailCategoryVisibility(false)
+//        viewState.setDetailCategoryTitle("", false)
 
         selectedDetailSubCategoryPosition = -1
-        viewState.setDetailSubCategoryVisibility(false)
-        viewState.setDetailSubCategoryCategoryTitle("", false)
+//        viewState.setDetailSubCategoryVisibility(false)
+//        viewState.setDetailSubCategoryCategoryTitle("", false)
 
         if (categories.size > selectedCategoryPosition && selectedCategoryPosition >= 0) {
             val items = categories[selectedCategoryPosition].items
@@ -265,19 +266,19 @@ class AnnouncementsFilterPresenter constructor(private val repository: Announcem
 
     fun onDetailCategorySelected(item: String, position: Int) {
         selectedDetailCategoryPosition = position
-        viewState.setDetailCategoryVisibility(true)
-        viewState.setDetailCategoryTitle(item, true)
+//        viewState.setDetailCategoryVisibility(true)
+//        viewState.setDetailCategoryTitle(item, true)
         selectedDetailSubCategoryPosition = -1
         if (subCategories.size > selectedDetailCategoryPosition && selectedDetailCategoryPosition >= 0) {
-            viewState.setDetailSubCategoryVisibility(subCategories[selectedDetailCategoryPosition].items.isNotEmpty())
-            viewState.setDetailSubCategoryCategoryTitle("", false)
+//            viewState.setDetailSubCategoryVisibility(subCategories[selectedDetailCategoryPosition].items.isNotEmpty())
+//            viewState.setDetailSubCategoryCategoryTitle("", false)
         }
     }
 
     fun onDetailSubCategorySelected(item: String, position: Int) {
         selectedDetailSubCategoryPosition = position
-        viewState.setDetailSubCategoryVisibility(true)
-        viewState.setDetailSubCategoryCategoryTitle(item, true)
+//        viewState.setDetailSubCategoryVisibility(true)
+//        viewState.setDetailSubCategoryCategoryTitle(item, true)
     }
 
     fun navigateToAnnouncements() {
@@ -285,11 +286,11 @@ class AnnouncementsFilterPresenter constructor(private val repository: Announcem
             val items = subCategories[selectedDetailCategoryPosition].items
             if (items.size > selectedDetailSubCategoryPosition && selectedDetailSubCategoryPosition >= 0) {
                 val id = items[selectedDetailSubCategoryPosition].id
-                viewState.onShowClick(id)
-                viewState.navigateToScreen(R.id.announcementsFragment, bundleOf(Constants.EXTRA_ANNOUNCEMENTS_ID to id))
+//                viewState.onShowClick(id)
+//                viewState.navigateToScreen(R.id.announcementsFragment, bundleOf(Constants.EXTRA_ANNOUNCEMENTS_ID to id))
             }
         } else {
-            viewState.showMessage("Требуется дополнительный выбор из списка")
+//            viewState.showMessage("Требуется дополнительный выбор из списка")
         }
     }
 

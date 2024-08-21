@@ -1,6 +1,4 @@
 package ru.komcity.mobile.presenter
-
-import moxy.InjectViewState
 import ru.komcity.mobile.network.MailSender
 import ru.komcity.mobile.network.MailSenderData
 import ru.komcity.mobile.repository.SendRepository
@@ -12,10 +10,14 @@ import ru.komcity.mobile.viewModel.addnews.AddNewsItemEmpty
  * <p>
  * Презентер добавления новой новости
  */
-@InjectViewState
 class NewsAddPresenter constructor(private val sendRepository: SendRepository) : BasePresenter<NewsAddView>() {
 
     private var mailSender: MailSender? = null
+    lateinit var viewState: NewsAddView
+
+    fun init(view: NewsAddView) {
+        this.viewState = view
+    }
 
     fun getSendParams() {
         //sendRepository

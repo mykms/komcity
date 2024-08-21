@@ -2,9 +2,7 @@ package ru.komcity.mobile.view
 
 import android.os.Bundle
 import com.sharetosocial.android.SocialApp
-import moxy.MvpView
-import moxy.viewstate.strategy.OneExecutionStateStrategy
-import moxy.viewstate.strategy.StateStrategyType
+import ru.komcity.mobile.presenter.MvpView
 import ru.komcity.mobile.viewModel.NewsItem
 import java.io.File
 
@@ -14,14 +12,14 @@ import java.io.File
  * View for screen news detail info
  */
 interface NewsDetailView : MvpView {
-    @StateStrategyType(OneExecutionStateStrategy::class) fun onLoading(isLoading: Boolean)
-    @StateStrategyType(OneExecutionStateStrategy::class) fun onError(message: String)
-    @StateStrategyType(OneExecutionStateStrategy::class) fun onNewsDetailLoaded(item: NewsItem)
-    @StateStrategyType(OneExecutionStateStrategy::class) fun navigateToScreen(screenId: Int, args: Bundle)
-    @StateStrategyType(OneExecutionStateStrategy::class) fun navigateToBackScreen()
-    @StateStrategyType(OneExecutionStateStrategy::class) fun setToolbarTitle(title: String)
-    @StateStrategyType(OneExecutionStateStrategy::class) fun setVisibilitySharePanel(isVisible: Boolean)
-    @StateStrategyType(OneExecutionStateStrategy::class) fun checkStoragePermissions()
-    @StateStrategyType(OneExecutionStateStrategy::class) fun onShareSocial(item: SocialApp, position: Int)
-    @StateStrategyType(OneExecutionStateStrategy::class) fun onSaveMediaSuccess(item: SocialApp, file: File)
+    fun onLoading(isLoading: Boolean)
+    fun onError(message: String)
+    fun onNewsDetailLoaded(item: NewsItem)
+    fun navigateToScreen(screenId: Int, args: Bundle)
+    fun navigateToBackScreen()
+    fun setToolbarTitle(title: String)
+    fun setVisibilitySharePanel(isVisible: Boolean)
+    fun checkStoragePermissions()
+    fun onShareSocial(item: SocialApp, position: Int)
+    fun onSaveMediaSuccess(item: SocialApp, file: File)
 }
